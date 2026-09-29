@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S1 · Scripter l'administration</title>
+<style>
+:root{
+  --bg:#0f1b2d; --bg2:#15253d; --ink:#1b2430; --paper:#fbfaf7; --muted:#5d6878;
+  --accent:#0f8b8d; --accent2:#e07a2f; --ok:#2f8f4e; --ko:#c0392b; --line:#d9dde3;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --code-str:#9fd6a5; --code-kw:#ffb86b; --code-var:#7fc8ff;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1320;font-family:var(--sans);color:var(--ink)}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--paper);padding:56px 72px 48px;
+  display:none;flex-direction:column;transform-origin:center center;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.slide.active{display:flex}
+.slide h1{font-size:44px;line-height:1.1;margin:0 0 20px;letter-spacing:-.5px}
+.slide h2{font-size:34px;line-height:1.15;margin:0 0 22px;letter-spacing:-.3px}
+.slide h2 small{display:block;font-size:17px;font-weight:600;color:var(--accent);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.slide p,.slide li{font-size:22px;line-height:1.45}
+.slide ul,.slide ol{margin:0 0 0 4px;padding-left:26px}
+.slide li{margin:6px 0}
+.slide li::marker{color:var(--accent)}
+.muted{color:var(--muted)}
+.foot{position:absolute;left:72px;right:72px;bottom:18px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+/* variantes */
+.title,.section{background:var(--bg);color:#fff;justify-content:center}
+.title h1{font-size:58px;max-width:980px}
+.title .kicker,.section .kicker{color:#7fd3d4;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:18px;margin-bottom:18px}
+.title p{color:#c6d0dc;font-size:24px}
+.section h1{font-size:64px}
+.section .num{font-size:120px;font-weight:800;color:#23405f;position:absolute;right:72px;bottom:28px;line-height:1}
+.title .foot,.section .foot{color:#8a97a8}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;min-height:0}
+.cols.c3{grid-template-columns:1fr 1fr 1fr}
+.cols.code{grid-template-columns:1.45fr 1fr}
+.cols > pre{align-self:start}
+pre.xs{font-size:13.5px;line-height:1.42}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.card h3{margin:0 0 10px;font-size:22px}
+.card.ok{border-top:5px solid var(--ok)} .card.ko{border-top:5px solid var(--ko)} .card.acc{border-top:5px solid var(--accent)}
+.card li,.card p{font-size:19px}
+.callout{margin-top:auto;background:#eaf6f6;border-left:6px solid var(--accent);padding:14px 20px;border-radius:6px;font-size:20px}
+.callout.warn{background:#fdf1e7;border-color:var(--accent2)}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef1f4;font-weight:700}
+td code,li code,p code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 6px;border-radius:4px}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:16px 20px;font-family:var(--mono);
+  font-size:16.5px;line-height:1.5;overflow:hidden;white-space:pre}
+pre.small{font-size:14.5px}
+.tok-com{color:var(--code-com);font-style:italic} .tok-str{color:var(--code-str)} .tok-kw{color:var(--code-kw)} .tok-var{color:var(--code-var)}
+.pill{display:inline-block;padding:2px 12px;border-radius:999px;font-size:16px;font-weight:700;background:#eef1f4}
+.pill.ok{background:#e3f3e8;color:var(--ok)} .pill.ko{background:#f8e4e1;color:var(--ko)} .pill.acc{background:#e0f2f2;color:var(--accent)}
+.big{font-size:30px!important;line-height:1.35}
+.center{align-items:center;justify-content:center;text-align:center}
+.steps{counter-reset:s;list-style:none;padding:0!important}
+.steps li{counter-increment:s;position:relative;padding-left:52px;margin:12px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-size:18px}
+aside.notes{display:none}
+body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0;right:0;top:100%;margin-top:8px;background:#fffbe6;
+  border:1px solid #e8d98a;padding:10px 16px;font-size:15px;color:#4a4020;border-radius:6px}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .2s}
+#help{position:fixed;right:12px;bottom:10px;color:#6f7d8f;font-size:12px}
+/* impression : une slide par page */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#fff}
+  #deck{position:static;display:block}
+  .slide{display:flex!important;position:relative;transform:none!important;box-shadow:none;page-break-after:always;break-after:page}
+  #bar,#help,aside.notes{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 -->
+<section class="slide title">
+  <div class="kicker">EEMI · B2 Cybersécurité · Séance 1 / 6</div>
+  <h1>Scripts de parsing et d'automatisation</h1>
+  <p>Scripter l'administration : Bash ou Python, anatomie d'un script propre, l'IA comme copilote</p>
+  <div class="foot"><span>Emmanuel Pinglier</span><span>ven. 16 octobre 2026</span></div>
+  <aside class="notes">Accueil. Faire noter l'URL du dépôt Git au tableau dès maintenant.</aside>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <h2><small>Faisons connaissance</small>Tour de table</h2>
+  <div class="cols">
+    <div class="card acc">
+      <h3>Votre intervenant</h3>
+      <p><strong>Emmanuel Pinglier</strong></p>
+      <p class="muted">Parcours et domaines d'intervention : à présenter à l'oral.</p>
+    </div>
+    <div class="card">
+      <h3>Et vous ? 30 secondes chacun</h3>
+      <ul>
+        <li>Votre entreprise d'alternance et votre poste</li>
+        <li>Un script que vous avez déjà écrit (ou aimeriez écrire)</li>
+        <li>Linux au quotidien : jamais, parfois, tout le temps ?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>2</span></div>
+  <aside class="notes">Noter mentalement les profils à l'aise ou non : ça servira pour former les binômes de S3.</aside>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <h2><small>Le module</small>Ce que vous saurez faire dans 21 heures</h2>
+  <ol class="steps">
+    <li><strong>Automatiser et planifier</strong> une tâche d'administration par script, en Python ou en Bash</li>
+    <li><strong>Analyser et exploiter</strong> les événements système : journaux, supervision</li>
+    <li><strong>Documenter</strong> vos scripts, pour vous et pour ceux qui les reprendront</li>
+    <li><strong>Vérifier la fiabilité et la robustesse</strong> d'un script avant sa mise en exploitation</li>
+  </ol>
+  <div class="callout">Titre RNCP 37680 <em>Administrateur d'infrastructures sécurisées</em> · bloc 1, CP3 : « administrer et sécuriser les infrastructures systèmes »</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h2><small>Le module</small>6 séances de 3 h 30</h2>
+  <table>
+    <tr><th>#</th><th>Date</th><th>Thème</th><th>Temps fort</th></tr>
+    <tr><td>1</td><td>16/10</td><td>Scripter l'administration</td><td>TP inventaire système</td></tr>
+    <tr><td>2</td><td>23/10</td><td>Parser les journaux</td><td>Détecteur de brute force SSH</td></tr>
+    <tr><td>3</td><td>06/11</td><td>Supervision et alertes</td><td><span class="pill acc">Note 1 · TP binôme</span></td></tr>
+    <tr><td>4</td><td>13/11</td><td>Automatiser et planifier</td><td>Lancement du projet</td></tr>
+    <tr><td>5</td><td>19/11</td><td>Fiabilité et documentation</td><td>Tests, analyse statique</td></tr>
+    <tr><td>6</td><td>20/11</td><td>Finalisation et soutenances</td><td><span class="pill acc">Note 2 · individuelle</span></td></tr>
+  </table>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h2><small>Le module</small>Comment vous êtes évalués</h2>
+  <div class="cols">
+    <div class="card acc">
+      <h3>Note 1 · 40 % · séance 3</h3>
+      <p><strong>TP noté en binôme</strong> : un mini-agent de surveillance qui mesure, compare à des seuils et alerte.</p>
+    </div>
+    <div class="card acc">
+      <h3>Note 2 · 60 % · séance 6</h3>
+      <p><strong>Projet individuel</strong> : un script qui automatise une tâche d'administration réelle.</p>
+      <ul><li>code, tests, README, journal d'usage de l'IA</li><li><strong>oral de 5 min</strong> : fonctionnement et <em>limites</em></li></ul>
+    </div>
+  </div>
+  <div class="callout">Sujets et grille dans <code>evaluation/projet-individuel.md</code> · un sujet de rattrapage est prévu</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h2><small>Le module</small>L'IA fait partie du cours</h2>
+  <p class="big">Elle est <strong>autorisée et encouragée</strong>, et vous êtes <strong>responsables de chaque ligne</strong> que vous rendez.</p>
+  <div class="cols" style="margin-top:18px">
+    <div class="card ok"><h3>Ce qu'on attend de vous</h3><ul><li>savoir lui poser la bonne question</li><li>savoir <strong>relire</strong> et <strong>tester</strong> ce qu'elle produit</li><li>tracer votre usage dans <code>JOURNAL-IA.md</code></li></ul></div>
+    <div class="card ko"><h3>Ce qui sera sanctionné</h3><ul><li>du code rendu que vous ne savez pas expliquer</li><li>des données sensibles collées dans un prompt</li></ul></div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>6</span></div>
+  <aside class="notes">Faire ouvrir CHARTE-IA.md. On y revient en détail aux slides 18 à 22.</aside>
+</section>
+
+<!-- 7 -->
+<section class="slide center">
+  <h2><small>15 minutes</small>Quiz de positionnement</h2>
+  <p class="big">Seul, <strong>sans IA ni internet</strong>.<br>« Je ne sais pas » est une réponse utile.</p>
+  <p class="muted"><code>seances/s1-scripter-admin/quiz-positionnement.md</code> · non noté</p>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>7</span></div>
+  <aside class="notes">Ramasser les réponses. Elles serviront à constituer les binômes de S3.</aside>
+</section>
+
+<!-- 8 -->
+<section class="slide section">
+  <div class="kicker">Partie 1</div>
+  <h1>Pourquoi scripter ?</h1>
+  <div class="num">01</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h2><small>Pourquoi scripter</small>Le quotidien d'un admin</h2>
+  <div class="cols">
+    <div class="card ko">
+      <h3>À la main</h3>
+      <ul><li>10 commandes tapées avant chaque intervention</li><li>oublis, fautes de frappe, « ça marchait chez moi »</li><li>aucune trace de ce qui a été fait</li><li>impossible sur 50 serveurs à 3 h du matin</li></ul>
+    </div>
+    <div class="card ok">
+      <h3>Scripté</h3>
+      <ul><li><strong>reproductible</strong> : même entrée, même résultat</li><li><strong>traçable</strong> : logs, code versionné dans Git</li><li><strong>planifiable</strong> : cron, systemd, supervision</li><li><strong>relisible</strong> par un collègue ou un auditeur</li></ul>
+    </div>
+  </div>
+  <div class="callout">En cybersécurité, un script est aussi une <strong>preuve</strong> : ce qui a été vérifié, quand et comment.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <h2><small>Pourquoi scripter</small>Bash ou Python ?</h2>
+  <table>
+    <tr><th></th><th>Bash</th><th>Python</th></tr>
+    <tr><td>Enchaîner des commandes système</td><td><span class="pill ok">idéal</span></td><td><span class="pill">possible</span> avec <code>subprocess</code></td></tr>
+    <tr><td>Disponible partout, sans installation</td><td><span class="pill ok">oui</span></td><td><span class="pill">presque</span> (versions variables)</td></tr>
+    <tr><td>Données structurées : JSON, CSV, API</td><td><span class="pill ko">pénible</span></td><td><span class="pill ok">natif</span></td></tr>
+    <tr><td>Logique complexe, calculs, dates</td><td><span class="pill ko">piégeux</span></td><td><span class="pill ok">naturel</span></td></tr>
+    <tr><td>Gestion d'erreurs et tests</td><td><span class="pill">limité</span></td><td><span class="pill ok">complet</span> (<code>try</code>, <code>pytest</code>)</td></tr>
+    <tr><td>Au-delà de 100 lignes</td><td><span class="pill ko">à éviter</span></td><td><span class="pill ok">oui</span></td></tr>
+  </table>
+  <div class="callout">Règle pratique : <strong>Bash pour coller des commandes</strong>, <strong>Python dès qu'il y a de la donnée ou de la logique</strong>.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <h2><small>Démo</small>Même tâche, deux langages : qui attaque en SSH ?</h2>
+  <div class="cols">
+    <div>
+      <p><strong>Bash</strong> : 1 ligne, lisible si on connaît les outils</p>
+<pre data-lang="bash" class="small">grep "Failed password" auth.log.extrait \
+  | grep -oE 'from [0-9.]+' \
+  | sort | uniq -c | sort -rn</pre>
+      <p class="muted" style="font-size:17px;margin-top:14px">Et si on veut filtrer par heure, exporter en JSON, ou alerter au-delà de 10 échecs ?</p>
+    </div>
+    <div>
+      <p><strong>Python</strong> : plus long, mais extensible</p>
+<pre data-lang="python" class="small">import re
+from collections import Counter
+
+MOTIF = re.compile(r"Failed password for (?:invalid user )?\S+ from (\S+)")
+
+ips = Counter()
+with open("auth.log.extrait", encoding="utf-8") as f:
+    for ligne in f:
+        if m := MOTIF.search(ligne):
+            ips[m.group(1)] += 1
+
+for ip, n in ips.most_common():
+    print(f"{n:>5} {ip}")</pre>
+    </div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>11</span></div>
+  <aside class="notes">Lancer les deux en direct dans seances/s1-scripter-admin/donnees/. Résultat attendu : 22 · 203.0.113.45 en tête. Faire remarquer les IP en 203.0.113.x et 198.51.100.x : ce sont des plages réservées à la documentation (RFC 5737), donc anonymes.</aside>
+</section>
+
+<!-- 12 -->
+<section class="slide section">
+  <div class="kicker">Partie 2</div>
+  <h1>Anatomie d'un script d'administration</h1>
+  <div class="num">02</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>12</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <h2><small>Anatomie</small>La checklist du script « propre »</h2>
+  <div class="cols">
+    <ul>
+      <li><strong>Shebang</strong> : <code>#!/usr/bin/env bash</code></li>
+      <li><strong>En-tête</strong> : rôle, usage, codes retour, auteur</li>
+      <li><strong><code>--help</code></strong> : un collègue doit pouvoir s'en servir sans lire le code</li>
+      <li><strong>Arguments</strong> plutôt que des valeurs en dur</li>
+      <li><strong>Codes retour</strong> significatifs : 0, 1, 2</li>
+    </ul>
+    <ul>
+      <li><strong>stdout</strong> pour le résultat, <strong>stderr</strong> pour les messages</li>
+      <li>Échec <strong>propre</strong> : un message clair, pas une trace</li>
+      <li><strong>Aucun secret</strong> dans le code</li>
+      <li>Vérifier les <strong>prérequis</strong> : commandes, droits, fichiers</li>
+      <li><strong>Idempotent</strong> si possible : le relancer ne casse rien</li>
+    </ul>
+  </div>
+  <div class="callout">Point de départ : <code>modeles/script_modele.sh</code> et <code>modeles/script_modele.py</code></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>13</span></div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <h2><small>Anatomie</small>Les codes retour : le langage des scripts entre eux</h2>
+  <div class="cols">
+    <div>
+      <table>
+        <tr><th>Code</th><th>Convention du module</th></tr>
+        <tr><td><strong>0</strong></td><td>tout va bien</td></tr>
+        <tr><td><strong>1</strong></td><td>le script a fonctionné <em>et</em> signale une anomalie</td></tr>
+        <tr><td><strong>2</strong></td><td>le script n'a pas pu faire son travail : usage, fichier, droits</td></tr>
+      </table>
+      <p style="margin-top:18px">Qui les lit ? <strong>cron</strong>, <strong>systemd</strong>, la <strong>supervision</strong>, la CI… et <code>&amp;&amp;</code> / <code>||</code>.</p>
+    </div>
+<pre data-lang="bash">$ ./inventaire.sh -s 80 &gt; /dev/null
+$ echo $?
+1                       # un disque dépasse 80 %
+
+$ ./inventaire.sh -s abc
+[ERREUR] seuil invalide : abc
+$ echo $?
+2
+
+$ ./inventaire.sh -s 90 &amp;&amp; echo "RAS" \
+                        || echo "à regarder"</pre>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>14</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <h2><small>Anatomie</small>stdout, stderr et redirections</h2>
+  <div class="cols code">
+<pre data-lang="bash" class="small"># stdout (1) : le RÉSULTAT, à exploiter
+# stderr (2) : les MESSAGES, pour l'humain
+
+./inventaire.py -f json &gt; inv.json   # résultat seul
+./inventaire.py 2&gt; erreurs.log       # messages à part
+./inventaire.py &gt; tout.log 2&gt;&amp;1      # tout ensemble
+./inventaire.py 2&gt;/dev/null          # messages ignorés
+
+# Le test qui ne pardonne pas :
+./inventaire.py -f json | python3 -m json.tool</pre>
+    <div>
+      <div class="card ko"><h3>Erreur classique</h3><p>Un <code>print("Lecture de /proc…")</code> de debug dans un script qui produit du JSON : <strong>la sortie n'est plus du JSON valide</strong>, et l'outil suivant plante.</p></div>
+      <div class="callout" style="margin-top:18px">En Python : <code>logging</code> configuré sur <code>sys.stderr</code>, et <code>print()</code> réservé au résultat.</div>
+    </div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>15</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <h2><small>Anatomie</small>Bash robuste : 5 réflexes</h2>
+  <div class="cols code">
+<pre data-lang="bash" class="small">#!/usr/bin/env bash
+set -euo pipefail   # erreur, variable vide, pipe : stop
+
+fichier="$1"        # TOUJOURS des guillemets
+[[ -r "$fichier" ]] || { echo "illisible" &gt;&amp;2; exit 2; }
+
+command -v ss &gt;/dev/null || echo "ss absent" &gt;&amp;2
+
+tmp="$(mktemp -d)"
+trap 'rm -rf -- "$tmp"' EXIT   # nettoyage garanti
+
+while read -r ligne; do
+  (( n++ )) || true
+done &lt; &lt;(df -P)      # et non : df -P | while read</pre>
+    <ol>
+      <li><code>set -euo pipefail</code> en tête</li>
+      <li><strong>guillemets</strong> autour de chaque variable</li>
+      <li>vérifier les <strong>prérequis</strong> (<code>command -v</code>, <code>[[ -r ]]</code>)</li>
+      <li><code>trap … EXIT</code> pour nettoyer</li>
+      <li><strong>pas de <code>| while</code></strong> si la boucle modifie une variable : c'est un sous-shell</li>
+    </ol>
+  </div>
+  <div class="callout">Et <code>shellcheck script.sh</code> avant chaque commit.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>16</span></div>
+  <aside class="notes">Le piège 5 est celui du TP (variable ALERTE). Le montrer en direct si le temps le permet.</aside>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <h2><small>Anatomie</small>Python robuste : la structure type</h2>
+  <div class="cols code">
+<pre data-lang="python" class="xs">#!/usr/bin/env python3
+"""Rôle. Codes retour : 0 OK, 1 anomalie, 2 erreur."""
+import argparse, logging, sys
+from pathlib import Path
+
+log = logging.getLogger("inventaire")
+
+def lire_comptes(chemin: Path) -&gt; list[dict]:
+    ...                     # fonction pure : facile à tester
+
+def main(argv=None) -&gt; int:
+    p = argparse.ArgumentParser(description="...")
+    p.add_argument("-s", "--seuil", type=int, default=80)
+    args = p.parse_args(argv)
+    logging.basicConfig(stream=sys.stderr)
+    try:
+        comptes = lire_comptes(Path("/etc/passwd"))
+    except PermissionError as e:
+        log.error("droits insuffisants : %s", e)
+        return 2
+    print(comptes)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())</pre>
+    <ul>
+      <li><code>main()</code> renvoie le <strong>code retour</strong></li>
+      <li><code>argparse</code> : l'aide et la validation sont gratuites</li>
+      <li><code>pathlib.Path</code> plutôt que des chaînes</li>
+      <li>des <strong>petites fonctions</strong> qui renvoient des données : la mise en forme vient après</li>
+      <li><code>subprocess.run([...], check=True, timeout=5)</code> : <strong>jamais</strong> <code>shell=True</code> ni <code>os.system</code></li>
+    </ul>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>17</span></div>
+</section>
+
+<!-- 18 -->
+<section class="slide section">
+  <div class="kicker">Partie 3</div>
+  <h1>L'IA comme copilote</h1>
+  <div class="num">03</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>18</span></div>
+</section>
+
+<!-- 19 -->
+<section class="slide">
+  <h2><small>IA</small>Ce qu'elle fait bien, ce qu'elle fait mal</h2>
+  <div class="cols">
+    <div class="card ok"><h3>Très utile pour…</h3><ul>
+      <li>un premier jet, ou un squelette</li><li>expliquer une commande, une regex, une erreur</li>
+      <li>traduire du Bash en Python (et l'inverse)</li><li>proposer des cas de test</li><li>relire, reformuler une documentation</li></ul></div>
+    <div class="card ko"><h3>Mais elle…</h3><ul>
+      <li><strong>invente</strong> des options ou des fonctions qui n'existent pas</li><li>ignore votre contexte : version, OS, droits</li>
+      <li>propose des commandes <strong>destructrices</strong> sans prévenir</li><li>néglige les erreurs et les cas limites</li>
+      <li>est sûre d'elle, <strong>même quand elle a tort</strong></li></ul></div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>19</span></div>
+</section>
+
+<!-- 20 -->
+<section class="slide">
+  <h2><small>IA</small>Les 5 règles du module</h2>
+  <ol class="steps">
+    <li><strong>Aucune donnée sensible</strong> dans un prompt : mots de passe, clés, IP ou noms réels, logs d'entreprise</li>
+    <li><strong>Vous comprenez tout</strong> ce que vous rendez : une ligne inexplicable n'a rien à faire là</li>
+    <li><strong>Vous testez</strong> dans un environnement jetable avant de faire confiance</li>
+    <li><strong>Vous vérifiez à la source</strong> : <code>man</code>, <code>--help</code>, documentation officielle</li>
+    <li><strong>Vous tracez</strong> votre usage dans <code>JOURNAL-IA.md</code></li>
+  </ol>
+  <div class="callout warn">Un journal honnête qui montre les erreurs de l'IA que vous avez corrigées vaut <strong>mieux</strong> qu'un journal vide.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>20</span></div>
+</section>
+
+<!-- 21 -->
+<section class="slide">
+  <h2><small>IA</small>Un prompt qui marche pour du scripting</h2>
+  <div class="cols">
+    <div>
+      <div class="card ko" style="margin-bottom:16px"><p style="margin:0"><code>fais-moi un script python qui analyse les logs ssh</code></p></div>
+<pre data-lang="text" class="small">Contexte    : Ubuntu 24.04, Python 3.12, lancé par cron
+              en tant que root.
+Tâche       : lire /var/log/auth.log et compter les échecs
+              SSH par IP.
+Contraintes : bibliothèque standard uniquement ; si le
+              fichier est absent : message sur stderr,
+              code retour 2.
+Format      : un seul fichier, main(), argparse.
+Demande     : explique chaque regex, puis propose 3 cas
+              de test, dont 1 cas limite.</pre>
+    </div>
+    <ul>
+      <li><strong>Contexte</strong> : OS, version, qui lance le script</li>
+      <li><strong>Tâche</strong> précise, avec l'entrée et la sortie</li>
+      <li><strong>Contraintes</strong> : dépendances, comportement en cas d'erreur</li>
+      <li><strong>Format</strong> attendu</li>
+      <li>Demander <strong>des explications et des tests</strong> : c'est ce qui vous permet de vérifier</li>
+    </ul>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>21</span></div>
+</section>
+
+<!-- 22 -->
+<section class="slide">
+  <h2><small>Démo en direct</small>Prompt → code → revue critique</h2>
+  <div class="cols">
+    <div>
+      <p><strong>Prompt naïf</strong> : « fais un script python qui affiche l'espace disque »</p>
+      <p class="muted">Que voyez-vous de problématique dans la réponse ?</p>
+      <p><strong>Puis le prompt structuré</strong> : comparons.</p>
+    </div>
+    <div class="card acc">
+      <h3>Grille de revue : 5 questions</h3>
+      <ol>
+        <li>Est-ce que je <strong>comprends</strong> chaque ligne ?</li>
+        <li>Entrée <strong>absente, vide ou malformée</strong> : que se passe-t-il ?</li>
+        <li>Quels <strong>effets de bord</strong> : écriture, suppression, réseau, droits ?</li>
+        <li>Les commandes et options <strong>existent-elles</strong> sur ma version ?</li>
+        <li>Comment je <strong>teste</strong> que ça marche, et que ça échoue proprement ?</li>
+      </ol>
+    </div>
+  </div>
+  <div class="callout">L'IA répond à la question posée, pas à celle qu'on aurait dû poser.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>22</span></div>
+  <aside class="notes">Défauts attendus : os.system ou shell=True, psutil (dépendance non demandée), pas de seuil ni de code retour, % calculé en used/total donc différent de df.</aside>
+</section>
+
+<!-- 23 -->
+<section class="slide section">
+  <div class="kicker">À vous</div>
+  <h1>TP1 · Inventaire système</h1>
+  <div class="num">TP</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>23</span></div>
+</section>
+
+<!-- 24 -->
+<section class="slide">
+  <h2><small>TP1 · 95 min</small>Automatiser l'état des lieux d'un serveur</h2>
+  <div class="cols c3">
+    <div class="card acc"><h3>A · Bash · 40'</h3><p><code>inventaire.sh</code> : hôte, CPU et mémoire, disques avec seuil, comptes, ports</p><p>Options <code>-s</code>, <code>-o</code>, <code>-h</code> · codes 0, 1, 2</p></div>
+    <div class="card acc"><h3>B · Python · 45'</h3><p><code>inventaire.py</code> : la même chose, plus <code>--format json</code></p><p><code>logging</code> sur stderr · aucune trace Python</p></div>
+    <div class="card acc"><h3>C · IA · en continu</h3><p>Faites écrire <strong>une</strong> fonction par l'IA, passez-la à la grille, puis notez-la dans <code>JOURNAL-IA.md</code></p></div>
+  </div>
+  <div class="callout">Vérifiez votre travail à tout moment : <code>bash verifier_tp1.sh</code> · énoncé complet : <code>seances/s1-scripter-admin/README.md</code></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>24</span></div>
+</section>
+
+<!-- 25 -->
+<section class="slide">
+  <h2><small>TP1</small>Démarrer</h2>
+<pre data-lang="bash"># 1. Récupérer le dépôt et préparer l'environnement
+git clone &lt;url-du-depot&gt; eemi-scripts-python &amp;&amp; cd eemi-scripts-python
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+bash seances/s1-scripter-admin/verifier_env.sh
+
+# 2. Démarrer le journal d'usage de l'IA
+cp modeles/JOURNAL-IA.md JOURNAL-IA.md
+
+# 3. Travailler, vérifier, committer
+cd seances/s1-scripter-admin
+chmod +x inventaire.sh inventaire.py
+./inventaire.sh -h
+bash verifier_tp1.sh
+git add . &amp;&amp; git commit -m "TP1 : partie A" &amp;&amp; git push</pre>
+  <div class="callout warn">Pas de Linux ? WSL 2 (Windows), une VM (macOS), ou un conteneur <code>ubuntu:24.04</code> : voir le README du dépôt.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>25</span></div>
+</section>
+
+<!-- 26 -->
+<section class="slide">
+  <h2><small>Pour conclure</small>Ce qu'on retient</h2>
+  <div class="cols">
+    <ul>
+      <li>Bash pour <strong>coller des commandes</strong>, Python pour <strong>la donnée et la logique</strong></li>
+      <li>Un script d'admin, c'est un <strong>contrat</strong> : aide, arguments, codes retour, stdout et stderr</li>
+      <li>Il doit <strong>échouer proprement</strong></li>
+      <li>L'IA accélère, <strong>vous</strong> vérifiez</li>
+    </ul>
+    <div class="card acc">
+      <h3>Séance 2 · ven. 23/10</h3>
+      <p><strong>Parser les journaux</strong> : regex, <code>auth.log</code>, <code>journalctl -o json</code>, logs web · TP détecteur de brute force SSH</p>
+      <p class="muted">D'ici là : terminer le TP1 et le pousser, avec <code>reponses.md</code> et <code>JOURNAL-IA.md</code>.</p>
+    </div>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>26</span></div>
+</section>
+
+</div>
+<div id="bar"></div>
+<div id="help">← → naviguer · F plein écran · N notes · P imprimer</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const bar = document.getElementById('bar');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96;
+    slides.forEach(el => el.style.transform = `scale(${s})`);
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    bar.style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('show-notes');
+    else if (e.key.toLowerCase() === 'p') window.print();
+  });
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('pre, a, code')) return;
+    show(e.clientX > window.innerWidth / 2 ? i + 1 : i - 1);
+  });
+  let x0 = null;
+  document.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // Coloration syntaxique minimale (commentaires, chaînes, mots-clés, variables)
+  const KW = {
+    python: /\b(import|from|def|return|if|else|elif|for|in|with|as|try|except|raise|not|and|or|None|True|False|class|while|lambda|is)\b/g,
+    bash: /\b(if|then|else|fi|for|in|do|done|while|case|esac|function|return|exit|set|local|readonly|trap|echo|export)\b/g,
+  };
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function highlightCode(code, lang) {
+    let out = '', k = 0;
+    const plain = s => {
+      let h = esc(s);
+      if (KW[lang]) h = h.replace(KW[lang], '<span class="tok-kw">$1</span>');
+      if (lang === 'bash') h = h.replace(/(\$\{?[A-Za-z_?#@][A-Za-z0-9_]*\}?|\$\(|\$\?)/g, '<span class="tok-var">$1</span>');
+      return h;
+    };
+    let buf = '';
+    while (k < code.length) {
+      const c = code[k];
+      const prev = k === 0 ? '\n' : code[k - 1];
+      if (c === '#' && lang !== 'text' && /\s/.test(prev) || (c === '#' && k === 0)) {
+        if (!(lang === 'bash' && code[k + 1] === '!' && k === 0)) {
+          const end = code.indexOf('\n', k); const stop = end === -1 ? code.length : end;
+          out += plain(buf) + `<span class="tok-com">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+        }
+      }
+      if (lang === 'python' && code.startsWith('"""', k)) {
+        const end = code.indexOf('"""', k + 3); const stop = end === -1 ? code.length : end + 3;
+        out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+      }
+      if ((c === '"' || c === "'") && lang !== 'text') {
+        let j = k + 1;
+        while (j < code.length && code[j] !== c && code[j] !== '\n') { if (code[j] === '\\') j++; j++; }
+        if (code[j] === c) {
+          out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, j + 1))}</span>`; buf = ''; k = j + 1; continue;
+        }
+      }
+      buf += c; k++;
+    }
+    return out + plain(buf);
+  }
+  document.querySelectorAll('pre[data-lang]').forEach(pre => {
+    pre.innerHTML = highlightCode(pre.textContent, pre.dataset.lang);
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>

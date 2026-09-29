@@ -1,0 +1,5 @@
+# Dépendances du module (séances 3 et 5). Les séances 1 et 2 n'utilisent que la bibliothèque standard.
+psutil>=5.9
+pytest>=8.0
+ruff>=0.5
+bandit>=1.7
