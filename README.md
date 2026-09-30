@@ -51,8 +51,8 @@ Il vous faut **un Linux** (Debian, Ubuntu ou équivalent) avec **Python 3.10 ou 
 Ensuite :
 
 ```bash
-git clone <url-du-depot> eemi-scripts-python
-cd eemi-scripts-python
+git clone https://github.com/TikvichkaA/eemi-b2-scripts-python.git
+cd eemi-b2-scripts-python
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
