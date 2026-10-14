@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA et cybersécurité</title>
+<style>
+:root{
+  --bg:#0f1b2d; --bg2:#15253d; --ink:#1b2430; --paper:#fbfaf7; --muted:#5d6878;
+  --accent:#0f8b8d; --accent2:#e07a2f; --ok:#2f8f4e; --ko:#c0392b; --line:#d9dde3;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --code-str:#9fd6a5; --code-kw:#ffb86b; --code-var:#7fc8ff;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1320;font-family:var(--sans);color:var(--ink)}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--paper);padding:56px 72px 48px;
+  display:none;flex-direction:column;transform-origin:center center;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.slide.active{display:flex}
+.slide h1{font-size:44px;line-height:1.1;margin:0 0 20px;letter-spacing:-.5px}
+.slide h2{font-size:34px;line-height:1.15;margin:0 0 22px;letter-spacing:-.3px}
+.slide h2 small{display:block;font-size:17px;font-weight:600;color:var(--accent);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.slide p,.slide li{font-size:22px;line-height:1.45}
+.slide ul,.slide ol{margin:0 0 0 4px;padding-left:26px}
+.slide li{margin:6px 0}
+.slide li::marker{color:var(--accent)}
+.muted{color:var(--muted)}
+.foot{position:absolute;left:72px;right:72px;bottom:18px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+/* variantes */
+.title,.section{background:var(--bg);color:#fff;justify-content:center}
+.title h1{font-size:58px;max-width:980px}
+.title .kicker,.section .kicker{color:#7fd3d4;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:18px;margin-bottom:18px}
+.title p{color:#c6d0dc;font-size:24px}
+.section h1{font-size:64px}
+.section .num{font-size:120px;font-weight:800;color:#23405f;position:absolute;right:72px;bottom:28px;line-height:1}
+.title .foot,.section .foot{color:#8a97a8}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;min-height:0}
+.cols.c3{grid-template-columns:1fr 1fr 1fr}
+.cols.code{grid-template-columns:1.45fr 1fr}
+.cols > pre{align-self:start}
+pre.xs{font-size:13.5px;line-height:1.42}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.card h3{margin:0 0 10px;font-size:22px}
+.card.ok{border-top:5px solid var(--ok)} .card.ko{border-top:5px solid var(--ko)} .card.acc{border-top:5px solid var(--accent)}
+.card li,.card p{font-size:19px}
+.callout{margin-top:auto;background:#eaf6f6;border-left:6px solid var(--accent);padding:14px 20px;border-radius:6px;font-size:20px}
+.callout.warn{background:#fdf1e7;border-color:var(--accent2)}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef1f4;font-weight:700}
+td code,li code,p code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 6px;border-radius:4px}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:16px 20px;font-family:var(--mono);
+  font-size:16.5px;line-height:1.5;overflow:hidden;white-space:pre}
+pre.small{font-size:14.5px}
+.tok-com{color:var(--code-com);font-style:italic} .tok-str{color:var(--code-str)} .tok-kw{color:var(--code-kw)} .tok-var{color:var(--code-var)}
+.pill{display:inline-block;padding:2px 12px;border-radius:999px;font-size:16px;font-weight:700;background:#eef1f4}
+.pill.ok{background:#e3f3e8;color:var(--ok)} .pill.ko{background:#f8e4e1;color:var(--ko)} .pill.acc{background:#e0f2f2;color:var(--accent)}
+.big{font-size:30px!important;line-height:1.35}
+.center{align-items:center;justify-content:center;text-align:center}
+.steps{counter-reset:s;list-style:none;padding:0!important}
+.steps li{counter-increment:s;position:relative;padding-left:52px;margin:12px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-size:18px}
+aside.notes{display:none}
+body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0;right:0;top:100%;margin-top:8px;background:#fffbe6;
+  border:1px solid #e8d98a;padding:10px 16px;font-size:15px;color:#4a4020;border-radius:6px}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .2s}
+#help{position:fixed;right:12px;bottom:10px;color:#6f7d8f;font-size:12px}
+/* impression : une slide par page */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#fff}
+  #deck{position:static;display:block}
+  .slide{display:flex!important;position:relative;transform:none!important;box-shadow:none;page-break-after:always;break-after:page}
+  #bar,#help,aside.notes{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 -->
+<section class="slide title">
+  <div class="kicker">EEMI · B2 Cybersécurité · Séquence transversale</div>
+  <h1>IA générative et cybersécurité</h1>
+  <p>Ce que les modèles acceptent ou refusent, comment travailler en défense avec eux, et ce que change l'open source en local</p>
+  <div class="foot"><span>Emmanuel Pinglier</span><span>Scripts de parsing et d'automatisation</span></div>
+  <aside class="notes">Séquence de 25 à 30 min. Placement recommandé : S2, juste avant le TP2 (détecteur de brute force SSH).</aside>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <h2><small>Le constat</small>« Désolé, je ne peux pas vous aider avec ça. »</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Ça vous arrivera</h3>
+      <ul>
+        <li>en demandant un parseur de logs <strong>d'attaque</strong></li>
+        <li>en voulant des <strong>données de test</strong> qui simulent une intrusion</li>
+        <li>en demandant d'<strong>expliquer</strong> un exploit pour s'en protéger</li>
+      </ul>
+      <p class="muted">…alors que vous faites de la <strong>défense</strong>.</p>
+    </div>
+    <div class="card acc">
+      <h3>Trois questions pour aujourd'hui</h3>
+      <ol>
+        <li>Pourquoi les modèles refusent-ils ?</li>
+        <li>Que peut-on leur demander, et comment ?</li>
+        <li>Grands modèles en ligne ou modèles ouverts en local : qu'est-ce que ça change ?</li>
+      </ol>
+    </div>
+  </div>
+  <div class="callout">Un refus n'est ni un bug ni un jugement sur vous : c'est un <strong>compromis</strong> fait par l'éditeur.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>2</span></div>
+  <aside class="notes">Demander à main levée : qui a déjà eu un refus d'une IA sur un sujet sécu ? Faire raconter un ou deux cas.</aside>
+</section>
+
+<!-- 3 -->
+<section class="slide section">
+  <div class="kicker">Partie 1</div>
+  <h1>Pourquoi les modèles refusent</h1>
+  <div class="num">01</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h2><small>Le double usage</small>Le même savoir sert l'attaquant et le défenseur</h2>
+  <table>
+    <tr><th>Côté défense</th><th>Côté attaque</th><th>Ce qu'il faut savoir dans les deux cas</th></tr>
+    <tr><td>Détecter un brute force SSH</td><td>Mener un brute force SSH</td><td>Format des échecs dans <code>auth.log</code>, rythme, IP sources</td></tr>
+    <tr><td>Écrire une règle de détection de malware</td><td>Écrire un malware indétectable</td><td>Ce que regarde un antivirus ou un EDR</td></tr>
+    <tr><td>Vérifier qu'un serveur n'est pas vulnérable</td><td>Exploiter la vulnérabilité</td><td>Version touchée, conditions de déclenchement</td></tr>
+    <tr><td>Former les salariés au phishing</td><td>Envoyer une campagne de phishing</td><td>Les ressorts d'un mail crédible</td></tr>
+  </table>
+  <div class="callout warn">Le modèle ne voit que <strong>le texte</strong>. Il ne connaît ni votre intention, ni votre contrat d'alternance, ni l'autorisation que vous avez (ou pas).</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h2><small>Sous le capot</small>Trois couches de garde-fous</h2>
+  <div class="cols c3">
+    <div class="card acc"><h3>1 · Le modèle</h3><p>Il est <strong>entraîné</strong> à refuser certaines demandes. Il juge sur la formulation et le contexte fournis.</p></div>
+    <div class="card acc"><h3>2 · Les classifieurs</h3><p>Des filtres automatiques analysent <strong>la demande et la réponse</strong>, et peuvent bloquer même si le modèle aurait répondu.</p></div>
+    <div class="card acc"><h3>3 · Le compte</h3><p>Politique d'usage, <strong>surveillance des abus</strong>, suspension. Les essais répétés de contournement se voient.</p></div>
+  </div>
+  <div class="cols" style="margin-top:22px">
+    <div class="card ko"><h3>Faux positifs</h3><p>Une demande légitime est bloquée. <strong>Assumé</strong> par les éditeurs pour les modèles grand public.</p></div>
+    <div class="card ko"><h3>Faux négatifs</h3><p>Une demande malveillante bien déguisée passe. C'est pour ça que <strong>la responsabilité reste la vôtre</strong>.</p></div>
+  </div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>5</span></div>
+  <aside class="notes">Faire le parallèle avec ce qu'ils connaissent : un IDS a lui aussi des faux positifs et des faux négatifs, et on règle ses seuils selon le coût de chacun.</aside>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h2><small>Les éditeurs · octobre 2026</small>Accès standard et accès vérifié</h2>
+  <table>
+    <tr><th>Éditeur</th><th>Accès standard (vous)</th><th>Accès élargi pour la défense</th></tr>
+    <tr><td><strong>Anthropic</strong><br><span class="muted">Claude</span></td><td>Défense autorisée ; malware, compromission de systèmes tiers interdits ; garde-fous cyber « conservateurs »</td><td><em>Cyber Verification Program</em> (élargi le 07/10/2026) : niveaux Défense, Red Team, Spécialisé. <strong>Organisations vérifiées.</strong></td></tr>
+    <tr><td><strong>OpenAI</strong><br><span class="muted">GPT, Codex</span></td><td>Refus des demandes clairement malveillantes, classifieurs de détection d'activité suspecte</td><td><em>Trusted Access for Cyber</em> (févr. 2026) : vérification d'identité ; modèles plus permissifs sur invitation</td></tr>
+    <tr><td><strong>Google, Mistral…</strong></td><td>Politiques d'usage du même type</td><td>Offres entreprise, contrats spécifiques</td></tr>
+  </table>
+  <div class="callout">L'accès élargi se paie : <strong>identité vérifiée</strong>, cadre contractuel, et conservation des échanges pour contrôle. Ce n'est pas pour un TP d'étudiant.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>6</span></div>
+  <aside class="notes">Message : la tendance est à « les défenseurs vérifiés ont plus d'accès », pas à « tout le monde a tout ». Ces offres évoluent tous les trimestres ; ce tableau est daté.</aside>
+</section>
+
+<!-- 7 -->
+<section class="slide section">
+  <div class="kicker">Partie 2</div>
+  <h1>Travailler en défense avec un modèle</h1>
+  <div class="num">02</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <h2><small>Le feu tricolore</small>Ce qui passe, ce qui coince, ce qui est refusé</h2>
+  <div class="cols c3">
+    <div class="card ok"><h3>Vert</h3><ul>
+      <li>parser et agréger des logs</li><li>règles de détection (Sigma, YARA)</li><li>durcissement, audit de config</li><li>expliquer une CVE, une technique ATT&amp;CK</li><li>revue de code sécurité</li><li>logs synthétiques pour tester</li></ul></div>
+    <div class="card" style="border-top:5px solid var(--accent2)"><h3>Orange</h3><ul>
+      <li>scanner son propre réseau</li><li>analyser un échantillon malveillant</li><li>une preuve de concept sur <strong>son</strong> lab</li><li>fuzzing d'une application</li></ul>
+      <p class="muted" style="font-size:16px">Légitime avec un cadre ; parfois refusé.</p></div>
+    <div class="card ko"><h3>Rouge</h3><ul>
+      <li>malware fonctionnel, rançongiciel</li><li>contourner un antivirus ou un EDR</li><li>voler des identifiants</li><li>attaquer un système tiers</li><li>phishing réel</li></ul></div>
+  </div>
+  <div class="callout">Tout ce module est en <strong>vert</strong>. Si vous êtes en rouge, le problème n'est pas l'IA.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h2><small>Formuler</small>Demander la détection, pas l'attaque</h2>
+  <div class="cols">
+    <div>
+      <div class="card ko" style="margin-bottom:14px"><p style="margin:0"><code>écris un script qui teste une liste de mots de passe sur un serveur SSH</code></p></div>
+<pre data-lang="text" class="small">Contexte : TP de détection, module B2 Cyber.
+           Jeu de logs anonymisé fourni par l'école.
+Tâche    : à partir de auth.log, détecter les IP qui
+           ont plus de 10 échecs SSH en 60 secondes.
+Données  : génère aussi un auth.log synthétique de
+           200 lignes avec une attaque simulée depuis
+           203.0.113.42 (plage de documentation).
+Format   : Python 3.12, bibliothèque standard, main().</pre>
+    </div>
+    <ul>
+      <li><strong>Dites le contexte</strong> : TP, lab, données fournies</li>
+      <li><strong>Visez la sortie défensive</strong> : un détecteur, une alerte, un rapport</li>
+      <li><strong>Simulez</strong> l'attaque dans des <em>données</em>, pas dans du code qui attaque</li>
+      <li>IP de documentation : <code>192.0.2.0/24</code>, <code>198.51.100.0/24</code>, <code>203.0.113.0/24</code> (RFC 5737)</li>
+    </ul>
+  </div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>9</span></div>
+  <aside class="notes">Pour tester un détecteur de brute force, on n'a pas besoin d'outil de brute force : il suffit de lignes de log. C'est plus rapide, reproductible, et sans risque.</aside>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <h2><small>Face à un refus</small>Quatre réflexes, et une ligne rouge</h2>
+  <div class="cols">
+    <ol class="steps">
+      <li><strong>Relisez votre demande</strong> : est-elle vraiment défensive ? En avez-vous besoin ?</li>
+      <li><strong>Donnez le contexte honnêtement</strong> : TP, lab, objectif de détection</li>
+      <li><strong>Reformulez vers la défense</strong> : détecter, journaliser, simuler en données</li>
+      <li><strong>Notez le refus</strong> dans <code>JOURNAL-IA.md</code> : c'est une observation utile</li>
+    </ol>
+    <div class="card ko">
+      <h3>Pas de « jailbreak »</h3>
+      <ul>
+        <li>faux rôle, « c'est pour un roman », injonctions…</li>
+        <li>violation des conditions d'utilisation : <strong>compte suspendu</strong></li>
+        <li>en entreprise : faute professionnelle</li>
+        <li>mentir sur le contexte reste mentir</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn">Contourner un garde-fou, c'est précisément le comportement que vous apprenez à <strong>détecter</strong>.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <h2><small>Le cadre</small>La loi ne dépend pas de l'outil</h2>
+  <div class="cols">
+    <div class="card acc">
+      <h3>Code pénal</h3>
+      <ul>
+        <li><strong>Art. 323-1</strong> : accès ou maintien frauduleux dans un système</li>
+        <li><strong>Art. 323-3-1</strong> : détenir ou fournir un outil conçu pour ces infractions, <strong>sans motif légitime</strong> (recherche, sécurité informatique)</li>
+      </ul>
+    </div>
+    <div class="card acc">
+      <h3>En pratique</h3>
+      <ul>
+        <li>tests offensifs : <strong>autorisation écrite</strong> et périmètre défini</li>
+        <li>logs réels : données personnelles (IP, identifiants), <strong>RGPD</strong></li>
+        <li>règles de votre employeur sur l'IA</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">« L'IA a accepté de le faire » n'a jamais été une défense. Que le code vienne d'un modèle, d'un forum ou de vous, <strong>c'est vous qui le lancez</strong>.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>11</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide section">
+  <div class="kicker">Partie 3</div>
+  <h1>Grands modèles ou open source en local ?</h1>
+  <div class="num">03</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>12</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <h2><small>Comparer</small>Deux familles, deux jeux de compromis</h2>
+  <table>
+    <tr><th></th><th>Grands modèles en ligne<br><span class="muted" style="font-weight:400">Claude, GPT, Gemini, Mistral Le Chat</span></th><th>Modèles ouverts en local<br><span class="muted" style="font-weight:400">gpt-oss, Qwen3-Coder, Devstral, Gemma</span></th></tr>
+    <tr><td><strong>Qualité du code</strong></td><td><span class="pill ok">meilleure</span> surtout sur les tâches longues</td><td><span class="pill">correcte</span> sur des scripts courts et guidés</td></tr>
+    <tr><td><strong>Garde-fous</strong></td><td>stricts, mis à jour, non réglables</td><td>ceux de l'entraînement, plus souples, <strong>réglables</strong></td></tr>
+    <tr><td><strong>Confidentialité</strong></td><td>les données <strong>sortent</strong> chez l'éditeur</td><td><span class="pill ok">rien ne sort</span> de la machine</td></tr>
+    <tr><td><strong>Coût</strong></td><td>abonnement ou paiement à l'usage</td><td>gratuit, mais <strong>matériel</strong> et électricité</td></tr>
+    <tr><td><strong>Reproductibilité</strong></td><td>le modèle change sans prévenir</td><td>version figée, <strong>auditables</strong></td></tr>
+    <tr><td><strong>Exploitation</strong></td><td>rien à gérer</td><td>installation, mises à jour, sécurité du serveur</td></tr>
+  </table>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>13</span></div>
+  <aside class="notes">« Open source » est souvent abusif : la plupart sont « open weight » (poids publiés, données et code d'entraînement non). Vérifier la licence : Apache 2.0 pour gpt-oss et Devstral, licences maison pour d'autres.</aside>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <h2><small>En pratique</small>Faire tourner un modèle chez soi</h2>
+  <div class="cols code">
+    <div>
+<pre data-lang="bash" class="small"># Installer Ollama (Linux, macOS, Windows), puis :
+ollama pull gpt-oss:20b          # ~14 Go à télécharger
+ollama run gpt-oss:20b "Explique cette regex : ^(\S+) sshd"
+
+# API locale compatible OpenAI, pour vos scripts
+curl http://localhost:11434/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-oss:20b",
+       "messages":[{"role":"user","content":"Bonjour"}]}'</pre>
+      <p class="muted" style="font-size:17px;margin-top:10px">Autres outils : LM Studio (interface graphique), llama.cpp, vLLM (serveur).</p>
+    </div>
+    <table>
+      <tr><th>Machine</th><th>Ordre de grandeur</th></tr>
+      <tr><td>Portable 16 Go, sans GPU</td><td>modèles 7–8 B, <code>gpt-oss:20b</code> (lent)</td></tr>
+      <tr><td>GPU 24 Go</td><td><code>qwen3-coder:30b</code>, <code>devstral:24b</code></td></tr>
+      <tr><td>Serveur multi-GPU</td><td>70 B et plus</td></tr>
+    </table>
+  </div>
+  <div class="callout">Un modèle local de 20 B n'égale pas un grand modèle en ligne, mais il suffit souvent pour <strong>expliquer, relire et compléter</strong> un script court.</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>14</span></div>
+  <aside class="notes">Démo formateur si Ollama est prêt (modèle téléchargé à l'avance, pas sur le wifi de l'école) : le prompt structuré de la charte, en local puis en ligne. Comparer vitesse et qualité.</aside>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <h2><small>Attention</small>Local ne veut pas dire sans risque</h2>
+  <div class="cols">
+    <div class="card ko">
+      <h3>Les modèles « décensurés »</h3>
+      <ul>
+        <li>des variantes dont on a retiré les refus circulent</li>
+        <li>souvent <strong>moins bons</strong> : le réglage dégrade le modèle</li>
+        <li>provenance douteuse : un fichier de modèle est un <strong>vecteur d'attaque</strong> (format <code>pickle</code>)</li>
+        <li>la loi s'applique exactement pareil</li>
+      </ul>
+    </div>
+    <div class="card ok">
+      <h3>Les bons réflexes</h3>
+      <ul>
+        <li>télécharger depuis l'<strong>éditeur officiel</strong></li>
+        <li>formats <code>safetensors</code> ou <code>GGUF</code></li>
+        <li>vérifier licence et empreinte</li>
+        <li>exposer l'API sur <code>localhost</code>, pas sur le réseau</li>
+        <li>modèles spécialisés défense : ex. <em>Foundation-sec-8B</em> (Cisco)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>15</span></div>
+  <aside class="notes">Lien avec la chaîne d'approvisionnement logicielle : un modèle téléchargé, c'est une dépendance comme une autre, à traiter comme un paquet pip inconnu.</aside>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <h2><small>Synthèse</small>Quel outil pour quelle tâche ?</h2>
+  <table>
+    <tr><th>Tâche</th><th>Choix raisonnable</th></tr>
+    <tr><td>Écrire, relire, tester un script d'admin</td><td>Grand modèle en ligne, données anonymisées</td></tr>
+    <tr><td>Travailler sur des <strong>logs réels</strong> d'entreprise</td><td>Modèle local validé par l'entreprise, <strong>ou rien</strong></td></tr>
+    <tr><td>Générer des données de test d'attaque</td><td>L'un ou l'autre, en données synthétiques</td></tr>
+    <tr><td>Hors ligne, environnement isolé</td><td>Modèle local</td></tr>
+    <tr><td>Pentest autorisé, analyse de malware en équipe</td><td>Accès vérifié via l'employeur, outils dédiés</td></tr>
+  </table>
+  <div class="callout">Le bon modèle dépend de <strong>la donnée</strong> (où peut-elle aller ?) et de <strong>la tâche</strong> (est-elle défendable ?), pas de « lequel refuse le moins ».</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>16</span></div>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <h2><small>À vous · 15 min en binôme</small>Classer, tester, tracer</h2>
+  <ol class="steps">
+    <li>Classez les 6 demandes de la slide suivante en <span class="pill ok">vert</span> <span class="pill" style="background:#fdf1e7;color:var(--accent2)">orange</span> <span class="pill ko">rouge</span>, avec une phrase de justification</li>
+    <li>Soumettez <strong>les vertes et les oranges</strong> à un modèle en ligne (et en local si vous en avez un). <strong>Les rouges ne se soumettent pas.</strong></li>
+    <li>Une orange est refusée ? Reformulez-la vers la défense, honnêtement</li>
+    <li>Notez dans <code>JOURNAL-IA.md</code> : demande, modèle, accepté ou refusé, qualité de la réponse</li>
+  </ol>
+  <div class="callout">Débrief : quelles demandes ont été refusées ? La reformulation a-t-elle changé la réponse, ou seulement l'emballage ?</div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>17</span></div>
+  <aside class="notes">Les 6 demandes sont sur la slide suivante, à laisser affichée pendant l'exercice. Corrigé dans le guide formateur.</aside>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <h2><small>La fiche · vert, orange ou rouge ?</small>Les 6 demandes</h2>
+  <ol class="steps" style="margin-top:0">
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Écris une règle Sigma qui détecte plus de 10 échecs d'authentification SSH en une minute depuis une même IP.&nbsp;»</li>
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Génère un <code>auth.log</code> synthétique de 200 lignes contenant une attaque par dictionnaire depuis <code>203.0.113.42</code>, mêlée à du trafic normal.&nbsp;»</li>
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Écris un script Python qui liste les ports TCP ouverts sur <code>192.168.56.0/24</code>, le réseau host-only de mon lab VirtualBox.&nbsp;»</li>
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Explique la CVE-2024-6387 (regreSSHion) et écris un script qui dit si la version d'OpenSSH installée est concernée.&nbsp;»</li>
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Écris un script qui essaie une liste de mots de passe sur le SSH de mon serveur de TP.&nbsp;»</li>
+    <li style="font-size:20px;margin:12px 0">«&nbsp;Écris un script qui désactive Windows Defender sans que l'utilisateur s'en aperçoive et se relance au démarrage.&nbsp;»</li>
+  </ol>
+  <div class="callout warn">Classez d'abord, avec une phrase de justification. <strong>Ne soumettez à un modèle que les vertes et les oranges.</strong></div>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>18</span></div>
+  <aside class="notes">Laisser cette slide affichée pendant les 15 min de l'exercice. Corrigé dans le guide formateur (non publié).</aside>
+</section>
+
+<!-- 19 -->
+<section class="slide">
+  <h2><small>Pour conclure</small>Ce qu'on retient</h2>
+  <ul class="big" style="font-size:26px!important">
+    <li>Les refus viennent du <strong>double usage</strong> : le modèle ne connaît pas votre intention</li>
+    <li>En défense, on demande <strong>la détection</strong> et on simule l'attaque <strong>dans les données</strong></li>
+    <li>Un refus se traite par le <strong>contexte honnête</strong>, jamais par le contournement</li>
+    <li>En ligne : meilleure qualité, données qui sortent. En local : confidentialité, moins de qualité, <strong>un service à sécuriser</strong></li>
+    <li>La loi et la charte s'appliquent <strong>quel que soit le modèle</strong></li>
+  </ul>
+  <div class="foot"><span>IA &amp; cybersécurité</span><span>19</span></div>
+</section>
+</div>
+<div id="bar"></div>
+<div id="help">← → naviguer · F plein écran · N notes · P imprimer</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const bar = document.getElementById('bar');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96;
+    slides.forEach(el => el.style.transform = `scale(${s})`);
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    bar.style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('show-notes');
+    else if (e.key.toLowerCase() === 'p') window.print();
+  });
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('pre, a, code')) return;
+    show(e.clientX > window.innerWidth / 2 ? i + 1 : i - 1);
+  });
+  let x0 = null;
+  document.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // Coloration syntaxique minimale (commentaires, chaînes, mots-clés, variables)
+  const KW = {
+    python: /\b(import|from|def|return|if|else|elif|for|in|with|as|try|except|raise|not|and|or|None|True|False|class|while|lambda|is)\b/g,
+    bash: /\b(if|then|else|fi|for|in|do|done|while|case|esac|function|return|exit|set|local|readonly|trap|echo|export)\b/g,
+  };
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function highlightCode(code, lang) {
+    let out = '', k = 0;
+    const plain = s => {
+      let h = esc(s);
+      if (KW[lang]) h = h.replace(KW[lang], '<span class="tok-kw">$1</span>');
+      if (lang === 'bash') h = h.replace(/(\$\{?[A-Za-z_?#@][A-Za-z0-9_]*\}?|\$\(|\$\?)/g, '<span class="tok-var">$1</span>');
+      return h;
+    };
+    let buf = '';
+    while (k < code.length) {
+      const c = code[k];
+      const prev = k === 0 ? '\n' : code[k - 1];
+      if (c === '#' && lang !== 'text' && /\s/.test(prev) || (c === '#' && k === 0)) {
+        if (!(lang === 'bash' && code[k + 1] === '!' && k === 0)) {
+          const end = code.indexOf('\n', k); const stop = end === -1 ? code.length : end;
+          out += plain(buf) + `<span class="tok-com">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+        }
+      }
+      if (lang === 'python' && code.startsWith('"""', k)) {
+        const end = code.indexOf('"""', k + 3); const stop = end === -1 ? code.length : end + 3;
+        out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+      }
+      if ((c === '"' || c === "'") && lang !== 'text') {
+        let j = k + 1;
+        while (j < code.length && code[j] !== c && code[j] !== '\n') { if (code[j] === '\\') j++; j++; }
+        if (code[j] === c) {
+          out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, j + 1))}</span>`; buf = ''; k = j + 1; continue;
+        }
+      }
+      buf += c; k++;
+    }
+    return out + plain(buf);
+  }
+  document.querySelectorAll('pre[data-lang]').forEach(pre => {
+    pre.innerHTML = highlightCode(pre.textContent, pre.dataset.lang);
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>

@@ -166,16 +166,17 @@ body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0
     <div class="card ko"><h3>Ce qui sera sanctionné</h3><ul><li>du code rendu que vous ne savez pas expliquer</li><li>des données sensibles collées dans un prompt</li></ul></div>
   </div>
   <div class="foot"><span>S1 · Scripter l'administration</span><span>6</span></div>
-  <aside class="notes">Faire ouvrir CHARTE-IA.md. On y revient en détail aux slides 18 à 22.</aside>
+  <aside class="notes">Faire ouvrir CHARTE-IA.md. On y revient en détail aux slides 20 à 24.</aside>
 </section>
 
 <!-- 7 -->
 <section class="slide center">
   <h2><small>15 minutes</small>Quiz de positionnement</h2>
-  <p class="big">Seul, <strong>sans IA ni internet</strong>.<br>« Je ne sais pas » est une réponse utile.</p>
-  <p class="muted"><code>seances/s1-scripter-admin/quiz-positionnement.md</code> · non noté</p>
+  <p class="big">Seul, <strong>sans IA ni recherche en ligne</strong>.<br>« Je ne sais pas » est une réponse utile.</p>
+  <p style="font-size:30px;margin:18px 0 6px"><strong>unjouruneapp.com/eemi-py/positionnement</strong></p>
+  <p class="muted">Code de séance : au tableau · non noté · correction affichée après l'envoi</p>
   <div class="foot"><span>S1 · Scripter l'administration</span><span>7</span></div>
-  <aside class="notes">Ramasser les réponses. Elles serviront à constituer les binômes de S3.</aside>
+  <aside class="notes">Écrire le code de séance au tableau (défini dans /admin). Suivre les envois dans /admin ; les réponses serviront à proposer les binômes de S3. Secours si le site est indisponible : quiz-positionnement.md sur papier.</aside>
 </section>
 
 <!-- 8 -->
@@ -221,6 +222,53 @@ body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0
 
 <!-- 11 -->
 <section class="slide">
+  <h2><small>Bash ou Python</small>D'où viennent les outils ?</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Bash : les commandes du système</h3>
+      <ul>
+        <li>texte : <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>cut</code>, <code>sort</code>, <code>uniq</code></li>
+        <li>système : <code>df</code>, <code>ss</code>, <code>systemctl</code>, <code>journalctl</code></li>
+        <li>réseau et données : <code>curl</code>, <code>jq</code></li>
+      </ul>
+      <p class="muted" style="font-size:18px">Elles dépendent de ce qui est installé, et varient d'un système à l'autre (GNU, BusyBox, macOS).</p>
+    </div>
+    <div class="card acc">
+      <h3>Python : trois cercles</h3>
+      <ul>
+        <li><strong>La bibliothèque standard</strong> : plus de 200 modules livrés avec Python, présents partout</li>
+        <li><strong>PyPI</strong> : plus de 900 000 projets, installés avec <code>pip</code></li>
+        <li>Pour l'admin et la sécu : <code>requests</code> (HTTP), <code>paramiko</code> (SSH), <code>psutil</code> (métriques), <code>scapy</code> (paquets réseau)… et Ansible est écrit en Python</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn">Une bibliothèque externe, c'est un paquet à <strong>installer sur chaque serveur</strong>, à mettre à jour, et une <strong>surface d'attaque</strong> : typosquatting et paquets piégés sur PyPI.</div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>11</span></div>
+  <aside class="notes">Demander : qui a déjà fait pip install sans regarder ce qu'il installait ? Le typosquatting (requets, python-dateutils…) fait le lien avec leur formation cyber.</aside>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <h2><small>Bash ou Python</small>Les bibliothèques de ce module</h2>
+  <table>
+    <tr><th>Séance</th><th>Bibliothèque standard</th><th>Externes</th></tr>
+    <tr><td>1 · Scripter</td><td><code>argparse</code> <code>subprocess</code> <code>pathlib</code> <code>shutil</code> <code>json</code> <code>logging</code></td><td class="muted">aucune</td></tr>
+    <tr><td>2 · Journaux</td><td><code>re</code> <code>collections</code> <code>datetime</code> <code>csv</code></td><td class="muted">aucune</td></tr>
+    <tr><td>3 · Supervision</td><td><code>smtplib</code> <code>urllib.request</code> <code>logging.handlers</code></td><td><code>psutil</code></td></tr>
+    <tr><td>4 · Planifier</td><td><code>logging</code> (rotation) <code>configparser</code> <code>os.environ</code></td><td><code>PyYAML</code> <span class="muted">(optionnel)</span></td></tr>
+    <tr><td>5 · Fiabilité</td><td><code>unittest.mock</code></td><td><code>pytest</code> <code>ruff</code> <code>bandit</code> <span class="muted">(outils)</span></td></tr>
+  </table>
+  <div class="cols" style="margin-top:6px;grid-template-columns:1fr 1.25fr;gap:24px">
+    <div class="callout" style="margin-top:0">Règle du module : <strong>standard d'abord</strong>. Une dépendance externe doit se justifier.</div>
+<pre data-lang="bash" class="small">python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt   # à partir de S3</pre>
+  </div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>12</span></div>
+  <aside class="notes">TP1 et TP2 en bibliothèque standard uniquement : le script doit tourner sur 20 serveurs où l'on n'a pas forcément le droit de faire pip install. Le venv évite de polluer le Python du système (sur Ubuntu 24.04, pip refuse d'ailleurs d'installer hors venv : PEP 668).</aside>
+</section>
+
+<!-- 13 -->
+<section class="slide">
   <h2><small>Démo</small>Même tâche, deux langages : qui attaque en SSH ?</h2>
   <div class="cols">
     <div>
@@ -247,19 +295,19 @@ for ip, n in ips.most_common():
     print(f"{n:>5} {ip}")</pre>
     </div>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>11</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>13</span></div>
   <aside class="notes">Lancer les deux en direct dans seances/s1-scripter-admin/donnees/. Résultat attendu : 22 · 203.0.113.45 en tête. Faire remarquer les IP en 203.0.113.x et 198.51.100.x : ce sont des plages réservées à la documentation (RFC 5737), donc anonymes.</aside>
 </section>
 
-<!-- 12 -->
+<!-- 14 -->
 <section class="slide section">
   <div class="kicker">Partie 2</div>
   <h1>Anatomie d'un script d'administration</h1>
   <div class="num">02</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>12</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>14</span></div>
 </section>
 
-<!-- 13 -->
+<!-- 15 -->
 <section class="slide">
   <h2><small>Anatomie</small>La checklist du script « propre »</h2>
   <div class="cols">
@@ -279,10 +327,10 @@ for ip, n in ips.most_common():
     </ul>
   </div>
   <div class="callout">Point de départ : <code>modeles/script_modele.sh</code> et <code>modeles/script_modele.py</code></div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>13</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>15</span></div>
 </section>
 
-<!-- 14 -->
+<!-- 16 -->
 <section class="slide">
   <h2><small>Anatomie</small>Les codes retour : le langage des scripts entre eux</h2>
   <div class="cols">
@@ -307,10 +355,10 @@ $ echo $?
 $ ./inventaire.sh -s 90 &amp;&amp; echo "RAS" \
                         || echo "à regarder"</pre>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>14</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>16</span></div>
 </section>
 
-<!-- 15 -->
+<!-- 17 -->
 <section class="slide">
   <h2><small>Anatomie</small>stdout, stderr et redirections</h2>
   <div class="cols code">
@@ -329,10 +377,10 @@ $ ./inventaire.sh -s 90 &amp;&amp; echo "RAS" \
       <div class="callout" style="margin-top:18px">En Python : <code>logging</code> configuré sur <code>sys.stderr</code>, et <code>print()</code> réservé au résultat.</div>
     </div>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>15</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>17</span></div>
 </section>
 
-<!-- 16 -->
+<!-- 18 -->
 <section class="slide">
   <h2><small>Anatomie</small>Bash robuste : 5 réflexes</h2>
   <div class="cols code">
@@ -359,11 +407,11 @@ done &lt; &lt;(df -P)      # et non : df -P | while read</pre>
     </ol>
   </div>
   <div class="callout">Et <code>shellcheck script.sh</code> avant chaque commit.</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>16</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>18</span></div>
   <aside class="notes">Le piège 5 est celui du TP (variable ALERTE). Le montrer en direct si le temps le permet.</aside>
 </section>
 
-<!-- 17 -->
+<!-- 19 -->
 <section class="slide">
   <h2><small>Anatomie</small>Python robuste : la structure type</h2>
   <div class="cols code">
@@ -400,18 +448,18 @@ if __name__ == "__main__":
       <li><code>subprocess.run([...], check=True, timeout=5)</code> : <strong>jamais</strong> <code>shell=True</code> ni <code>os.system</code></li>
     </ul>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>17</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>19</span></div>
 </section>
 
-<!-- 18 -->
+<!-- 20 -->
 <section class="slide section">
   <div class="kicker">Partie 3</div>
   <h1>L'IA comme copilote</h1>
   <div class="num">03</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>18</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>20</span></div>
 </section>
 
-<!-- 19 -->
+<!-- 21 -->
 <section class="slide">
   <h2><small>IA</small>Ce qu'elle fait bien, ce qu'elle fait mal</h2>
   <div class="cols">
@@ -423,10 +471,10 @@ if __name__ == "__main__":
       <li>propose des commandes <strong>destructrices</strong> sans prévenir</li><li>néglige les erreurs et les cas limites</li>
       <li>est sûre d'elle, <strong>même quand elle a tort</strong></li></ul></div>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>19</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>21</span></div>
 </section>
 
-<!-- 20 -->
+<!-- 22 -->
 <section class="slide">
   <h2><small>IA</small>Les 5 règles du module</h2>
   <ol class="steps">
@@ -437,10 +485,10 @@ if __name__ == "__main__":
     <li><strong>Vous tracez</strong> votre usage dans <code>JOURNAL-IA.md</code></li>
   </ol>
   <div class="callout warn">Un journal honnête qui montre les erreurs de l'IA que vous avez corrigées vaut <strong>mieux</strong> qu'un journal vide.</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>20</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>22</span></div>
 </section>
 
-<!-- 21 -->
+<!-- 23 -->
 <section class="slide">
   <h2><small>IA</small>Un prompt qui marche pour du scripting</h2>
   <div class="cols">
@@ -465,10 +513,10 @@ Demande     : explique chaque regex, puis propose 3 cas
       <li>Demander <strong>des explications et des tests</strong> : c'est ce qui vous permet de vérifier</li>
     </ul>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>21</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>23</span></div>
 </section>
 
-<!-- 22 -->
+<!-- 24 -->
 <section class="slide">
   <h2><small>Démo en direct</small>Prompt → code → revue critique</h2>
   <div class="cols">
@@ -489,19 +537,19 @@ Demande     : explique chaque regex, puis propose 3 cas
     </div>
   </div>
   <div class="callout">L'IA répond à la question posée, pas à celle qu'on aurait dû poser.</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>22</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>24</span></div>
   <aside class="notes">Défauts attendus : os.system ou shell=True, psutil (dépendance non demandée), pas de seuil ni de code retour, % calculé en used/total donc différent de df.</aside>
 </section>
 
-<!-- 23 -->
+<!-- 25 -->
 <section class="slide section">
   <div class="kicker">À vous</div>
   <h1>TP1 · Inventaire système</h1>
   <div class="num">TP</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>23</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>25</span></div>
 </section>
 
-<!-- 24 -->
+<!-- 26 -->
 <section class="slide">
   <h2><small>TP1 · 95 min</small>Automatiser l'état des lieux d'un serveur</h2>
   <div class="cols c3">
@@ -510,10 +558,10 @@ Demande     : explique chaque regex, puis propose 3 cas
     <div class="card acc"><h3>C · IA · en continu</h3><p>Faites écrire <strong>une</strong> fonction par l'IA, passez-la à la grille, puis notez-la dans <code>JOURNAL-IA.md</code></p></div>
   </div>
   <div class="callout">Vérifiez votre travail à tout moment : <code>bash verifier_tp1.sh</code> · énoncé complet : <code>seances/s1-scripter-admin/README.md</code></div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>24</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>26</span></div>
 </section>
 
-<!-- 25 -->
+<!-- 27 -->
 <section class="slide">
   <h2><small>TP1</small>Démarrer</h2>
 <pre data-lang="bash"># 1. Récupérer le dépôt et préparer l'environnement
@@ -532,10 +580,10 @@ chmod +x inventaire.sh inventaire.py
 bash verifier_tp1.sh
 git add . &amp;&amp; git commit -m "TP1 : partie A" &amp;&amp; git push</pre>
   <div class="callout warn">Pas de Linux ? WSL 2 (Windows), une VM (macOS), ou un conteneur <code>ubuntu:24.04</code> : voir le README du dépôt.</div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>25</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>27</span></div>
 </section>
 
-<!-- 26 -->
+<!-- 28 -->
 <section class="slide">
   <h2><small>Pour conclure</small>Ce qu'on retient</h2>
   <div class="cols">
@@ -551,7 +599,7 @@ git add . &amp;&amp; git commit -m "TP1 : partie A" &amp;&amp; git push</pre>
       <p class="muted">D'ici là : terminer le TP1 et le pousser, avec <code>reponses.md</code> et <code>JOURNAL-IA.md</code>.</p>
     </div>
   </div>
-  <div class="foot"><span>S1 · Scripter l'administration</span><span>26</span></div>
+  <div class="foot"><span>S1 · Scripter l'administration</span><span>28</span></div>
 </section>
 
 </div>

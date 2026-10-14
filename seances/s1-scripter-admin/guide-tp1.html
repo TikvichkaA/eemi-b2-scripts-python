@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide du TP1</title>
+<style>
+:root{
+  --paper:#fbfaf7; --card:#ffffff; --ink:#1b2430; --muted:#5d6878; --line:#d9dde3;
+  --accent:#0f8b8d; --accent-soft:#e0f2f2; --warn:#e07a2f; --warn-soft:#fdf1e7;
+  --ok:#2f8f4e; --ok-soft:#e3f3e8; --ko:#c0392b; --ko-soft:#f8e4e1;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --chip:#eef1f4; --nav:#0f1b2d; --nav-ink:#c6d0dc;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+    --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+    --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+  --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+  --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+a{color:var(--accent)}
+/* Mise en page */
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--nav);color:var(--nav-ink);padding:22px 0}
+nav.side .brand{padding:0 20px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+nav.side .brand b{display:block;color:#fff;font-size:15px}
+nav.side .brand span{font-size:12.5px;color:#7fd3d4;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+nav.side a{display:flex;justify-content:space-between;gap:8px;padding:6px 20px;color:var(--nav-ink);text-decoration:none;font-size:14px}
+nav.side a:hover{background:rgba(255,255,255,.06);color:#fff}
+nav.side a.sub{padding-left:34px;font-size:13px}
+nav.side a .tick{color:#5cc47e;font-weight:700;visibility:hidden}
+nav.side a.done .tick{visibility:visible}
+.progress{margin:14px 20px 4px}
+.progress .bar{height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress .bar i{display:block;height:100%;width:0;background:#3cc3c4;transition:width .25s}
+.progress small{display:block;margin-top:6px;font-size:12.5px}
+main{padding:40px 48px 96px;max-width:980px}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:12px}
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+h1{font-size:34px;line-height:1.15;margin:6px 0 10px;letter-spacing:-.3px}
+h2{font-size:25px;margin:48px 0 10px;padding-top:8px;letter-spacing:-.2px}
+h3{font-size:19px;margin:30px 0 8px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:24px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:var(--chip);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--chip);padding:1px 6px;border-radius:4px}
+pre{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 18px;font-family:var(--mono);
+  font-size:14px;line-height:1.5;overflow-x:auto;margin:10px 0 16px}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .c{color:var(--code-com);font-style:italic}
+.copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:#cfd8e3;border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;font-size:12px;padding:3px 9px;cursor:pointer;font-family:var(--sans)}
+.copy:hover{background:rgba(255,255,255,.2)}
+table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:15px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--chip)}
+.table-wrap{overflow-x:auto}
+/* Encadrés */
+.box{border-radius:10px;padding:14px 18px;margin:14px 0;border-left:5px solid var(--accent);background:var(--accent-soft)}
+.box.warn{border-color:var(--warn);background:var(--warn-soft)}
+.box.ko{border-color:var(--ko);background:var(--ko-soft)}
+.box.ok{border-color:var(--ok);background:var(--ok-soft)}
+.box > :last-child{margin-bottom:0}
+.box strong:first-child{display:block;margin-bottom:2px}
+/* Étapes */
+.step{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:16px 0;overflow:hidden}
+.step-head{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.step-head .id{flex-shrink:0;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--accent);color:#fff;border-radius:6px;padding:2px 8px}
+.step-head h3{margin:0;font-size:17px;flex:1}
+.step-head label{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.step-head input{width:18px;height:18px;accent-color:var(--ok);cursor:pointer}
+.step.done{border-color:var(--ok)}
+.step.done .step-head{background:var(--ok-soft)}
+.step.done .step-head .id{background:var(--ok)}
+.step-body{padding:14px 18px 6px}
+details{border:1px dashed var(--line);border-radius:8px;margin:10px 0 14px;background:var(--paper)}
+details summary{cursor:pointer;padding:8px 14px;font-weight:600;font-size:14.5px;color:var(--accent);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";}
+details[open] summary::before{content:"▾ ";}
+details > div{padding:0 14px 10px}
+details.trap summary{color:var(--warn)}
+.timer{font-size:13px;font-weight:700;color:var(--muted);background:var(--chip);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.theme-btn{position:fixed;top:12px;right:14px;z-index:20;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+  padding:5px 12px;font-size:13px;cursor:pointer}
+footer{margin-top:60px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width: 900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.side{position:static;height:auto;padding:14px 0}
+  nav.side .links{display:none}
+  main{padding:24px 16px 72px}
+  h1{font-size:27px}
+  .step-head{flex-wrap:wrap}
+}
+@media print{
+  nav.side,.theme-btn,.copy{display:none}
+  .layout{display:block}
+  details{border:none}
+  details > div{display:block}
+}
+</style>
+</head>
+<body>
+<button class="theme-btn" id="theme" type="button" aria-label="Changer de thème">◐ Thème</button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><span>EEMI · B2 Cyber · S1</span><b>Guide du TP1 · Inventaire système</b></div>
+  <div class="progress"><div class="bar"><i id="pbar"></i></div><small id="ptext">0 / 18 étapes</small></div>
+  <div class="links">
+    <a href="#demarrer">0 · Démarrer</a>
+    <a href="#partie-a">A · En Bash <span class="muted">40'</span></a>
+    <a class="sub" href="#A1" data-step="A1">A1 · Aide <span class="tick">✓</span></a>
+    <a class="sub" href="#A2" data-step="A2">A2 · Hôte <span class="tick">✓</span></a>
+    <a class="sub" href="#A3" data-step="A3">A3 · CPU et mémoire <span class="tick">✓</span></a>
+    <a class="sub" href="#A4" data-step="A4">A4 · Disques <span class="tick">✓</span></a>
+    <a class="sub" href="#A5" data-step="A5">A5 · Comptes <span class="tick">✓</span></a>
+    <a class="sub" href="#A6" data-step="A6">A6 · Ports <span class="tick">✓</span></a>
+    <a class="sub" href="#A7" data-step="A7">A7 · Valider le seuil <span class="tick">✓</span></a>
+    <a href="#partie-b">B · En Python <span class="muted">45'</span></a>
+    <a class="sub" href="#B1" data-step="B1">B1 · os-release <span class="tick">✓</span></a>
+    <a class="sub" href="#B2" data-step="B2">B2 · Hôte <span class="tick">✓</span></a>
+    <a class="sub" href="#B3" data-step="B3">B3 · CPU <span class="tick">✓</span></a>
+    <a class="sub" href="#B4" data-step="B4">B4 · Mémoire <span class="tick">✓</span></a>
+    <a class="sub" href="#B5" data-step="B5">B5 · Disques <span class="tick">✓</span></a>
+    <a class="sub" href="#B6" data-step="B6">B6 · Comptes <span class="tick">✓</span></a>
+    <a class="sub" href="#B7" data-step="B7">B7 · Ports <span class="tick">✓</span></a>
+    <a class="sub" href="#B9" data-step="B9">B9 · Arguments <span class="tick">✓</span></a>
+    <a class="sub" href="#B10" data-step="B10">B10 · main() <span class="tick">✓</span></a>
+    <a class="sub" href="#B8" data-step="B8">B8 · Sortie texte <span class="tick">✓</span></a>
+    <a href="#partie-c" data-step="C">C · Avec l'IA <span class="tick">✓</span></a>
+    <a href="#synthese">Questions de synthèse</a>
+    <a href="#rendre">Rendre son travail</a>
+    <a href="#coince">Coincé ? Les erreurs fréquentes</a>
+    <a href="#bonus">Bonus</a>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="kicker">Séance 1 · Scripter l'administration</div>
+  <h1>TP1 · Inventaire système</h1>
+  <p>Vous arrivez dans une équipe d'exploitation qui gère une vingtaine de serveurs Linux. Avant chaque intervention, un collègue tape une dizaine de commandes pour faire « l'état des lieux ». Vous allez automatiser cet état des lieux, <strong>d'abord en Bash, puis en Python</strong>, pour comparer les deux approches.</p>
+  <div class="chips">
+    <span class="chip">≈ 95 min</span>
+    <span class="chip">Individuel</span>
+    <span class="chip">Non noté, mais vérifié</span>
+    <span class="chip">IA autorisée, selon la charte</span>
+  </div>
+</header>
+
+<div class="box">
+  <strong>Comment utiliser ce guide</strong>
+  <p>Chaque étape correspond à un <code>TODO</code> des fichiers <code>inventaire.sh</code> et <code>inventaire.py</code>. Lisez l'objectif, essayez seul, puis dépliez les indices <strong>un par un</strong> si vous bloquez. Cochez l'étape quand elle marche : votre progression est gardée dans ce navigateur.</p>
+  <p>La référence complète (sorties attendues, options, codes retour) reste le <a href="README.md">README du TP</a>.</p>
+</div>
+
+<!-- ============ 0 ============ -->
+<h2 id="demarrer">0 · Démarrer <span class="timer">5 min</span></h2>
+<ol>
+  <li>Forkez le dépôt du module sur GitHub, puis clonez <strong>votre fork</strong> dans votre Linux (WSL 2, VM ou conteneur).</li>
+  <li>Placez-vous dans le dossier du TP et vérifiez votre environnement :</li>
+</ol>
+<pre><code>cd seances/s1-scripter-admin
+bash verifier_env.sh                          <span class="c"># tout doit être [OK], sauf éventuellement shellcheck</span>
+cp ../../modeles/JOURNAL-IA.md ../../JOURNAL-IA.md
+chmod +x inventaire.sh inventaire.py</code></pre>
+<ol start="3">
+  <li>Lancez le vérificateur une première fois. Presque tout est <code>[KO]</code> : c'est normal, c'est votre point de départ.</li>
+</ol>
+<pre><code>bash verifier_tp1.sh</code></pre>
+<div class="box warn">
+  <strong>Avant de toucher au code</strong>
+  <p>Ouvrez <code>inventaire.sh</code> et lisez-le en entier : l'en-tête, <code>set -euo pipefail</code>, les fonctions <code>die</code> et <code>titre</code>, et <code>main</code>. Le squelette fait déjà la moitié du travail (lecture des options, écriture dans un fichier). Vous n'avez qu'à remplir les fonctions.</p>
+</div>
+
+<!-- ============ PARTIE A ============ -->
+<h2 id="partie-a">A · En Bash <span class="timer">≈ 40 min</span></h2>
+<p>Fichier : <code>inventaire.sh</code>. Testez après <strong>chaque</strong> étape avec <code>./inventaire.sh</code>, sans attendre la fin.</p>
+
+<div class="box ko">
+  <strong>Le piège n°1 de ce squelette : <code>IFS=$'\n\t'</code></strong>
+  <p>Le script ne découpe <strong>pas</strong> sur les espaces (c'est voulu : ça protège des noms de fichiers avec espaces). Conséquence : <code>read a b &lt; fichier</code> met toute la ligne dans <code>a</code>. Pour découper des colonnes séparées par des espaces, utilisez <code>awk</code>, <code>cut -d' '</code>, ou <code>IFS=' ' read -r …</code> pour cette seule commande.</p>
+</div>
+
+<div class="step" id="A1" data-step="A1">
+  <div class="step-head"><span class="id">A1</span><h3>Compléter l'aide</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>./inventaire.sh -h</code> affiche l'usage, les trois options (<code>-s</code>, <code>-o</code>, <code>-h</code>) et la signification des codes retour 0, 1 et 2.</p>
+    <details><summary>Indice 1</summary><div><p>Pour afficher plusieurs lignes d'un coup, un <em>here-document</em> est plus lisible qu'une suite d'<code>echo</code> : <code>cat &lt;&lt;EOF</code> … <code>EOF</code>. Les variables comme <code>${SCRIPT_NAME}</code> y sont remplacées.</p></div></details>
+    <details><summary>Vérifier</summary><div><pre><code>./inventaire.sh -h; echo "code retour : $?"    <span class="c"># doit afficher 0</span></code></pre></div></details>
+  </div>
+</div>
+
+<div class="step" id="A2" data-step="A2">
+  <div class="step-head"><span class="id">A2</span><h3>Section « Hôte »</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Afficher le nom d'hôte, le système, le noyau et l'uptime au format <code>12j 3h 41min</code>.</p>
+<pre><code>== Hôte ==
+Nom      : srv-web-01
+Système  : Ubuntu 24.04.1 LTS
+Noyau    : 6.8.0-45-generic
+Uptime   : 12j 3h 41min</code></pre>
+    <details><summary>Indice 1 · les sources</summary><div><ul>
+      <li>nom : <code>hostname</code> ; noyau : <code>uname -r</code></li>
+      <li>système : la ligne <code>PRETTY_NAME=</code> de <code>/etc/os-release</code>, sans les guillemets</li>
+      <li>uptime : le <strong>premier nombre</strong> de <code>/proc/uptime</code>, en secondes (avec des décimales)</li>
+    </ul></div></details>
+    <details><summary>Indice 2 · extraire et calculer</summary><div>
+      <p>Pour le système : <code>grep</code> la ligne, puis <code>cut -d= -f2</code> et <code>tr -d '"'</code>.</p>
+      <p>Pour l'uptime, récupérez un entier avec <code>awk '{print int($1)}' /proc/uptime</code> (voir le piège <code>IFS</code> plus haut), puis l'arithmétique Bash : <code>$(( s / 86400 ))</code> donne les jours, <code>$(( s % 86400 / 3600 ))</code> les heures. À vous les minutes.</p>
+      <p>Pour aligner : <code>printf '%-9s: %s\n' "Nom" "$(hostname)"</code>.</p>
+    </div></details>
+  </div>
+</div>
+
+<div class="step" id="A3" data-step="A3">
+  <div class="step-head"><span class="id">A3</span><h3>Section « CPU et mémoire »</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Nombre de cœurs, charge moyenne (1, 5 et 15 min), mémoire disponible et totale en Mio.</p>
+    <details><summary>Indice 1</summary><div><ul>
+      <li><code>nproc</code> donne le nombre de cœurs.</li>
+      <li>Les trois premiers champs de <code>/proc/loadavg</code> sont la charge : <code>cut -d' ' -f1-3</code>.</li>
+      <li>Dans <code>/proc/meminfo</code>, les lignes <code>MemTotal</code> et <code>MemAvailable</code> sont en <strong>kio</strong>. Divisez par 1024.</li>
+    </ul></div></details>
+    <details><summary>Indice 2 · un seul awk pour la mémoire</summary><div>
+<pre><code>awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2}
+     END {printf "%d Mio disponibles sur %d Mio\n", a/1024, t/1024}' /proc/meminfo</code></pre>
+      <p>Pourquoi <code>MemAvailable</code> et pas <code>MemFree</code> ? Cherchez la différence dans <code>man proc</code>.</p>
+    </div></details>
+  </div>
+</div>
+
+<div class="step" id="A4" data-step="A4">
+  <div class="step-head"><span class="id">A4</span><h3>Section « Disques » et alerte</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Pour chaque système de fichiers réel : point de montage et % d'occupation. Si le % est <strong>supérieur ou égal</strong> au seuil, ajouter <code>ALERTE</code> et passer <code>ALERTE=1</code> : c'est ce qui donnera le code retour 1.</p>
+<pre><code>== Disques (seuil 80 %) ==
+/                          47 %
+/var                       86 %  ALERTE</code></pre>
+    <details><summary>Indice 1 · la source</summary><div>
+      <p><code>df -P -x tmpfs -x devtmpfs</code> : <code>-P</code> garantit une ligne par système de fichiers (format POSIX), <code>-x</code> exclut les types virtuels. <code>tail -n +2</code> retire la ligne d'en-tête. Le % est en 5<sup>e</sup> colonne, le point de montage en 6<sup>e</sup>.</p>
+    </div></details>
+    <details><summary>Indice 2 · la boucle</summary><div>
+<pre><code>while IFS=' ' read -r _ _ _ _ pct point; do
+    pct="${pct%\%}"          <span class="c"># retire le signe %</span>
+    <span class="c"># à vous : printf aligné, comparaison avec (( pct >= SEUIL )), ALERTE=1</span>
+done &lt; &lt;(df -P -x tmpfs -x devtmpfs | tail -n +2)</code></pre>
+    </div></details>
+    <details class="trap"><summary>Piège · « ALERTE reste à 0 alors que le disque est plein »</summary><div>
+      <p>Si vous écrivez <code>df … | while read …</code>, la boucle tourne dans un <strong>sous-shell</strong> : la variable <code>ALERTE</code> modifiée dedans est perdue à la sortie. D'où la forme <code>done &lt; &lt;(cmd)</code> ci-dessus. C'est la question de synthèse n°4.</p>
+      <p>Autre piège : <code>(( ALERTE++ ))</code> quand <code>ALERTE</code> vaut 0 renvoie un code d'échec, et <code>set -e</code> arrête le script. Écrivez simplement <code>ALERTE=1</code>.</p>
+    </div></details>
+    <details><summary>Vérifier</summary><div><pre><code>./inventaire.sh -s 0;   echo "code : $?"   <span class="c"># tout en ALERTE, code 1</span>
+./inventaire.sh -s 100; echo "code : $?"   <span class="c"># aucune alerte, code 0</span></code></pre></div></details>
+  </div>
+</div>
+
+<div class="step" id="A5" data-step="A5">
+  <div class="step-head"><span class="id">A5</span><h3>Section « Comptes interactifs »</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Lister les comptes humains : UID ≥ 1000, sauf 65534 (<code>nobody</code>), et dont le shell ne finit ni par <code>nologin</code> ni par <code>false</code>.</p>
+    <details><summary>Indice 1</summary><div><p><code>/etc/passwd</code> a 7 champs séparés par <code>:</code>. Le champ 1 est le nom, le 3 l'UID, le 7 le shell. <code>awk -F:</code> découpe sur les deux-points.</p></div></details>
+    <details><summary>Indice 2</summary><div>
+      <p>Une condition awk se place avant le bloc : <code>awk -F: 'CONDITION {printf …}' /etc/passwd</code>. Il vous faut trois conditions reliées par <code>&amp;&amp;</code>, dont une sur le shell avec <code>$7 !~ /(nologin|false)$/</code>.</p>
+    </div></details>
+    <details><summary>Si la liste est vide</summary><div><p>Dans un conteneur, il n'y a souvent aucun compte humain. Créez-en un pour tester : <code>sudo useradd -m -s /bin/bash test01</code>, puis supprimez-le après.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="A6" data-step="A6">
+  <div class="step-head"><span class="id">A6</span><h3>Section « Ports TCP en écoute »</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Lister les <code>adresse:port</code> TCP en écoute, sans doublon. <strong>Si <code>ss</code> n'existe pas</strong>, afficher « non disponible » et <strong>continuer</strong>.</p>
+    <details><summary>Indice 1</summary><div><p><code>command -v ss &gt;/dev/null</code> réussit si la commande existe. C'est la bonne façon de tester, pas <code>which</code>.</p></div></details>
+    <details><summary>Indice 2</summary><div><p><code>ss -Htln</code> : <code>-H</code> sans en-tête, <code>-t</code> TCP, <code>-l</code> en écoute, <code>-n</code> sans résolution de noms. L'adresse locale est en 4<sup>e</sup> colonne. Terminez par <code>sort -u</code>.</p></div></details>
+    <details><summary>Vérifier le cas « ss absent »</summary><div>
+      <p>Le plus simple : un conteneur minimal, où <code>ss</code> n'est pas installé.</p>
+<pre><code>docker run --rm -v "$PWD":/tp -w /tp debian:stable-slim bash inventaire.sh -s 100</code></pre>
+      <p class="muted">Sans Docker : remplacez un instant <code>ss</code> par <code>ss_absent</code> dans votre test <code>command -v</code>, vérifiez que « non disponible » s'affiche, puis remettez <code>ss</code>.</p>
+    </div></details>
+  </div>
+</div>
+
+<div class="step" id="A7" data-step="A7">
+  <div class="step-head"><span class="id">A7</span><h3>Refuser un seuil invalide</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>-s abc</code>, <code>-s -5</code> ou <code>-s 150</code> doivent donner un message d'erreur sur stderr et le code retour <strong>2</strong>.</p>
+    <details><summary>Indice 1</summary><div><p>Deux tests : que ce soit un entier (expression régulière avec <code>[[ … =~ … ]]</code>), puis qu'il soit ≤ 100. Dans cet ordre : <code>(( ))</code> sur une chaîne non numérique donne des résultats surprenants.</p></div></details>
+    <details><summary>Indice 2</summary><div><p>La fonction <code>die</code> existe déjà : elle écrit sur stderr et sort avec le code 2. Le motif d'un entier positif : <code>^[0-9]+$</code>.</p></div></details>
+  </div>
+</div>
+
+<div class="box ok">
+  <strong>Fin de la partie A</strong>
+  <p><code>bash verifier_tp1.sh</code> : les 10 premières lignes (partie A) doivent être <code>[OK]</code>. Si <code>shellcheck</code> est installé, il doit aussi être satisfait. Faites un commit : <code>git add inventaire.sh &amp;&amp; git commit -m "TP1 partie A"</code>.</p>
+</div>
+
+<!-- ============ PARTIE B ============ -->
+<h2 id="partie-b">B · En Python <span class="timer">≈ 45 min</span></h2>
+<p>Fichier : <code>inventaire.py</code>. Même inventaire, avec en plus une sortie JSON, des messages de diagnostic sur stderr et des erreurs propres. <strong>Bibliothèque standard uniquement.</strong></p>
+
+<div class="box">
+  <strong>Ordre conseillé</strong>
+  <p>Faites d'abord les arguments (B9) et <code>main()</code> (B10) avec la sortie JSON : vous pourrez alors tester chaque fonction de collecte dès qu'elle est écrite. La sortie texte (B8) vient en dernier. Pour tester une seule fonction :</p>
+<pre><code>python3 -c "import inventaire; print(inventaire.lire_meminfo())"</code></pre>
+</div>
+
+<div class="step" id="B9" data-step="B9">
+  <div class="step-head"><span class="id">B9</span><h3>Les arguments</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>-s/--seuil</code> (entier de 0 à 100, défaut 80), <code>-f/--format</code> (<code>texte</code> ou <code>json</code>), <code>-o/--output</code> (fichier), <code>-v/--verbose</code>.</p>
+    <details><summary>Indice 1</summary><div><p><code>p.add_argument("-f", "--format", choices=["texte", "json"], default="texte")</code>. Pour <code>-v</code>, cherchez <code>action="store_true"</code> dans la doc d'<code>argparse</code>.</p></div></details>
+    <details><summary>Indice 2 · valider le seuil</summary><div>
+      <p>Le paramètre <code>type=</code> accepte n'importe quelle fonction. Si elle lève <code>argparse.ArgumentTypeError</code>, argparse affiche le message et sort avec le code 2, tout seul.</p>
+<pre><code>def pourcentage(valeur: str) -> int:
+    <span class="c"># convertir en int, vérifier 0..100, sinon raise argparse.ArgumentTypeError("…")</span></code></pre>
+    </div></details>
+  </div>
+</div>
+
+<div class="step" id="B10" data-step="B10">
+  <div class="step-head"><span class="id">B10</span><h3>Le programme principal</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Collecter, formater selon <code>--format</code>, écrire sur stdout ou dans <code>--output</code>, et renvoyer 0, 1 ou 2.</p>
+    <details><summary>Indice 1 · les étapes</summary><div><ol>
+      <li>si <code>args.verbose</code>, passer le logger en <code>DEBUG</code> ;</li>
+      <li><code>inv = collecter(args.seuil)</code> ;</li>
+      <li>JSON : <code>json.dumps(inv, ensure_ascii=False, indent=2)</code>, sinon <code>formater_texte(…)</code> ;</li>
+      <li>écrire : <code>print(…)</code> ou <code>Path(args.output).write_text(…, encoding="utf-8")</code> ;</li>
+      <li>renvoyer <code>EXIT_ALERTE</code> si <code>inv["alerte"]</code>, sinon <code>EXIT_OK</code>.</li>
+    </ol></div></details>
+    <details><summary>Indice 2 · une erreur propre, pas une trace</summary><div>
+      <p>Écrire dans <code>/dossier/inexistant/x.json</code> lève une <code>OSError</code> (ou une sous-classe). Attrapez-la autour de l'écriture, <code>log.error("…: %s", e)</code>, puis <code>return EXIT_ERREUR</code>.</p>
+      <p>Pourquoi <code>logging</code> et jamais <code>print</code> pour les messages ? Essayez <code>python3 inventaire.py -f json | python3 -m json.tool</code> avec un <code>print("debug")</code> qui traîne.</p>
+    </div></details>
+  </div>
+</div>
+
+<div class="step" id="B1" data-step="B1">
+  <div class="step-head"><span class="id">B1</span><h3><code>lire_os_release()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Renvoyer la valeur de <code>PRETTY_NAME</code> sans guillemets, ou <code>"inconnu"</code> si le fichier est absent ou ne la contient pas.</p>
+    <details><summary>Indice 1</summary><div><p><code>chemin.read_text().splitlines()</code>, puis cherchez la ligne qui commence par <code>PRETTY_NAME=</code>. <code>str.partition("=")</code> et <code>str.strip('"')</code> font le reste.</p></div></details>
+    <details><summary>Indice 2</summary><div><p>Le fichier absent lève <code>FileNotFoundError</code> : attrapez <code>OSError</code> pour couvrir aussi les droits. Le paramètre <code>chemin</code> sert aux tests : on pourra lui passer un faux fichier en séance 5.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B2" data-step="B2">
+  <div class="step-head"><span class="id">B2</span><h3><code>infos_hote()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>{"nom", "systeme", "noyau", "uptime_s"}</code>.</p>
+    <details><summary>Indice</summary><div><p>Tout est dans le commentaire du <code>TODO</code>. Pour l'uptime : premier champ de <code>/proc/uptime</code>, converti en <code>float</code> puis en <code>int</code>.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B3" data-step="B3">
+  <div class="step-head"><span class="id">B3</span><h3><code>infos_cpu()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>{"coeurs": int, "charge": [float, float, float]}</code>.</p>
+    <details><summary>Indice</summary><div><p><code>os.getloadavg()</code> renvoie un <em>tuple</em> : le JSON attendu est une <em>liste</em>, avec des valeurs arrondies à 2 décimales (<code>round(x, 2)</code>).</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B4" data-step="B4">
+  <div class="step-head"><span class="id">B4</span><h3><code>lire_meminfo()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> <code>{"total_mio": int, "disponible_mio": int}</code> à partir de <code>MemTotal</code> et <code>MemAvailable</code>.</p>
+    <details><summary>Indice</summary><div><p>Une ligne ressemble à <code>MemTotal:        8127920 kB</code>. <code>ligne.split()</code> donne <code>['MemTotal:', '8127920', 'kB']</code>. Construisez un dictionnaire clé → valeur, puis divisez par 1024 avec <code>//</code> pour garder un entier.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B5" data-step="B5">
+  <div class="step-head"><span class="id">B5</span><h3><code>infos_disques()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Une entrée par système de fichiers réel, avec le <strong>même %</strong> que <code>df</code> (le vérificateur tolère 1 point d'écart). Un montage inaccessible ne doit pas faire planter le script.</p>
+    <details><summary>Indice 1 · la boucle</summary><div><ul>
+      <li>chaque ligne de <code>/proc/mounts</code> : périphérique, point de montage, type, … ;</li>
+      <li>sauter les types de <code>FS_IGNORES</code> et les points déjà vus (un même point peut apparaître deux fois) ;</li>
+      <li><code>shutil.disk_usage(point)</code> dans un <code>try / except OSError</code>, avec un <code>log.debug</code> si ça échoue.</li>
+    </ul></div></details>
+    <details><summary>Indice 2 · le bon pourcentage</summary><div>
+      <p><code>disk_usage</code> renvoie <code>total</code>, <code>used</code> et <code>free</code>. Si vous calculez <code>used / total</code>, vous serez à côté de <code>df</code>. <code>df</code> calcule <code>used / (used + free)</code> et <strong>arrondit au supérieur</strong> (<code>math.ceil</code>). Pourquoi ? C'est la question de synthèse n°3.</p>
+    </div></details>
+    <details class="trap"><summary>Piège · les points de montage avec espaces</summary><div><p>Dans <code>/proc/mounts</code>, un espace est écrit <code>\040</code>. Rare sur un serveur, mais un script robuste le gère : <code>point.replace("\\040", " ")</code>.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B6" data-step="B6">
+  <div class="step-head"><span class="id">B6</span><h3><code>lire_comptes()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Même règle qu'en A5, en Python.</p>
+    <details><summary>Indice</summary><div><p><code>champs = ligne.split(":")</code> ; l'UID est <code>int(champs[2])</code>, le shell <code>champs[6]</code>. <code>shell.endswith(("nologin", "false"))</code> accepte un tuple. Ignorez les lignes vides ou mal formées plutôt que de planter.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B7" data-step="B7">
+  <div class="step-head"><span class="id">B7</span><h3><code>ports_tcp_ecoute()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Liste triée et sans doublon des <code>adresse:port</code>, ou <code>None</code> si <code>ss</code> est absent ou échoue.</p>
+    <details><summary>Indice 1</summary><div><p>L'appel est donné dans le <code>TODO</code>. Passez la commande en <strong>liste</strong> (<code>["ss", "-Htln"]</code>), jamais en chaîne avec <code>shell=True</code>.</p></div></details>
+    <details><summary>Indice 2 · les trois erreurs</summary><div><ul>
+      <li><code>FileNotFoundError</code> : la commande n'existe pas ;</li>
+      <li><code>subprocess.CalledProcessError</code> : elle a renvoyé un code ≠ 0 (à cause de <code>check=True</code>) ;</li>
+      <li><code>subprocess.TimeoutExpired</code> : elle a dépassé 5 s.</li>
+    </ul><p>Dans les trois cas : un <code>log.warning</code> et <code>return None</code>. Puis <code>sorted({ligne.split()[3] for ligne in …})</code>.</p></div></details>
+  </div>
+</div>
+
+<div class="step" id="B8" data-step="B8">
+  <div class="step-head"><span class="id">B8</span><h3><code>formater_texte()</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p><strong>Objectif.</strong> Reproduire exactement la présentation de <code>inventaire.sh</code> à partir du dictionnaire <code>inv</code>.</p>
+    <details><summary>Indice</summary><div>
+      <p>Construisez une liste de lignes, puis <code>"\n".join(lignes)</code>. L'alignement se fait dans les f-strings : <code>f"{'Nom':&lt;9}: {h['nom']}"</code>, <code>f"{d['point_montage']:&lt;26} {d['utilise_pct']:&gt;2} %"</code>. Pensez au cas <code>ports_tcp is None</code> → « non disponible ».</p>
+    </div></details>
+    <details><summary>Vérifier</summary><div><pre><code>diff &lt;(./inventaire.sh -s 100 | tail -n +2) &lt;(python3 inventaire.py -s 100 | tail -n +2)</code></pre><p class="muted">Les deux sorties doivent être identiques (on retire la ligne de date). L'uptime peut différer d'une minute.</p></div></details>
+  </div>
+</div>
+
+<div class="box ok">
+  <strong>Fin de la partie B</strong>
+  <p><code>bash verifier_tp1.sh</code> doit afficher <strong>21 OK</strong> (20 si <code>shellcheck</code> n'est pas installé). Commit : <code>git commit -am "TP1 partie B"</code>.</p>
+</div>
+
+<!-- ============ PARTIE C ============ -->
+<h2 id="partie-c">C · Avec l'IA <span class="timer">pendant tout le TP</span></h2>
+<div class="step" data-step="C">
+  <div class="step-head"><span class="id">C</span><h3>Deux entrées dans <code>JOURNAL-IA.md</code></h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <ol>
+      <li>Choisissez <strong>une</strong> fonction de la partie B (par exemple <code>infos_disques</code> ou <code>ports_tcp_ecoute</code>) et faites-la écrire par l'IA de votre choix.</li>
+      <li>Utilisez un prompt structuré, comme dans la <a href="../../CHARTE-IA.md">charte</a>. Point de départ :</li>
+    </ol>
+<pre><code>Contexte    : Ubuntu 24.04, Python 3.12, bibliothèque standard uniquement.
+Tâche       : écrire la fonction infos_disques(seuil, mounts) qui lit /proc/mounts
+              et renvoie une liste de dictionnaires (voir la docstring ci-dessous).
+Contraintes : ignorer les FS virtuels ; un montage inaccessible ne fait pas planter ;
+              le % doit être identique à celui de df.
+Format      : la fonction seule, avec annotations de type.
+Demande     : explique ton calcul du pourcentage, puis propose 2 cas de test.
+<span class="c"># + collez la signature et la docstring du squelette</span></code></pre>
+    <ol start="3">
+      <li>Passez la réponse au crible des <strong>5 questions</strong> : je comprends chaque ligne ? entrée absente ou malformée ? effets de bord ? les fonctions existent-elles ? comment je teste ?</li>
+      <li>Notez dans le journal : le prompt, ce qui n'allait pas, ce que vous avez corrigé, <strong>comment vous l'avez vérifié</strong>.</li>
+      <li>Deuxième entrée au choix : l'explication d'une commande, d'une erreur ou d'une regex.</li>
+    </ol>
+    <div class="box warn"><strong>Règle 1 de la charte</strong><p>Ne collez pas la sortie de votre inventaire si vous travaillez sur une machine de votre entreprise : noms d'hôtes, comptes et ports réels sont des données sensibles.</p></div>
+  </div>
+</div>
+
+<!-- ============ SYNTHÈSE ============ -->
+<h2 id="synthese">Questions de synthèse</h2>
+<p>Dans un fichier <code>reponses.md</code>, dans le dossier du TP. Quelques lignes par question suffisent : on cherche votre raisonnement, pas une définition recopiée.</p>
+<ol>
+  <li>Citez deux choses <strong>plus simples</strong> en Bash et deux choses <strong>plus simples</strong> en Python, d'après votre expérience du TP.</li>
+  <li>Pourquoi le script doit-il renvoyer <strong>1</strong> quand un disque dépasse le seuil ? Qui va lire ce code retour ?</li>
+  <li>Votre % en Python est-il le même que celui de <code>df</code> ? S'il diffère, pourquoi ? <span class="muted">(Indice : blocs réservés à root.)</span></li>
+  <li>Votre script Bash contient-il un <code>cmd | while read</code> ? Quel problème cela pose-t-il pour <code>ALERTE</code> ?</li>
+  <li>Qu'est-ce que l'IA a fait de travers dans votre partie C ? Comment l'auriez-vous détecté <strong>sans exécuter</strong> le code ?</li>
+</ol>
+
+<!-- ============ RENDRE ============ -->
+<h2 id="rendre">Rendre son travail</h2>
+<div class="table-wrap"><table>
+  <tr><th>Livrable</th><th>Où</th><th>Contrôle</th></tr>
+  <tr><td><code>inventaire.sh</code></td><td>dossier du TP</td><td>partie A du vérificateur</td></tr>
+  <tr><td><code>inventaire.py</code></td><td>dossier du TP</td><td>partie B du vérificateur</td></tr>
+  <tr><td><code>JOURNAL-IA.md</code>, 2 entrées au moins</td><td>racine du dépôt</td><td>relu par l'intervenant</td></tr>
+  <tr><td><code>reponses.md</code></td><td>dossier du TP</td><td>relu par l'intervenant</td></tr>
+</table></div>
+<pre><code>bash verifier_tp1.sh
+git add inventaire.sh inventaire.py reponses.md ../../JOURNAL-IA.md
+git commit -m "TP1 : inventaire Bash et Python, journal IA, synthèse"
+git push</code></pre>
+
+<!-- ============ COINCÉ ============ -->
+<h2 id="coince">Coincé ? Les erreurs fréquentes</h2>
+<div class="table-wrap"><table>
+  <tr><th>Symptôme</th><th>Cause probable</th><th>Piste</th></tr>
+  <tr><td><code>Permission denied</code> au lancement</td><td>le fichier n'est pas exécutable</td><td><code>chmod +x inventaire.sh</code></td></tr>
+  <tr><td><code>/usr/bin/env: 'bash\r'</code></td><td>fins de ligne Windows (CRLF)</td><td><code>sed -i 's/\r$//' inventaire.sh</code>, et <code>git config core.autocrlf input</code></td></tr>
+  <tr><td>Le script s'arrête sans message</td><td><code>set -e</code> : une commande a échoué (un <code>grep</code> qui ne trouve rien, un <code>(( ))</code> qui vaut 0)</td><td>lancer <code>bash -x inventaire.sh</code> pour voir la dernière commande</td></tr>
+  <tr><td><code>unbound variable</code></td><td><code>set -u</code> : variable non définie ou mal orthographiée</td><td>vérifier le nom, ou <code>${VAR:-défaut}</code></td></tr>
+  <tr><td>Une colonne contient toute la ligne</td><td><code>IFS=$'\n\t'</code> ne découpe pas sur les espaces</td><td><code>awk</code>, <code>cut</code>, ou <code>IFS=' ' read</code></td></tr>
+  <tr><td><code>ALERTE</code> reste à 0</td><td><code>cmd | while read</code> : sous-shell</td><td><code>done &lt; &lt;(cmd)</code></td></tr>
+  <tr><td><code>ss: command not found</code></td><td>conteneur minimal</td><td><code>sudo apt install iproute2</code>, mais le script doit fonctionner sans</td></tr>
+  <tr><td>Le JSON est invalide</td><td>un <code>print</code> de débogage sur stdout</td><td>remplacer par <code>log.debug(…)</code></td></tr>
+  <tr><td>Trace Python <code>Traceback …</code></td><td>exception non attrapée</td><td>l'attraper là où elle survient, message clair, code 2</td></tr>
+  <tr><td>% Python ≠ % <code>df</code></td><td>calcul sur <code>total</code></td><td>indice 2 de B5</td></tr>
+</table></div>
+
+<!-- ============ BONUS ============ -->
+<h2 id="bonus">Pour aller plus loin</h2>
+<ul>
+  <li><code>shellcheck inventaire.sh</code> : corrigez tout ce qui est signalé, et lisez la page wiki de chaque code <code>SCxxxx</code>.</li>
+  <li>Ajoutez une option <code>--sections disques,ports</code> pour n'afficher que certaines sections.</li>
+  <li>Planifiez l'inventaire JSON toutes les 15 minutes avec cron, dans <code>/var/tmp/inventaire.json</code>. Que se passe-t-il si <code>ss</code> n'est pas dans le <code>PATH</code> de cron ? On y revient en séance 4.</li>
+</ul>
+
+<footer>EEMI · B2 Cybersécurité · Scripts de parsing et d'automatisation · Séance 1 · Emmanuel Pinglier</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var KEY = 'eemi-tp1-progression';
+  var etat = {};
+  try { etat = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { etat = {}; }
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step[data-step]'));
+  var total = steps.length;
+
+  function rafraichir() {
+    var n = 0;
+    steps.forEach(function (s) {
+      var id = s.getAttribute('data-step');
+      var fait = !!etat[id];
+      if (fait) n++;
+      s.classList.toggle('done', fait);
+      s.querySelector('input[type=checkbox]').checked = fait;
+      var lien = document.querySelector('nav a[data-step="' + id + '"]');
+      if (lien) lien.classList.toggle('done', fait);
+    });
+    document.getElementById('pbar').style.width = (100 * n / total) + '%';
+    document.getElementById('ptext').textContent = n + ' / ' + total + ' étapes';
+  }
+  steps.forEach(function (s) {
+    s.querySelector('input[type=checkbox]').addEventListener('change', function (e) {
+      etat[s.getAttribute('data-step')] = e.target.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(etat)); } catch (err) {}
+      rafraichir();
+    });
+  });
+  rafraichir();
+
+  // Boutons « copier » sur les blocs de code
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var b = document.createElement('button');
+    b.className = 'copy'; b.type = 'button'; b.textContent = 'Copier';
+    b.addEventListener('click', function () {
+      var clone = pre.cloneNode(true);
+      clone.querySelectorAll('.copy').forEach(function (x) { x.remove(); });
+      var texte = clone.textContent;
+      function ok() { b.textContent = 'Copié'; setTimeout(function () { b.textContent = 'Copier'; }, 1200); }
+      if (navigator.clipboard) { navigator.clipboard.writeText(texte).then(ok, function () {}); }
+    });
+    pre.appendChild(b);
+  });
+
+  // Thème clair / sombre
+  var root = document.documentElement;
+  try { var t = localStorage.getItem('eemi-theme'); if (t) root.setAttribute('data-theme', t); } catch (e) {}
+  document.getElementById('theme').addEventListener('click', function () {
+    var sombre = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var nouveau = sombre ? 'light' : 'dark';
+    root.setAttribute('data-theme', nouveau);
+    try { localStorage.setItem('eemi-theme', nouveau); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

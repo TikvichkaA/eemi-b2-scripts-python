@@ -2,12 +2,14 @@
 
 Slides : [`slides/s1-scripter-admin.html`](../../slides/s1-scripter-admin.html)
 
+**Guide pas à pas du TP1 : [`guide-tp1.html`](guide-tp1.html)**, à ouvrir dans un navigateur (consignes par étape, indices à déplier, erreurs fréquentes, suivi de progression).
+
 ## Au programme
 
 | Durée | Activité |
 |---|---|
 | 15 min | Présentation du module et de l'évaluation |
-| 15 min | [Quiz de positionnement](quiz-positionnement.md), non noté |
+| 15 min | Quiz de positionnement, non noté : [unjouruneapp.com/eemi-py/positionnement](https://unjouruneapp.com/eemi-py/positionnement) (code de séance donné en cours ; [version texte](quiz-positionnement.md)) |
 | 60 min | Cours : Bash ou Python, anatomie d'un script d'administration, l'IA comme copilote |
 | 10 min | Pause |
 | 100 min | **TP1 · Inventaire système** |
