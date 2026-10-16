@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python express</title>
+<style>
+:root{
+  --paper:#fbfaf7; --card:#ffffff; --ink:#1b2430; --muted:#5d6878; --line:#d9dde3;
+  --accent:#0f8b8d; --accent-soft:#e0f2f2; --warn:#e07a2f; --warn-soft:#fdf1e7;
+  --ok:#2f8f4e; --ok-soft:#e3f3e8; --ko:#c0392b; --ko-soft:#f8e4e1;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --chip:#eef1f4; --nav:#0f1b2d; --nav-ink:#c6d0dc;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+    --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+    --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+  --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+  --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+a{color:var(--accent)}
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--nav);color:var(--nav-ink);padding:22px 0}
+nav.side .brand{padding:0 20px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+nav.side .brand b{display:block;color:#fff;font-size:15px}
+nav.side .brand span{font-size:12.5px;color:#7fd3d4;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+nav.side a{display:block;padding:6px 20px;color:var(--nav-ink);text-decoration:none;font-size:14px}
+nav.side a:hover{background:rgba(255,255,255,.06);color:#fff}
+main{padding:40px 48px 96px;max-width:980px}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:12px}
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+h1{font-size:34px;line-height:1.15;margin:6px 0 10px;letter-spacing:-.3px}
+h2{font-size:24px;margin:44px 0 10px;padding-top:8px;letter-spacing:-.2px}
+h2 .tp{font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:24px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+code{font-family:var(--mono);font-size:.88em;background:var(--chip);padding:1px 6px;border-radius:4px}
+pre{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 18px;font-family:var(--mono);
+  font-size:14px;line-height:1.5;overflow-x:auto;margin:10px 0 16px}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .c{color:var(--code-com);font-style:italic}
+pre .r{color:#9fd6a5}
+.copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:#cfd8e3;border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;font-size:12px;padding:3px 9px;cursor:pointer;font-family:var(--sans)}
+table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:15px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--chip)}
+.table-wrap{overflow-x:auto}
+.box{border-radius:10px;padding:14px 18px;margin:14px 0;border-left:5px solid var(--accent);background:var(--accent-soft)}
+.box.warn{border-color:var(--warn);background:var(--warn-soft)}
+.box.ko{border-color:var(--ko);background:var(--ko-soft)}
+.box > :last-child{margin-bottom:0}
+.box strong:first-child{display:block;margin-bottom:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.theme-btn{position:fixed;top:12px;right:14px;z-index:20;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+  padding:5px 12px;font-size:13px;cursor:pointer}
+footer{margin-top:60px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width: 900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.side{position:static;height:auto;padding:14px 0}
+  nav.side .links{display:none}
+  main{padding:24px 16px 72px}
+  h1{font-size:27px}
+  .two{grid-template-columns:minmax(0,1fr)}
+}
+@media print{ nav.side,.theme-btn,.copy{display:none} .layout{display:block} }
+</style>
+</head>
+<body>
+<button class="theme-btn" id="theme" type="button" aria-label="Changer de thème">◐ Thème</button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><span>EEMI · B2 Cyber · S1</span><b>Python express</b></div>
+  <div class="links">
+    <a href="#lancer">1 · Lancer Python</a>
+    <a href="#bash">2 · Si vous connaissez Bash</a>
+    <a href="#types">3 · Valeurs et variables</a>
+    <a href="#chaines">4 · Chaînes de caractères</a>
+    <a href="#listes">5 · Listes</a>
+    <a href="#dicts">6 · Dictionnaires</a>
+    <a href="#blocs">7 · Conditions et boucles</a>
+    <a href="#fonctions">8 · Fonctions</a>
+    <a href="#fichiers">9 · Lire un fichier</a>
+    <a href="#erreurs">10 · Erreurs et exceptions</a>
+    <a href="#tp1">11 · Les modules du TP1</a>
+    <a href="#methode">12 · Méthode</a>
+    <a href="guide-tp1.html">← Guide du TP1</a>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="kicker">Mémo débutant · 10 minutes de lecture</div>
+  <h1>Python express</h1>
+  <p>Le strict nécessaire pour faire la <strong>partie B du TP1</strong>, rien de plus. Chaque section indique les étapes du TP où elle sert. Gardez cette page ouverte à côté de votre éditeur.</p>
+</header>
+
+<div class="box">
+  <strong>La meilleure façon d'apprendre ici</strong>
+  <p>Tapez les exemples dans l'interpréteur (section 1) plutôt que de les lire. Dix lignes tapées valent une page lue.</p>
+</div>
+
+<!-- 1 -->
+<h2 id="lancer">1 · Lancer Python</h2>
+<div class="two">
+<div>
+<p><strong>L'interpréteur interactif</strong> : pour essayer une ligne.</p>
+<pre><code>$ python3
+&gt;&gt;&gt; 2 + 3
+<span class="r">5</span>
+&gt;&gt;&gt; "admin".upper()
+<span class="r">'ADMIN'</span>
+&gt;&gt;&gt; exit()</code></pre>
+</div>
+<div>
+<p><strong>Un script</strong> : un fichier lancé du début à la fin.</p>
+<pre><code>$ python3 inventaire.py --help
+
+<span class="c"># tester une seule fonction du TP :</span>
+$ python3 -c "import inventaire; print(inventaire.infos_cpu())"</code></pre>
+</div>
+</div>
+<div class="box warn">
+  <strong>L'indentation fait partie du code</strong>
+  <p>Pas d'accolades ni de <code>fi</code>/<code>done</code> : un bloc commence après <code>:</code> et se compose des lignes décalées de <strong>4 espaces</strong>. Un décalage incohérent donne <code>IndentationError</code>. Réglez votre éditeur pour insérer des espaces, pas des tabulations.</p>
+</div>
+
+<!-- 2 -->
+<h2 id="bash">2 · Si vous connaissez Bash</h2>
+<div class="table-wrap"><table>
+  <tr><th>En Bash</th><th>En Python</th></tr>
+  <tr><td><code>nom="srv01"</code></td><td><code>nom = "srv01"</code> (espaces autorisés autour du <code>=</code>)</td></tr>
+  <tr><td><code>echo "Nom : $nom"</code></td><td><code>print(f"Nom : {nom}")</code></td></tr>
+  <tr><td><code>$(( a + b ))</code></td><td><code>a + b</code></td></tr>
+  <tr><td><code>if [[ $x -ge 80 ]]; then … fi</code></td><td><code>if x &gt;= 80:</code> puis un bloc indenté</td></tr>
+  <tr><td><code>for f in *.log; do … done</code></td><td><code>for f in Path(".").glob("*.log"):</code></td></tr>
+  <tr><td><code>cut -d: -f1</code></td><td><code>ligne.split(":")[0]</code></td></tr>
+  <tr><td><code>grep -q "motif" &lt;&lt;&lt; "$ligne"</code></td><td><code>"motif" in ligne</code></td></tr>
+  <tr><td><code>cat fichier</code></td><td><code>Path("fichier").read_text()</code></td></tr>
+  <tr><td><code>sortie=$(ss -Htln)</code></td><td><code>subprocess.run(["ss", "-Htln"], capture_output=True, text=True).stdout</code></td></tr>
+  <tr><td><code>echo "erreur" &gt;&amp;2; exit 2</code></td><td><code>log.error("erreur")</code> puis <code>return 2</code> dans <code>main()</code></td></tr>
+</table></div>
+
+<!-- 3 -->
+<h2 id="types">3 · Valeurs et variables</h2>
+<pre><code>coeurs = 4              <span class="c"># int : entier</span>
+charge = 0.42           <span class="c"># float : nombre à virgule</span>
+nom = "srv-web-01"      <span class="c"># str : chaîne de caractères</span>
+alerte = False          <span class="c"># bool : True ou False (majuscule !)</span>
+ports = None            <span class="c"># None : « pas de valeur » (≈ vide)</span>
+
+int("8127920")          <span class="c"># → 8127920   convertir une chaîne en entier</span>
+float("6402.17")        <span class="c"># → 6402.17</span>
+int(6402.17)            <span class="c"># → 6402      tronque</span>
+round(0.4166, 2)        <span class="c"># → 0.42</span>
+8127920 // 1024         <span class="c"># → 7937      division entière (Mio)</span>
+str(42)                 <span class="c"># → "42"</span></code></pre>
+<div class="box ko">
+  <strong>Piège : tout ce qu'on lit dans un fichier est une chaîne</strong>
+  <p><code>"8127920" // 1024</code> provoque <code>TypeError</code>. Convertissez d'abord avec <code>int(…)</code>.</p>
+</div>
+
+<!-- 4 -->
+<h2 id="chaines">4 · Chaînes de caractères <span class="tp">B1 · B4 · B6 · B8</span></h2>
+<pre><code>ligne = 'PRETTY_NAME="Ubuntu 24.04.1 LTS"'
+
+ligne.startswith("PRETTY_NAME=")    <span class="c"># → True</span>
+cle, _, valeur = ligne.partition("=")  <span class="c"># coupe au premier "="</span>
+valeur                              <span class="c"># → '"Ubuntu 24.04.1 LTS"'</span>
+valeur.strip('"')                   <span class="c"># → 'Ubuntu 24.04.1 LTS'   retire les " au bord</span>
+
+"MemTotal:   8127920 kB".split()   <span class="c"># → ['MemTotal:', '8127920', 'kB']   coupe sur les espaces</span>
+"alice:x:1000:1000::/home/alice:/bin/bash".split(":")
+                                    <span class="c"># → ['alice', 'x', '1000', '1000', '', '/home/alice', '/bin/bash']</span>
+"/bin/bash".endswith(("nologin", "false"))  <span class="c"># → False</span>
+"  texte \n".strip()                <span class="c"># → 'texte'   retire espaces et retour à la ligne</span></code></pre>
+<p><strong>Les f-strings</strong> : un <code>f</code> devant les guillemets, des variables entre <code>{ }</code>.</p>
+<pre><code>nom, pct = "/var", 86
+f"{nom} est plein à {pct} %"        <span class="c"># → '/var est plein à 86 %'</span>
+f"{'Nom':&lt;9}: srv01"                <span class="c"># → 'Nom      : srv01'   aligné à gauche sur 9</span>
+f"{pct:&gt;3} %"                       <span class="c"># → ' 86 %'              aligné à droite sur 3</span></code></pre>
+
+<!-- 5 -->
+<h2 id="listes">5 · Listes <span class="tp">B3 · B5 · B6 · B7</span></h2>
+<pre><code>ports = ["0.0.0.0:22", "127.0.0.1:5432"]
+ports[0]               <span class="c"># → '0.0.0.0:22'   on compte à partir de 0</span>
+ports[-1]              <span class="c"># → dernier élément</span>
+len(ports)             <span class="c"># → 2</span>
+ports.append("[::]:80")
+"0.0.0.0:22" in ports  <span class="c"># → True</span>
+
+sorted(["b", "a", "b"])        <span class="c"># → ['a', 'b', 'b']</span>
+sorted(set(["b", "a", "b"]))   <span class="c"># → ['a', 'b']   set() supprime les doublons</span>
+list((0.42, 0.37, 0.3))        <span class="c"># tuple → liste</span>
+
+comptes = []           <span class="c"># liste vide, qu'on remplit dans une boucle</span></code></pre>
+
+<!-- 6 -->
+<h2 id="dicts">6 · Dictionnaires <span class="tp">B2 · B3 · B4 · B6 · B10</span></h2>
+<p>Des paires <strong>clé → valeur</strong>. C'est ce que renvoient presque toutes les fonctions du TP, et c'est exactement la forme du JSON.</p>
+<pre><code>hote = {"nom": "srv-web-01", "noyau": "6.8.0-45-generic"}
+hote["nom"]                <span class="c"># → 'srv-web-01'</span>
+hote["uptime_s"] = 1049000 <span class="c"># ajoute une clé</span>
+hote.get("absent", 0)      <span class="c"># → 0    valeur par défaut si la clé manque (pas d'erreur)</span>
+hote["absent"]             <span class="c"># → KeyError !</span>
+
+for cle, valeur in hote.items():
+    print(cle, valeur)
+
+import json
+print(json.dumps(hote, ensure_ascii=False, indent=2))   <span class="c"># dict → texte JSON</span></code></pre>
+
+<!-- 7 -->
+<h2 id="blocs">7 · Conditions et boucles <span class="tp">partout</span></h2>
+<pre><code>for ligne in lignes:
+    if not ligne:              <span class="c"># ligne vide → on passe à la suivante</span>
+        continue
+    champs = ligne.split(":")
+    uid = int(champs[2])
+    if uid &gt;= 1000 and uid != 65534:
+        print(champs[0])
+    elif uid == 0:
+        print("root")
+    else:
+        pass                   <span class="c"># « ne rien faire »</span>
+
+0 &lt;= seuil &lt;= 100              <span class="c"># comparaison chaînée, pratique pour B9</span></code></pre>
+<p class="muted">Opérateurs : <code>==</code> égal, <code>!=</code> différent, <code>and</code>, <code>or</code>, <code>not</code> (en toutes lettres, pas <code>&amp;&amp;</code> ni <code>||</code>).</p>
+
+<!-- 8 -->
+<h2 id="fonctions">8 · Fonctions <span class="tp">tous les TODO</span></h2>
+<pre><code>def infos_cpu() -&gt; dict:
+    """Ce texte est la documentation de la fonction."""
+    coeurs = os.cpu_count()
+    charge = [round(x, 2) for x in os.getloadavg()]
+    return {"coeurs": coeurs, "charge": charge}</code></pre>
+<ul>
+  <li><code>def nom(paramètres):</code> déclare la fonction ; <code>return</code> renvoie le résultat.</li>
+  <li><code>-&gt; dict</code> et <code>chemin: Path</code> sont des <strong>annotations</strong> : elles documentent le type attendu, Python ne les vérifie pas. Gardez-les.</li>
+  <li>Dans le squelette, chaque <code>TODO</code> se termine par un <code>return {}</code> ou <code>return []</code> provisoire : <strong>remplacez-le</strong> par le vrai résultat.</li>
+  <li><code>[round(x, 2) for x in …]</code> est une <em>compréhension de liste</em> : une boucle qui construit une liste en une ligne. Une boucle <code>for</code> + <code>append</code> fait la même chose.</li>
+</ul>
+
+<!-- 9 -->
+<h2 id="fichiers">9 · Lire un fichier <span class="tp">B1 · B2 · B4 · B5 · B6</span></h2>
+<pre><code>from pathlib import Path
+
+texte = Path("/proc/meminfo").read_text()   <span class="c"># tout le fichier dans une chaîne</span>
+for ligne in texte.splitlines():            <span class="c"># une ligne à la fois, sans le "\n"</span>
+    print(ligne)
+
+<span class="c"># Variante classique, utile pour les gros fichiers :</span>
+with open("/etc/passwd", encoding="utf-8") as f:
+    for ligne in f:
+        print(ligne.rstrip())</code></pre>
+<p>Dans le squelette, le fichier à lire arrive souvent en <strong>paramètre</strong> (<code>chemin</code>, <code>mounts</code>) : utilisez ce paramètre, pas le chemin écrit en dur. C'est ce qui permettra de tester la fonction avec un faux fichier en séance 5.</p>
+
+<!-- 10 -->
+<h2 id="erreurs">10 · Erreurs et exceptions <span class="tp">B1 · B5 · B7 · B10</span></h2>
+<div class="two">
+<div>
+<p><strong>Lire un message d'erreur</strong> : par le bas.</p>
+<pre><code>Traceback (most recent call last):
+  File "inventaire.py", line 72, in lire_meminfo
+    total = valeurs["MemTotal:"] // 1024
+<span class="r">TypeError: unsupported operand type(s)
+for //: 'str' and 'int'</span></code></pre>
+<p class="muted">Dernière ligne : <strong>quoi</strong>. Au-dessus : <strong>où</strong> (fichier, ligne, fonction).</p>
+</div>
+<div>
+<p><strong>Rattraper une erreur prévisible</strong> :</p>
+<pre><code>try:
+    texte = chemin.read_text()
+except OSError:          <span class="c"># fichier absent, droits…</span>
+    return "inconnu"
+
+try:
+    usage = shutil.disk_usage(point)
+except OSError as e:
+    log.debug("ignoré %s : %s", point, e)
+    continue</code></pre>
+</div>
+</div>
+<div class="table-wrap"><table>
+  <tr><th>Erreur</th><th>Cause la plus fréquente</th></tr>
+  <tr><td><code>IndentationError</code></td><td>décalage incohérent, mélange espaces et tabulations</td></tr>
+  <tr><td><code>SyntaxError</code></td><td>un <code>:</code> oublié après <code>if</code>/<code>for</code>/<code>def</code>, une parenthèse ou un guillemet non fermé</td></tr>
+  <tr><td><code>NameError</code></td><td>variable mal orthographiée, ou module non importé</td></tr>
+  <tr><td><code>TypeError</code></td><td>calcul sur une chaîne non convertie (<code>int(…)</code> oublié)</td></tr>
+  <tr><td><code>KeyError</code> / <code>IndexError</code></td><td>clé absente du dictionnaire / position hors de la liste</td></tr>
+  <tr><td><code>FileNotFoundError</code></td><td>chemin faux, ou fichier absent sur cette machine</td></tr>
+</table></div>
+
+<!-- 11 -->
+<h2 id="tp1">11 · Les modules du TP1</h2>
+<p>Déjà importés en haut de <code>inventaire.py</code> : vous n'avez qu'à vous en servir.</p>
+<div class="table-wrap"><table>
+  <tr><th>Module</th><th>Ce qu'on en utilise</th><th>Étapes</th></tr>
+  <tr><td><code>pathlib</code></td><td><code>Path(…).read_text()</code>, <code>.write_text()</code></td><td>B1, B4, B5, B6, B10</td></tr>
+  <tr><td><code>os</code></td><td><code>os.cpu_count()</code>, <code>os.getloadavg()</code></td><td>B3</td></tr>
+  <tr><td><code>socket</code>, <code>platform</code></td><td><code>socket.gethostname()</code>, <code>platform.release()</code></td><td>B2</td></tr>
+  <tr><td><code>shutil</code></td><td><code>shutil.disk_usage(point)</code> → <code>.total</code>, <code>.used</code>, <code>.free</code></td><td>B5</td></tr>
+  <tr><td><code>subprocess</code></td><td><code>subprocess.run([...], capture_output=True, text=True)</code></td><td>B7</td></tr>
+  <tr><td><code>argparse</code></td><td><code>p.add_argument(…)</code></td><td>B9</td></tr>
+  <tr><td><code>json</code></td><td><code>json.dumps(…)</code></td><td>B10</td></tr>
+  <tr><td><code>logging</code></td><td><code>log.debug(…)</code>, <code>log.warning(…)</code>, <code>log.error(…)</code> : messages sur stderr</td><td>B5, B7, B10</td></tr>
+</table></div>
+<p class="muted">Documentation officielle en français : <a href="https://docs.python.org/fr/3/library/">docs.python.org/fr/3/library</a>. Dans l'interpréteur : <code>help(shutil.disk_usage)</code>.</p>
+
+<!-- 12 -->
+<h2 id="methode">12 · Méthode pour avancer sans se noyer</h2>
+<ol>
+  <li><strong>Une fonction à la fois.</strong> Écrivez-la, puis testez-la seule : <code>python3 -c "import inventaire; print(inventaire.lire_meminfo())"</code>.</li>
+  <li><strong>Essayez la ligne difficile dans l'interpréteur</strong> avant de l'écrire dans le fichier.</li>
+  <li><strong>Affichez ce que vous manipulez</strong> : un <code>print(champs)</code> temporaire répond à la moitié des questions. Retirez-le ensuite : la sortie JSON doit rester propre.</li>
+  <li><strong>Lisez l'erreur par le bas</strong>, et regardez le numéro de ligne.</li>
+  <li><strong>Demandez à l'IA d'expliquer</strong>, pas seulement d'écrire : « explique-moi ligne par ligne ce que fait ce code ». C'est une bonne entrée de <code>JOURNAL-IA.md</code>.</li>
+</ol>
+
+<footer>EEMI · B2 Cybersécurité · Scripts de parsing et d'automatisation · Séance 1 · <a href="guide-tp1.html">Retour au guide du TP1</a></footer>
+</main>
+</div>
+<script>
+(function () {
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var b = document.createElement('button');
+    b.className = 'copy'; b.type = 'button'; b.textContent = 'Copier';
+    b.addEventListener('click', function () {
+      var clone = pre.cloneNode(true);
+      clone.querySelectorAll('.copy').forEach(function (x) { x.remove(); });
+      var texte = clone.textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(texte).then(function () {
+          b.textContent = 'Copié'; setTimeout(function () { b.textContent = 'Copier'; }, 1200);
+        }, function () {});
+      }
+    });
+    pre.appendChild(b);
+  });
+  var root = document.documentElement;
+  try { var t = localStorage.getItem('eemi-theme'); if (t) root.setAttribute('data-theme', t); } catch (e) {}
+  document.getElementById('theme').addEventListener('click', function () {
+    var sombre = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var nouveau = sombre ? 'light' : 'dark';
+    root.setAttribute('data-theme', nouveau);
+    try { localStorage.setItem('eemi-theme', nouveau); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
