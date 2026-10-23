@@ -1,0 +1,35 @@
+import re
+from collections import Counter
+
+def analyser_texte():
+    print("=== Analyseur de texte ===")
+    texte = input("Entrez votre texte : ")
+    
+    # 1. Nombre de mots (basé sur les espaces)
+    mots_bruts = texte.split()
+    nombre_mots = len(mots_bruts)
+    
+    # 2. Nombre de caractères sans les espaces
+    # On remplace les espaces par du vide (on peut aussi inclure tabulations/retours à la ligne si besoin)
+    nombre_caracteres = len(texte.replace(" ", ""))
+    
+    # 3. Recherche du mot le plus fréquent (insensible à la casse, gestion de la ponctuation)
+    # re.findall extrait uniquement les mots en ignorant la ponctuation et convertit tout en minuscules
+    mots_nettoyes = re.findall(r'\b\w+\b', texte.lower())
+    
+    mot_frequent = "Aucun"
+    frequence = 0
+    
+    if mots_nettoyes:
+        # On utilise Counter pour compter les occurrences de chaque mot
+        compteur = Counter(mots_nettoyes)
+        # most_common(1) renvoie une liste avec le tuple le plus fréquent : [('mot', nombre)]
+        mot_frequent, frequence = compteur.most_common(1)[0]
+
+    print("\n--- Résultats de l'analyse ---")
+    print(f"• Nombre de mots : {nombre_mots}")
+    print(f"• Nombre de caractères (sans les espaces) : {nombre_caracteres}")
+    print(f"• Mot le plus fréquent : '{mot_frequent}' (apparaît {frequence} fois)")
+
+if __name__ == "__main__":
+    analyser_texte()
