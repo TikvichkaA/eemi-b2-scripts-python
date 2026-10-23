@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exercices Python assistés par IA</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      color: #1a1a2e;
+      background: #f4f6fb;
+      padding: 40px 20px;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      padding: 36px 40px 28px;
+    }
+
+    .header .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.9);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Intro */
+    .intro {
+      padding: 24px 40px;
+      background: #f8f9ff;
+      border-bottom: 1px solid #e8ecf4;
+    }
+
+    .intro p {
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .intro strong { color: #0f3460; }
+
+    .method-box {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .method-step {
+      flex: 1;
+      min-width: 160px;
+      background: white;
+      border: 1px solid #dde3f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .method-step .num {
+      background: #0f3460;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .method-step .text {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    /* Exercises */
+    .exercises {
+      padding: 28px 40px 32px;
+    }
+
+    .exercises h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .exercise {
+      border: 1px solid #e4e9f4;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .exercise-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: #f8f9ff;
+      border-bottom: 1px solid #e4e9f4;
+    }
+
+    .ex-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      background: #0f3460;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ex-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      flex: 1;
+    }
+
+    .ex-concept {
+      font-size: 11px;
+      font-weight: 600;
+      color: #0f3460;
+      background: #e8edf8;
+      padding: 3px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+
+    .exercise-body {
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 18px;
+    }
+
+    .block-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    .objective-text {
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .tests-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .tests-list li {
+      font-size: 12px;
+      color: #555;
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .tests-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #0f3460;
+      font-weight: 700;
+    }
+
+    /* Footer note */
+    .footer-note {
+      padding: 18px 40px 28px;
+      border-top: 1px solid #e8ecf4;
+    }
+
+    .footer-note p {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.7;
+    }
+
+    .footer-note strong { color: #555; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .page { box-shadow: none; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="header">
+      <div class="tag">EEMI — Formation Python</div>
+      <h1>Scripting Python assisté par IA</h1>
+      <p>4 exercices pour découvrir Python en utilisant l'IA comme outil de développement</p>
+    </div>
+
+    <div class="intro">
+      <p>
+        Ces exercices ont deux objectifs : <strong>découvrir les bases de Python</strong> et
+        apprendre à <strong>travailler avec une IA pour produire du code</strong>.
+        Pour chaque exercice, lisez l'objectif, rédigez votre propre prompt, puis soumettez-le
+        à l'IA de votre choix (ChatGPT, Claude, Copilot…).
+        Votre travail est ensuite de comprendre le code produit, de le tester, et de corriger ce qui ne va pas.
+      </p>
+      <div class="method-box">
+        <div class="method-step">
+          <div class="num">1</div>
+          <div class="text"><strong>Rédigez</strong> votre prompt et soumettez-le à l'IA</div>
+        </div>
+        <div class="method-step">
+          <div class="num">2</div>
+          <div class="text"><strong>Copiez</strong> le code dans un fichier <code>.py</code> et exécutez-le</div>
+        </div>
+        <div class="method-step">
+          <div class="num">3</div>
+          <div class="text"><strong>Testez</strong> les cas listés — notez ce qui marche ou pas</div>
+        </div>
+        <div class="method-step">
+          <div class="num">4</div>
+          <div class="text"><strong>Corrigez</strong> en retournant à l'IA si nécessaire</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercises">
+      <h2>Les exercices</h2>
+
+      <!-- Ex 1 -->
+      <div class="exercise">
+        <div class="exercise-header">
+          <div class="ex-num">1</div>
+          <div class="ex-title">Calculateur d'IMC</div>
+          <div class="ex-concept">variables · conditions · input()</div>
+        </div>
+        <div class="exercise-body">
+          <div>
+            <div class="block-label">Objectif</div>
+            <div class="objective-text">
+              Le script demande le poids (en kg) et la taille (en mètres) d'une personne,
+              calcule son IMC et affiche la catégorie correspondante :
+              sous-poids, poids normal, surpoids ou obèse.
+              Il doit gérer les erreurs si l'utilisateur saisit une valeur non numérique.
+            </div>
+          </div>
+          <div>
+            <div class="block-label">Cas à tester</div>
+            <ul class="tests-list">
+              <li>80 kg / 1.80 m → poids normal</li>
+              <li>50 kg / 1.75 m → sous-poids</li>
+              <li>100 kg / 1.65 m → obèse</li>
+              <li>Entrer "abc" à la place d'un chiffre</li>
+              <li>Entrer 0 pour la taille</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="exercise">
+        <div class="exercise-header">
+          <div class="ex-num">2</div>
+          <div class="ex-title">Analyseur de texte</div>
+          <div class="ex-concept">strings · split() · boucles</div>
+        </div>
+        <div class="exercise-body">
+          <div>
+            <div class="block-label">Objectif</div>
+            <div class="objective-text">
+              Le script demande à l'utilisateur de saisir un texte,
+              puis affiche trois informations : le nombre de mots, le nombre de caractères
+              (sans les espaces), et le mot qui apparaît le plus souvent.
+              La casse ne doit pas avoir d'importance ("Le" et "le" comptent comme le même mot).
+            </div>
+          </div>
+          <div>
+            <div class="block-label">Cas à tester</div>
+            <ul class="tests-list">
+              <li>Texte normal avec répétitions</li>
+              <li>Texte avec majuscules mélangées</li>
+              <li>Texte vide (juste Entrée)</li>
+              <li>Un seul mot</li>
+              <li>Texte avec ponctuation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="exercise">
+        <div class="exercise-header">
+          <div class="ex-num">3</div>
+          <div class="ex-title">Générateur de mots de passe</div>
+          <div class="ex-concept">fonctions · import random · paramètres</div>
+        </div>
+        <div class="exercise-body">
+          <div>
+            <div class="block-label">Objectif</div>
+            <div class="objective-text">
+              Le script génère un mot de passe aléatoire selon les préférences de l'utilisateur :
+              longueur souhaitée, inclusion ou non de chiffres, inclusion ou non de caractères spéciaux.
+              Le code doit être organisé sous forme de fonction.
+            </div>
+          </div>
+          <div>
+            <div class="block-label">Cas à tester</div>
+            <ul class="tests-list">
+              <li>Longueur 12, chiffres oui, spéciaux oui</li>
+              <li>Longueur 8, que des lettres</li>
+              <li>Longueur 0 ou négative</li>
+              <li>Générer 5 mots de passe à la suite</li>
+              <li>Vérifier qu'ils sont tous différents</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 4 -->
+      <div class="exercise">
+        <div class="exercise-header">
+          <div class="ex-num">4</div>
+          <div class="ex-title">Liste de tâches persistante</div>
+          <div class="ex-concept">fichiers · listes · boucles · menus</div>
+        </div>
+        <div class="exercise-body">
+          <div>
+            <div class="block-label">Objectif</div>
+            <div class="objective-text">
+              Le script est un gestionnaire de tâches en ligne de commande avec un menu interactif.
+              Il doit permettre d'ajouter une tâche, lister les tâches (avec leur statut fait/à faire),
+              marquer une tâche comme faite, et quitter.
+              La liste doit être sauvegardée dans un fichier pour persister entre deux exécutions.
+            </div>
+          </div>
+          <div>
+            <div class="block-label">Cas à tester</div>
+            <ul class="tests-list">
+              <li>Ajouter 3 tâches, quitter, relancer → tâches toujours là</li>
+              <li>Marquer une tâche déjà faite</li>
+              <li>Entrer un numéro de tâche inexistant</li>
+              <li>Afficher quand la liste est vide</li>
+              <li>Entrer une option de menu invalide</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-note">
+      <p>
+        <strong>Rendu attendu :</strong> pour chaque exercice, déposez votre fichier <code>.py</code> final
+        et un court commentaire (3-5 lignes) expliquant ce que vous avez dû corriger ou ajuster par rapport
+        au code initial produit par l'IA.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
