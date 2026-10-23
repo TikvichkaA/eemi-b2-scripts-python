@@ -1,1 +1,34 @@
+exercice1: Calculateur d'IMC
 
+def lire_nombre(message):
+    """Demande un nombre positif à l'utilisateur, accepte la virgule."""
+    saisie = input(message).strip().replace(",", ".")
+    try:
+        valeur = float(saisie)
+    except ValueError:
+        print("Erreur : veuillez entrer une valeur numérique.")
+        return None
+    if valeur <= 0:
+        print("Erreur : la valeur doit être supérieure à 0.")
+        return None
+    return valeur
+
+
+def categorie_imc(imc):
+    """Retourne la catégorie correspondant à l'IMC."""
+    if imc < 18.5:
+        return "sous-poids"
+    elif imc < 25:
+        return "poids normal"
+    elif imc < 30:
+        return "surpoids"
+    else:
+        return "obèse"
+
+
+poids = lire_nombre("Entrez votre poids (en kg) : ")
+if poids is not None:
+    taille = lire_nombre("Entrez votre taille (en mètres) : ")
+    if taille is not None:
+        imc = poids / (taille ** 2)
+        print(f"Votre IMC est de {imc:.1f} -> {categorie_imc(imc)}")
