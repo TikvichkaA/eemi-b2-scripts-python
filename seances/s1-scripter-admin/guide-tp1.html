@@ -129,6 +129,7 @@ footer{margin-top:60px;color:var(--muted);font-size:13.5px;border-top:1px solid 
     <a class="sub" href="#A5" data-step="A5">A5 · Comptes <span class="tick">✓</span></a>
     <a class="sub" href="#A6" data-step="A6">A6 · Ports <span class="tick">✓</span></a>
     <a class="sub" href="#A7" data-step="A7">A7 · Valider le seuil <span class="tick">✓</span></a>
+    <a href="python-express.html">Mémo Python express ↗</a>
     <a href="#partie-b">B · En Python <span class="muted">45'</span></a>
     <a class="sub" href="#B1" data-step="B1">B1 · os-release <span class="tick">✓</span></a>
     <a class="sub" href="#B2" data-step="B2">B2 · Hôte <span class="tick">✓</span></a>
@@ -312,8 +313,20 @@ done &lt; &lt;(df -P -x tmpfs -x devtmpfs | tail -n +2)</code></pre>
 <h2 id="partie-b">B · En Python <span class="timer">≈ 45 min</span></h2>
 <p>Fichier : <code>inventaire.py</code>. Même inventaire, avec en plus une sortie JSON, des messages de diagnostic sur stderr et des erreurs propres. <strong>Bibliothèque standard uniquement.</strong></p>
 
+<div class="box warn">
+  <strong>Débutant en Python ? Suivez ce parcours</strong>
+  <ol>
+    <li>Lisez le mémo <a href="python-express.html"><strong>Python express</strong></a> (10 min), en tapant les exemples dans <code>python3</code>.</li>
+    <li>Faites les fonctions simples, et testez chacune seule avec <code>python3 -c "import inventaire; print(inventaire.NOM())"</code> :
+      <strong>B3</strong> (CPU) → <strong>B1</strong> (os-release) → <strong>B4</strong> (mémoire) → <strong>B6</strong> (comptes) → <strong>B2</strong> (hôte).</li>
+    <li>Puis <strong>B9</strong> (arguments) et <strong>B10</strong> (main) pour obtenir la sortie JSON complète.</li>
+    <li><strong>B5, B7 et B8 sont en bonus</strong> pour aujourd'hui. Le vérificateur affichera des <code>[KO]</code> sur les disques : c'est attendu.</li>
+  </ol>
+  <p>Objectif réaliste : une sortie <code>--format json</code> qui contient l'hôte, le CPU, la mémoire et les comptes. C'est déjà un vrai script d'administration.</p>
+</div>
+
 <div class="box">
-  <strong>Ordre conseillé</strong>
+  <strong>Ordre conseillé (si vous êtes à l'aise)</strong>
   <p>Faites d'abord les arguments (B9) et <code>main()</code> (B10) avec la sortie JSON : vous pourrez alors tester chaque fonction de collecte dès qu'elle est écrite. La sortie texte (B8) vient en dernier. Pour tester une seule fonction :</p>
 <pre><code>python3 -c "import inventaire; print(inventaire.lire_meminfo())"</code></pre>
 </div>

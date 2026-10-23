@@ -4,6 +4,8 @@ Slides : [`slides/s1-scripter-admin.html`](../../slides/s1-scripter-admin.html)
 
 **Guide pas à pas du TP1 : [`guide-tp1.html`](guide-tp1.html)**, à ouvrir dans un navigateur (consignes par étape, indices à déplier, erreurs fréquentes, suivi de progression).
 
+Débutant en Python ? Commencez par le mémo [`python-express.html`](python-express.html) (10 min).
+
 ## Au programme
 
 | Durée | Activité |

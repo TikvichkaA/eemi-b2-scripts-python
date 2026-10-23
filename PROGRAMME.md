@@ -30,17 +30,17 @@ Chaque séance dure 3 h 30 et alterne apports courts (30 % du temps au plus) et 
 
 ---
 
-## Séance 2 · Parser les journaux
+## Séance 2 · Les bases de Python, avec l'IA comme tuteur
 
 **Contenu**
-- Où sont les événements : `/var/log/auth.log`, `journalctl -o json`, logs Apache et Nginx.
-- Expressions régulières : groupes nommés, ancres, pièges classiques.
-- Agréger avec `collections.Counter` et `defaultdict`, horodatages avec `datetime`.
-- Exporter en CSV et en JSON pour d'autres outils.
+- Lancer Python : interpréteur et script, indentation.
+- Valeurs et conversions, chaînes (`split`, `partition`, `strip`, f-strings), listes, `set`, dictionnaires.
+- Conditions, boucles, fonctions ; lire un fichier ; lire un message d'erreur.
+- Apprendre avec l'IA : expliquer, donner un indice, proposer des tests, comparer, déboguer.
 
 **Activités**
-- **TP2 · Détecteur de brute force SSH** sur un jeu de logs fourni : top des IP, fenêtres de temps, rapport.
-- **IA** : faire générer les regex, puis les valider sur un échantillon et des cas limites.
+- **8 exercices Python** auto-vérifiés, chacun avec un mode d'usage de l'IA différent ; l'exercice 7 est le cœur du détecteur de brute force SSH.
+- Le TP2 complet (expressions régulières, fenêtres de temps, rapport CSV/JSON) suit à la prochaine séance.
 
 ---
 

@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S2 · Python avec l'IA</title>
+<style>
+:root{
+  --bg:#0f1b2d; --bg2:#15253d; --ink:#1b2430; --paper:#fbfaf7; --muted:#5d6878;
+  --accent:#0f8b8d; --accent2:#e07a2f; --ok:#2f8f4e; --ko:#c0392b; --line:#d9dde3;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --code-str:#9fd6a5; --code-kw:#ffb86b; --code-var:#7fc8ff;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1320;font-family:var(--sans);color:var(--ink)}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--paper);padding:56px 72px 48px;
+  display:none;flex-direction:column;transform-origin:center center;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.slide.active{display:flex}
+.slide h1{font-size:44px;line-height:1.1;margin:0 0 20px;letter-spacing:-.5px}
+.slide h2{font-size:34px;line-height:1.15;margin:0 0 22px;letter-spacing:-.3px}
+.slide h2 small{display:block;font-size:17px;font-weight:600;color:var(--accent);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.slide p,.slide li{font-size:22px;line-height:1.45}
+.slide ul,.slide ol{margin:0 0 0 4px;padding-left:26px}
+.slide li{margin:6px 0}
+.slide li::marker{color:var(--accent)}
+.muted{color:var(--muted)}
+.foot{position:absolute;left:72px;right:72px;bottom:18px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+/* variantes */
+.title,.section{background:var(--bg);color:#fff;justify-content:center}
+.title h1{font-size:58px;max-width:980px}
+.title .kicker,.section .kicker{color:#7fd3d4;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:18px;margin-bottom:18px}
+.title p{color:#c6d0dc;font-size:24px}
+.section h1{font-size:64px}
+.section .num{font-size:120px;font-weight:800;color:#23405f;position:absolute;right:72px;bottom:28px;line-height:1}
+.title .foot,.section .foot{color:#8a97a8}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;min-height:0}
+.cols.c3{grid-template-columns:1fr 1fr 1fr}
+.cols.code{grid-template-columns:1.45fr 1fr}
+.cols > pre{align-self:start}
+pre.xs{font-size:13.5px;line-height:1.42}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.card h3{margin:0 0 10px;font-size:22px}
+.card.ok{border-top:5px solid var(--ok)} .card.ko{border-top:5px solid var(--ko)} .card.acc{border-top:5px solid var(--accent)}
+.card li,.card p{font-size:19px}
+.callout{margin-top:auto;background:#eaf6f6;border-left:6px solid var(--accent);padding:14px 20px;border-radius:6px;font-size:20px}
+.callout.warn{background:#fdf1e7;border-color:var(--accent2)}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef1f4;font-weight:700}
+td code,li code,p code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 6px;border-radius:4px}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:16px 20px;font-family:var(--mono);
+  font-size:16.5px;line-height:1.5;overflow:hidden;white-space:pre}
+pre.small{font-size:14.5px}
+.tok-com{color:var(--code-com);font-style:italic} .tok-str{color:var(--code-str)} .tok-kw{color:var(--code-kw)} .tok-var{color:var(--code-var)}
+.pill{display:inline-block;padding:2px 12px;border-radius:999px;font-size:16px;font-weight:700;background:#eef1f4}
+.pill.ok{background:#e3f3e8;color:var(--ok)} .pill.ko{background:#f8e4e1;color:var(--ko)} .pill.acc{background:#e0f2f2;color:var(--accent)}
+.big{font-size:30px!important;line-height:1.35}
+.center{align-items:center;justify-content:center;text-align:center}
+.steps{counter-reset:s;list-style:none;padding:0!important}
+.steps li{counter-increment:s;position:relative;padding-left:52px;margin:12px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-size:18px}
+aside.notes{display:none}
+body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0;right:0;top:100%;margin-top:8px;background:#fffbe6;
+  border:1px solid #e8d98a;padding:10px 16px;font-size:15px;color:#4a4020;border-radius:6px}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .2s}
+#help{position:fixed;right:12px;bottom:10px;color:#6f7d8f;font-size:12px}
+/* impression : une slide par page */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#fff}
+  #deck{position:static;display:block}
+  .slide{display:flex!important;position:relative;transform:none!important;box-shadow:none;page-break-after:always;break-after:page}
+  #bar,#help,aside.notes{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 -->
+<section class="slide title">
+  <div class="kicker">EEMI · B2 Cybersécurité · Séance 2 / 6</div>
+  <h1>Les bases de Python, avec l'IA comme tuteur</h1>
+  <p>Python en 40 minutes, puis 8 exercices courts qui mènent au détecteur de brute force SSH</p>
+  <div class="foot"><span>Emmanuel Pinglier</span><span>ven. 23 octobre 2026</span></div>
+  <aside class="notes">Annoncer d'emblée : on change le programme du jour parce que le quiz l'a montré. Ce n'est pas un reproche, c'est le principe du positionnement.</aside>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <h2><small>Le quiz de positionnement</small>Ce qu'il nous a appris</h2>
+  <div class="cols">
+    <div class="card ok"><h3>Ce qu'on garde de la S1</h3><ul><li>Bash pour enchaîner des commandes</li><li>codes retour, stdout et stderr</li><li>la charte IA et le journal</li></ul></div>
+    <div class="card ko"><h3>À construire</h3><ul><li>les bases de Python : types, listes, dictionnaires</li><li>lire et découper un fichier</li><li>lire un message d'erreur</li></ul></div>
+  </div>
+  <div class="callout">Aujourd'hui : <strong>Python d'abord</strong>. Le TP2 (détecteur de brute force) vient juste après, et l'exercice 7 en est déjà le cœur.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>2</span></div>
+  <aside class="notes">Citer un ou deux chiffres réels du quiz (scores du bloc Python) vus dans /admin avant la séance.</aside>
+</section>
+
+<!-- 3 -->
+<section class="slide section">
+  <div class="kicker">Partie 1</div>
+  <h1>Python en 40 minutes</h1>
+  <div class="num">01</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>3</span></div>
+  <aside class="notes">Tout se fait en direct dans python3, projeté. Les étudiants tapent avec vous. Le mémo python-express.html reprend tout.</aside>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h2><small>Démarrer</small>Deux façons de lancer Python</h2>
+  <div class="cols">
+    <div>
+      <p><strong>L'interpréteur</strong> : pour essayer une ligne</p>
+<pre data-lang="text">$ python3
+>>> 2 + 3
+5
+>>> "admin".upper()
+'ADMIN'
+>>> exit()</pre>
+    </div>
+    <div>
+      <p><strong>Un script</strong> : un fichier lancé en entier</p>
+<pre data-lang="bash">python3 ex01_uptime.py</pre>
+      <div class="card ko" style="margin-top:18px"><h3>L'indentation fait partie du code</h3><p>Un bloc commence après <code>:</code> et contient les lignes décalées de <strong>4 espaces</strong>. Pas de <code>fi</code>, pas de <code>done</code>, pas d'accolades.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h2><small>Valeurs</small>Les types de base, et le piège n°1</h2>
+  <div class="cols code">
+<pre data-lang="python">coeurs = 4             # int
+charge = 0.42          # float
+nom = "srv-web-01"     # str
+alerte = False         # bool
+ports = None           # pas de valeur
+
+int("8127920")         # 8127920
+str(42)                # "42"
+8127920 // 1024        # 7937  division entière
+17 % 5                 # 2     reste</pre>
+    <div class="card ko"><h3>Tout ce qu'on lit est du texte</h3><p>Un fichier, une commande, une saisie : on obtient des <strong>chaînes</strong>.</p><p><code>"8127920" // 1024</code><br>→ <code>TypeError</code></p><p>Convertir d'abord avec <code>int(…)</code>.</p></div>
+  </div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>5</span></div>
+  <aside class="notes">Faire taper type(42), type("42"), "4" + "2", 4 + 2. Le fait que "4"+"2" donne "42" marque les esprits.</aside>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h2><small>Chaînes</small>Découper une ligne : 80 % du travail d'admin</h2>
+<pre data-lang="python" class="small">ligne = "alice:x:1000:1000:Alice:/home/alice:/bin/bash"
+champs = ligne.split(":")      # ['alice', 'x', '1000', '1000', 'Alice', '/home/alice', '/bin/bash']
+champs[0]                      # 'alice'      on compte à partir de 0
+int(champs[2])                 # 1000
+
+'ID="ubuntu"'.partition("=")   # ('ID', '=', '"ubuntu"')   coupe au premier =
+'"ubuntu"'.strip('"')          # 'ubuntu'
+"Failed password" in ligne     # False
+"/bin/bash".endswith("bash")   # True
+
+pct = 86
+print(f"/var est plein à {pct} %")   # f-string : les variables entre { }</pre>
+  <div class="callout">C'est l'équivalent de <code>cut</code>, <code>grep</code> et <code>echo</code>, sans lancer de commande.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <h2><small>Collections</small>Listes et dictionnaires</h2>
+  <div class="cols">
+    <div>
+      <p><strong>Liste</strong> : une suite ordonnée</p>
+<pre data-lang="python" class="small">ips = ["203.0.113.45", "10.0.0.12"]
+ips.append("203.0.113.45")
+len(ips)                 # 3
+ips[0]                   # premier
+sorted(set(ips))         # sans doublon, trié</pre>
+    </div>
+    <div>
+      <p><strong>Dictionnaire</strong> : clé → valeur</p>
+<pre data-lang="python" class="small">hote = {"nom": "srv01", "coeurs": 4}
+hote["nom"]              # 'srv01'
+hote["ram"] = 7937       # ajouter
+hote.get("disque", 0)    # 0 si absent
+for cle, val in hote.items():
+    print(cle, val)</pre>
+    </div>
+  </div>
+  <div class="callout">Un dictionnaire, c'est exactement la forme d'un objet <strong>JSON</strong>. C'est ce que renvoient presque toutes nos fonctions.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <h2><small>Contrôle</small>Conditions et boucles</h2>
+  <div class="cols code">
+<pre data-lang="python">for ligne in lignes:
+    if not ligne:          # ligne vide
+        continue           # → suivante
+    champs = ligne.split(":")
+    uid = int(champs[2])
+    if uid >= 1000 and uid != 65534:
+        print(champs[0])
+    elif uid == 0:
+        print("root")</pre>
+    <ul>
+      <li><code>==</code> égal, <code>!=</code> différent</li>
+      <li><code>and</code>, <code>or</code>, <code>not</code> en toutes lettres</li>
+      <li><code>for x in …</code> parcourt une liste, un fichier, un dictionnaire</li>
+      <li><code>continue</code> passe au tour suivant, <code>break</code> sort de la boucle</li>
+      <li><code>0 &lt;= x &lt;= 100</code> : comparaison chaînée</li>
+    </ul>
+  </div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h2><small>Fonctions</small>Le motif qu'on utilisera tout le module</h2>
+  <div class="cols code">
+<pre data-lang="python">def compter(elements: list) -> dict:
+    """Compte les apparitions de chaque élément."""
+    comptes = {}
+    for e in elements:
+        comptes[e] = comptes.get(e, 0) + 1
+    return comptes
+
+compter(["a", "b", "a"])   # {'a': 2, 'b': 1}</pre>
+    <ul>
+      <li><code>def nom(paramètres):</code> puis un bloc</li>
+      <li><code>return</code> renvoie le résultat</li>
+      <li><code>: list</code>, <code>-> dict</code> : annotations, pour documenter</li>
+      <li>Une fonction = <strong>une tâche</strong>, qu'on teste seule</li>
+    </ul>
+  </div>
+  <div class="callout warn">Ce <code>compter</code> est le cœur du détecteur de brute force : <strong>compter les échecs par IP</strong>.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <h2><small>Fichiers et erreurs</small>Lire un fichier, lire une erreur</h2>
+  <div class="cols">
+    <div>
+<pre data-lang="python" class="small">from pathlib import Path
+
+try:
+    texte = Path("auth.log").read_text()
+except OSError:
+    print("fichier illisible")
+    texte = ""
+
+for ligne in texte.splitlines():
+    ...</pre>
+    </div>
+    <div>
+<pre data-lang="text" class="small">Traceback (most recent call last):
+  File "ex01.py", line 12, in formater
+    jours = s // 86400
+TypeError: unsupported operand
+  type(s) for //: 'str' and 'int'</pre>
+      <p style="font-size:19px">On lit <strong>par le bas</strong> : la dernière ligne dit <strong>quoi</strong>, celles du dessus disent <strong>où</strong>.</p>
+    </div>
+  </div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide section">
+  <div class="kicker">Partie 2</div>
+  <h1>L'IA comme tuteur</h1>
+  <div class="num">02</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>11</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <h2><small>Apprendre avec l'IA</small>Copier ne fait pas apprendre</h2>
+  <div class="cols">
+    <div class="card ko"><h3>Ce qui ne marche pas</h3><ul><li>coller l'énoncé, coller la réponse</li><li>les tests passent… et on ne sait rien faire</li><li>au premier oral ou à la première panne, on est bloqué</li></ul></div>
+    <div class="card ok"><h3>Ce qui marche</h3><ul><li>lui demander d'<strong>expliquer</strong> une erreur</li><li>lui demander un <strong>indice</strong>, pas la solution</li><li>lui faire écrire, puis <strong>expliquer soi-même</strong> chaque ligne</li><li>lui demander des <strong>tests</strong>, ou de <strong>comparer</strong> deux solutions</li></ul></div>
+  </div>
+  <div class="callout">Règle du jour : je peux vous demander d'expliquer <strong>n'importe quelle ligne</strong> de vos fichiers.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>12</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <h2><small>À copier en début de conversation</small>Le prompt « tuteur »</h2>
+<pre data-lang="text">Je débute en Python et je fais un exercice pour apprendre.
+Règles pour toute la conversation :
+- ne me donne PAS la solution complète, sauf si j'écris « donne la solution » ;
+- quand je montre du code, dis-moi ce qui ne va pas et pourquoi, avec un indice ;
+- explique simplement, avec un petit exemple à taper dans python3 ;
+- si j'utilise un mot de travers, corrige-moi.
+Contexte : Python 3.12, Linux, bibliothèque standard uniquement.</pre>
+  <div class="callout">Il est dans le guide des exercices, avec un prompt adapté à chaque exercice.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>13</span></div>
+  <aside class="notes">Démo : coller ce prompt, puis « pourquoi "8127920" // 1024 plante ? ». Montrer que l'IA explique sans donner tout le code.</aside>
+</section>
+
+<!-- 14 -->
+<section class="slide section">
+  <div class="kicker">À vous</div>
+  <h1>8 exercices · 100 minutes</h1>
+  <div class="num">03</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>14</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <h2><small>Les exercices</small>Une notion, une façon d'utiliser l'IA</h2>
+  <table>
+    <tr><th>#</th><th>Exercice</th><th>Notion</th><th>Mode IA</th></tr>
+    <tr><td>1</td><td>Formater une durée</td><td><code>//</code> <code>%</code> f-string</td><td>seul d'abord</td></tr>
+    <tr><td>2</td><td>Lire « clé=valeur »</td><td>chaînes</td><td>seul d'abord</td></tr>
+    <tr><td>3</td><td>Ports en écoute</td><td>listes, <code>set</code></td><td>expliquer, pas écrire</td></tr>
+    <tr><td>4</td><td>Compter</td><td>dictionnaire</td><td>l'IA écrit, vous commentez</td></tr>
+    <tr><td>5</td><td>Comptes humains</td><td>conditions</td><td>l'IA propose des tests</td></tr>
+    <tr><td>6</td><td>IP d'un échec SSH</td><td><code>split</code>, <code>None</code></td><td>comparer deux solutions</td></tr>
+    <tr><td>7</td><td>Top des IP</td><td>fichier, tri</td><td><span class="pill acc">piloter</span> mini-TP2</td></tr>
+    <tr><td>8</td><td>Bonus : déboguer</td><td><code>try</code>, <code>raise</code></td><td>l'IA explique le bug</td></tr>
+  </table>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>15</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <h2><small>Démarrer</small>Comment travailler</h2>
+  <div class="cols code">
+<pre data-lang="bash">git fetch origin
+git merge origin/main --no-edit
+cd seances/s2-parsing-journaux/exercices-python
+
+python3 ex01_uptime.py   # ✓ ou ✗ par cas
+python3 bilan.py         # les 8 d'un coup</pre>
+    <ol class="steps">
+      <li>Ouvrez <code>guide-exercices.html</code></li>
+      <li>Lisez la consigne en haut du fichier</li>
+      <li>Écrivez la fonction, lancez, recommencez</li>
+      <li>3 entrées dans <code>JOURNAL-IA.md</code>, puis <code>git push</code></li>
+    </ol>
+  </div>
+  <div class="callout warn">Ne modifiez que la fonction, pas les tests (sauf à l'exercice 5, où vous en <strong>ajoutez</strong>).</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>16</span></div>
+  <aside class="notes">Point collectif à mi-parcours (~15h55) : ex01 à ex04 corrigés au tableau en 5 min. Passer dans les rangs pour la règle de l'oral.</aside>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <h2><small>Pour conclure</small>Ce qu'on retient</h2>
+  <ul class="big" style="font-size:26px!important">
+    <li>Tout ce qu'on lit est du <strong>texte</strong> : on découpe, on convertit</li>
+    <li>Listes pour les suites, <strong>dictionnaires</strong> pour compter et pour le JSON</li>
+    <li>Une fonction, une tâche, <strong>testée seule</strong></li>
+    <li>Une erreur se lit <strong>par le bas</strong></li>
+    <li>L'IA est un tuteur : <strong>expliquer, indiquer, vérifier</strong> ; c'est vous qui écrivez</li>
+  </ul>
+  <div class="callout">Prochaine étape : le détecteur de brute force SSH complet, avec les expressions régulières.</div>
+  <div class="foot"><span>S2 · Python avec l'IA</span><span>17</span></div>
+</section>
+</div>
+<div id="bar"></div>
+<div id="help">← → naviguer · F plein écran · N notes · P imprimer</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const bar = document.getElementById('bar');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96;
+    slides.forEach(el => el.style.transform = `scale(${s})`);
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    bar.style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('show-notes');
+    else if (e.key.toLowerCase() === 'p') window.print();
+  });
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('pre, a, code')) return;
+    show(e.clientX > window.innerWidth / 2 ? i + 1 : i - 1);
+  });
+  let x0 = null;
+  document.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // Coloration syntaxique minimale (commentaires, chaînes, mots-clés, variables)
+  const KW = {
+    python: /\b(import|from|def|return|if|else|elif|for|in|with|as|try|except|raise|not|and|or|None|True|False|class|while|lambda|is)\b/g,
+    bash: /\b(if|then|else|fi|for|in|do|done|while|case|esac|function|return|exit|set|local|readonly|trap|echo|export)\b/g,
+  };
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function highlightCode(code, lang) {
+    let out = '', k = 0;
+    const plain = s => {
+      let h = esc(s);
+      if (KW[lang]) h = h.replace(KW[lang], '<span class="tok-kw">$1</span>');
+      if (lang === 'bash') h = h.replace(/(\$\{?[A-Za-z_?#@][A-Za-z0-9_]*\}?|\$\(|\$\?)/g, '<span class="tok-var">$1</span>');
+      return h;
+    };
+    let buf = '';
+    while (k < code.length) {
+      const c = code[k];
+      const prev = k === 0 ? '\n' : code[k - 1];
+      if (c === '#' && lang !== 'text' && /\s/.test(prev) || (c === '#' && k === 0)) {
+        if (!(lang === 'bash' && code[k + 1] === '!' && k === 0)) {
+          const end = code.indexOf('\n', k); const stop = end === -1 ? code.length : end;
+          out += plain(buf) + `<span class="tok-com">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+        }
+      }
+      if (lang === 'python' && code.startsWith('"""', k)) {
+        const end = code.indexOf('"""', k + 3); const stop = end === -1 ? code.length : end + 3;
+        out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+      }
+      if ((c === '"' || c === "'") && lang !== 'text') {
+        let j = k + 1;
+        while (j < code.length && code[j] !== c && code[j] !== '\n') { if (code[j] === '\\') j++; j++; }
+        if (code[j] === c) {
+          out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, j + 1))}</span>`; buf = ''; k = j + 1; continue;
+        }
+      }
+      buf += c; k++;
+    }
+    return out + plain(buf);
+  }
+  document.querySelectorAll('pre[data-lang]').forEach(pre => {
+    pre.innerHTML = highlightCode(pre.textContent, pre.dataset.lang);
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>

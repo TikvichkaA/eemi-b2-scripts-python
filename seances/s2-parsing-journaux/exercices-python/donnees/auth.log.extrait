@@ -1,0 +1,82 @@
+2026-10-15T06:03:46.000000+02:00 srv-web-01 sshd[21031]: Failed password for oracle from 203.0.113.45 port 30383 ssh2
+2026-10-15T06:06:37.000000+02:00 srv-web-01 sshd[21048]: Failed password for test from 203.0.113.45 port 49794 ssh2
+2026-10-15T06:09:30.000000+02:00 srv-web-01 CRON[21058]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:12:07.000000+02:00 srv-web-01 sshd[21078]: Invalid user ubuntu from 203.0.113.45 port 46613
+2026-10-15T06:12:07.000000+02:00 srv-web-01 sshd[21078]: Failed password for invalid user ubuntu from 203.0.113.45 port 46613 ssh2
+2026-10-15T06:12:49.000000+02:00 srv-web-01 sshd[21117]: Accepted publickey for bob from 10.0.0.12 port 59936 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:12:49.000000+02:00 srv-web-01 sshd[21117]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T06:15:25.000000+02:00 srv-web-01 CRON[21136]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:18:48.000000+02:00 srv-web-01 sshd[21156]: Failed password for root from 203.0.113.45 port 52792 ssh2
+2026-10-15T06:21:03.000000+02:00 srv-web-01 CRON[21168]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:22:21.000000+02:00 srv-web-01 sshd[21206]: Failed password for postgres from 192.0.2.150 port 30405 ssh2
+2026-10-15T06:23:24.000000+02:00 srv-web-01 sshd[21238]: Invalid user oracle from 203.0.113.45 port 59726
+2026-10-15T06:23:24.000000+02:00 srv-web-01 sshd[21238]: Failed password for invalid user oracle from 203.0.113.45 port 59726 ssh2
+2026-10-15T06:26:26.000000+02:00 srv-web-01 sshd[21269]: Accepted publickey for bob from 10.0.0.12 port 62213 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:26:26.000000+02:00 srv-web-01 sshd[21269]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T06:26:32.000000+02:00 srv-web-01 sshd[21300]: Accepted publickey for bob from 10.0.0.12 port 35121 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:26:32.000000+02:00 srv-web-01 sshd[21300]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T06:28:42.000000+02:00 srv-web-01 CRON[21302]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:31:46.000000+02:00 srv-web-01 CRON[21317]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:35:38.000000+02:00 srv-web-01 sshd[21341]: Failed password for git from 203.0.113.45 port 56215 ssh2
+2026-10-15T06:37:43.000000+02:00 srv-web-01 sshd[21374]: Accepted publickey for alice from 10.0.0.12 port 50970 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:37:43.000000+02:00 srv-web-01 sshd[21374]: pam_unix(sshd:session): session opened for user alice(uid=1000) by alice(uid=0)
+2026-10-15T06:38:11.000000+02:00 srv-web-01 sshd[21380]: Failed password for oracle from 203.0.113.45 port 33053 ssh2
+2026-10-15T06:38:43.000000+02:00 srv-web-01 CRON[21384]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T06:42:01.000000+02:00 srv-web-01 sshd[21410]: Invalid user test from 198.51.100.23 port 45705
+2026-10-15T06:42:01.000000+02:00 srv-web-01 sshd[21410]: Failed password for invalid user test from 198.51.100.23 port 45705 ssh2
+2026-10-15T06:42:06.000000+02:00 srv-web-01 sshd[21426]: Invalid user root from 192.0.2.150 port 39649
+2026-10-15T06:42:06.000000+02:00 srv-web-01 sshd[21426]: Failed password for invalid user root from 192.0.2.150 port 39649 ssh2
+2026-10-15T06:43:53.000000+02:00 srv-web-01 sshd[21429]: Invalid user oracle from 203.0.113.77 port 60195
+2026-10-15T06:43:53.000000+02:00 srv-web-01 sshd[21429]: Failed password for invalid user oracle from 203.0.113.77 port 60195 ssh2
+2026-10-15T06:44:11.000000+02:00 srv-web-01 sshd[21431]: Accepted publickey for bob from 10.0.0.15 port 62954 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:44:11.000000+02:00 srv-web-01 sshd[21431]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T06:45:52.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T06:47:41.000000+02:00 srv-web-01 sshd[21445]: Invalid user admin from 203.0.113.45 port 56194
+2026-10-15T06:47:41.000000+02:00 srv-web-01 sshd[21445]: Failed password for invalid user admin from 203.0.113.45 port 56194 ssh2
+2026-10-15T06:51:30.000000+02:00 srv-web-01 sudo:    bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T06:53:41.000000+02:00 srv-web-01 sshd[21469]: Failed password for oracle from 203.0.113.45 port 41412 ssh2
+2026-10-15T06:54:37.000000+02:00 srv-web-01 sudo:    bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T06:55:57.000000+02:00 srv-web-01 sshd[21534]: Failed password for root from 203.0.113.45 port 49986 ssh2
+2026-10-15T06:57:01.000000+02:00 srv-web-01 sshd[21569]: Accepted publickey for bob from 10.0.0.12 port 62928 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T06:57:01.000000+02:00 srv-web-01 sshd[21569]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T06:57:38.000000+02:00 srv-web-01 sshd[21601]: Failed password for git from 203.0.113.77 port 37033 ssh2
+2026-10-15T06:59:01.000000+02:00 srv-web-01 sshd[21605]: Failed password for git from 203.0.113.77 port 33437 ssh2
+2026-10-15T07:01:20.000000+02:00 srv-web-01 sshd[21616]: Invalid user test from 203.0.113.45 port 55636
+2026-10-15T07:01:20.000000+02:00 srv-web-01 sshd[21616]: Failed password for invalid user test from 203.0.113.45 port 55636 ssh2
+2026-10-15T07:02:11.000000+02:00 srv-web-01 sshd[21646]: Invalid user root from 203.0.113.45 port 44525
+2026-10-15T07:02:11.000000+02:00 srv-web-01 sshd[21646]: Failed password for invalid user root from 203.0.113.45 port 44525 ssh2
+2026-10-15T07:04:49.000000+02:00 srv-web-01 sshd[21686]: Failed password for git from 203.0.113.45 port 31502 ssh2
+2026-10-15T07:05:06.000000+02:00 srv-web-01 sshd[21696]: Accepted publickey for alice from 10.0.0.12 port 63004 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T07:05:06.000000+02:00 srv-web-01 sshd[21696]: pam_unix(sshd:session): session opened for user alice(uid=1000) by alice(uid=0)
+2026-10-15T07:08:30.000000+02:00 srv-web-01 sshd[21731]: Accepted publickey for alice from 10.0.0.15 port 63469 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T07:08:30.000000+02:00 srv-web-01 sshd[21731]: pam_unix(sshd:session): session opened for user alice(uid=1000) by alice(uid=0)
+2026-10-15T07:09:28.000000+02:00 srv-web-01 sshd[21762]: Failed password for git from 203.0.113.45 port 60194 ssh2
+2026-10-15T07:13:23.000000+02:00 srv-web-01 sshd[21774]: Failed password for test from 203.0.113.45 port 48793 ssh2
+2026-10-15T07:16:54.000000+02:00 srv-web-01 sshd[21781]: Failed password for ubuntu from 203.0.113.45 port 37702 ssh2
+2026-10-15T07:20:11.000000+02:00 srv-web-01 sshd[21796]: Failed password for root from 198.51.100.23 port 41933 ssh2
+2026-10-15T07:22:12.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:22:54.000000+02:00 srv-web-01 sshd[21813]: Accepted publickey for alice from 10.0.0.15 port 53221 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T07:22:54.000000+02:00 srv-web-01 sshd[21813]: pam_unix(sshd:session): session opened for user alice(uid=1000) by alice(uid=0)
+2026-10-15T07:23:26.000000+02:00 srv-web-01 sshd[21839]: Failed password for oracle from 203.0.113.45 port 42682 ssh2
+2026-10-15T07:25:21.000000+02:00 srv-web-01 sshd[21863]: Invalid user postgres from 203.0.113.45 port 35251
+2026-10-15T07:25:21.000000+02:00 srv-web-01 sshd[21863]: Failed password for invalid user postgres from 203.0.113.45 port 35251 ssh2
+2026-10-15T07:27:02.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:29:36.000000+02:00 srv-web-01 sshd[21904]: Invalid user ubuntu from 198.51.100.23 port 52386
+2026-10-15T07:29:36.000000+02:00 srv-web-01 sshd[21904]: Failed password for invalid user ubuntu from 198.51.100.23 port 52386 ssh2
+2026-10-15T07:31:22.000000+02:00 srv-web-01 sshd[21927]: Invalid user admin from 203.0.113.45 port 51097
+2026-10-15T07:31:22.000000+02:00 srv-web-01 sshd[21927]: Failed password for invalid user admin from 203.0.113.45 port 51097 ssh2
+2026-10-15T07:31:39.000000+02:00 srv-web-01 sshd[21952]: Failed password for postgres from 203.0.113.45 port 59323 ssh2
+2026-10-15T07:31:51.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:32:36.000000+02:00 srv-web-01 sshd[21975]: Accepted publickey for bob from 10.0.0.15 port 31715 ssh2: ED25519 SHA256:q1w2e3r4t5y6u7i8o9p0AaBbCcDdEeFf
+2026-10-15T07:32:36.000000+02:00 srv-web-01 sshd[21975]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-10-15T07:32:52.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:33:27.000000+02:00 srv-web-01 sshd[22004]: Failed password for ubuntu from 203.0.113.45 port 49831 ssh2
+2026-10-15T07:36:02.000000+02:00 srv-web-01 CRON[22032]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T07:38:29.000000+02:00 srv-web-01 sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:42:23.000000+02:00 srv-web-01 sshd[22082]: Failed password for test from 203.0.113.45 port 59112 ssh2
+2026-10-15T07:43:46.000000+02:00 srv-web-01 CRON[22087]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-10-15T07:47:18.000000+02:00 srv-web-01 sshd[22104]: Invalid user ubuntu from 203.0.113.77 port 61287
+2026-10-15T07:47:18.000000+02:00 srv-web-01 sshd[22104]: Failed password for invalid user ubuntu from 203.0.113.77 port 61287 ssh2
+2026-10-15T07:47:50.000000+02:00 srv-web-01 sudo:    bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2026-10-15T07:49:02.000000+02:00 srv-web-01 sshd[22155]: Failed password for test from 203.0.113.77 port 30930 ssh2
+2026-10-15T07:49:06.000000+02:00 srv-web-01 sudo:    bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
