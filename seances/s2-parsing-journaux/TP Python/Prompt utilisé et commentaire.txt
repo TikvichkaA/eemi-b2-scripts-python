@@ -1,0 +1,24 @@
+Prompt E1
+Écris-moi un script Python qui demande le poids en kg et la taille en mètre, calcule l'IMC et affiche la catégorie : sous-poids, poids normal, surpoids ou obèse. Il doit gérer les erreur si l'utilisateur saisit une valeur non numérique ou 0. Teste-le avec : 80 kg / 1.80 m, 50 kg / 1.75 m, 100 kg / 1.65 m, "abc" à la place d'un chiffre, et 0 pour la taille. 
+
+Commentaire E1: IMC se calcule en fonction du poids et de la taille, la commande float transforme la taille en nombre et try rattrappe l'érreur au cas ou, pour les categories si l'IMC inérieur à 18.5=sous poids, IMC inférieur à 25=normal et IMC inférieur à 30=surpoids et obèse
+
+Prompt E2
+Écris-moi un script Python qui demande un texte et affiche : le nombre de mots, le nombre de caractères sans les espaces, et le mot qui apparaît le plus souvent. La casse n'a pas d'importance Le" et "le" sont le même mot). Utilise split() et des boucles. 
+
+Commentaire E2: lower met tout en minuscules, donc « Le » et « le » deviennent le même mot, On retire la ponctuation autour des mots pour que « chat, » et « chat » comptent ensemble, Un dictionnaire sert à compter
+
+Prompt E3
+
+Écris-moi un script Python qui génère un mot de passe aléatoire selon les préférences de l'utilisateur : longueur souhaitée, inclusion ou non de chiffres, inclusion ou non de caractères spéciaux. Le code doit être organisé sous forme de fonction. fonctions · import random · paramètres
+
+commentaire E3: on utilise secrets à la place de random car il est fait pour la sécurité, Une longueur de 0 ou négative déclenche une erreur (ValueError) avec un message clair, Pour de vrais mots de passe, on utilise secrets à la place de random, car il est fait pour la sécurité.
+
+Prompt 4
+Écris-moi un script Python gestionnaire de tâches en ligne de commande avec un menu interactif. Il doit permettre d'ajouter une tâche, lister les tâches (avec leur statut fait/à faire), marquer une tâche comme faite, et quitter. La liste doit être sauvegardée dans un fichier pour persister entre deux exécutions.Ajouter 3 tâches, quitter, relancer → tâches toujours là
+Marquer une tâche déjà faite
+Entrer un numéro de tâche inexistant
+Afficher quand la liste est vide
+Entrer une option de menu invalide
+
+Commentaire 4:Toutes les tâches sont dans une liste, Chaque action a sa propre fonction (ajouter, lister, marquer_faite), ce qui rend le code lisible.possible de choisie une tache, et d'ajouter une tache à faire, ca fonctionne un peu comme un agenda
