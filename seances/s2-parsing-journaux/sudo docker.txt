@@ -1,0 +1,8 @@
+sudo docker rm -f ldap 2>/dev/null || true
+sudo docker run -d \
+--name ldap \
+-p 3890:389 \
+-e LDAP_ORGANISATION="NovaCorp" \
+-e LDAP_DOMAIN="novacorp.fr" \
+-e LDAP_ADMIN_PASSWORD="Admin123!" \
+osixia/openldap:1.5.0
