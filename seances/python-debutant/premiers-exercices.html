@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python premiers exercices</title>
+<style>
+:root{
+  --paper:#fbfaf7; --card:#ffffff; --ink:#1b2430; --muted:#5d6878; --line:#d9dde3;
+  --accent:#0f8b8d; --accent-soft:#e0f2f2; --warn:#e07a2f; --warn-soft:#fdf1e7;
+  --ok:#2f8f4e; --ok-soft:#e3f3e8; --ko:#c0392b; --ko-soft:#f8e4e1;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --chip:#eef1f4; --nav:#0f1b2d; --nav-ink:#c6d0dc;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+    --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+    --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f141b; --card:#161d27; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2a3442;
+  --accent:#3cc3c4; --accent-soft:#12302f; --warn:#f0a060; --warn-soft:#33241a;
+  --ok:#5cc47e; --ok-soft:#16301f; --ko:#ef7a6c; --ko-soft:#3a1e1b; --chip:#232c38; --nav:#0a0f15;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+a{color:var(--accent)}
+/* Mise en page */
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--nav);color:var(--nav-ink);padding:22px 0}
+nav.side .brand{padding:0 20px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+nav.side .brand b{display:block;color:#fff;font-size:15px}
+nav.side .brand span{font-size:12.5px;color:#7fd3d4;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+nav.side a{display:flex;justify-content:space-between;gap:8px;padding:6px 20px;color:var(--nav-ink);text-decoration:none;font-size:14px}
+nav.side a:hover{background:rgba(255,255,255,.06);color:#fff}
+nav.side a.sub{padding-left:34px;font-size:13px}
+nav.side a .tick{color:#5cc47e;font-weight:700;visibility:hidden}
+nav.side a.done .tick{visibility:visible}
+.progress{margin:14px 20px 4px}
+.progress .bar{height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress .bar i{display:block;height:100%;width:0;background:#3cc3c4;transition:width .25s}
+.progress small{display:block;margin-top:6px;font-size:12.5px}
+main{padding:40px 48px 96px;max-width:980px}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:12px}
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+h1{font-size:34px;line-height:1.15;margin:6px 0 10px;letter-spacing:-.3px}
+h2{font-size:25px;margin:48px 0 10px;padding-top:8px;letter-spacing:-.2px}
+h3{font-size:19px;margin:30px 0 8px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:24px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:var(--chip);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--chip);padding:1px 6px;border-radius:4px}
+pre{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 18px;font-family:var(--mono);
+  font-size:14px;line-height:1.5;overflow-x:auto;margin:10px 0 16px}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .c{color:var(--code-com);font-style:italic}
+.copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:#cfd8e3;border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;font-size:12px;padding:3px 9px;cursor:pointer;font-family:var(--sans)}
+.copy:hover{background:rgba(255,255,255,.2)}
+table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:15px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--chip)}
+.table-wrap{overflow-x:auto}
+/* Encadrés */
+.box{border-radius:10px;padding:14px 18px;margin:14px 0;border-left:5px solid var(--accent);background:var(--accent-soft)}
+.box.warn{border-color:var(--warn);background:var(--warn-soft)}
+.box.ko{border-color:var(--ko);background:var(--ko-soft)}
+.box.ok{border-color:var(--ok);background:var(--ok-soft)}
+.box > :last-child{margin-bottom:0}
+.box strong:first-child{display:block;margin-bottom:2px}
+/* Étapes */
+.step{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:16px 0;overflow:hidden}
+.step-head{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.step-head .id{flex-shrink:0;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--accent);color:#fff;border-radius:6px;padding:2px 8px}
+.step-head h3{margin:0;font-size:17px;flex:1}
+.step-head label{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.step-head input{width:18px;height:18px;accent-color:var(--ok);cursor:pointer}
+.step.done{border-color:var(--ok)}
+.step.done .step-head{background:var(--ok-soft)}
+.step.done .step-head .id{background:var(--ok)}
+.step-body{padding:14px 18px 6px}
+details{border:1px dashed var(--line);border-radius:8px;margin:10px 0 14px;background:var(--paper)}
+details summary{cursor:pointer;padding:8px 14px;font-weight:600;font-size:14.5px;color:var(--accent);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";}
+details[open] summary::before{content:"▾ ";}
+details > div{padding:0 14px 10px}
+details.trap summary{color:var(--warn)}
+.timer{font-size:13px;font-weight:700;color:var(--muted);background:var(--chip);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.theme-btn{position:fixed;top:12px;right:14px;z-index:20;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+  padding:5px 12px;font-size:13px;cursor:pointer}
+footer{margin-top:60px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width: 900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.side{position:static;height:auto;padding:14px 0}
+  nav.side .links{display:none}
+  main{padding:24px 16px 72px}
+  h1{font-size:27px}
+  .step-head{flex-wrap:wrap}
+}
+@media print{
+  nav.side,.theme-btn,.copy{display:none}
+  .layout{display:block}
+  details{border:none}
+  details > div{display:block}
+}
+pre.out{background:#0a1929;color:#4ade80;border-left:3px solid #22c55e}
+</style>
+</head>
+
+<body>
+<button class="theme-btn" id="theme" type="button" aria-label="Changer de thème">◐ Thème</button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><span>EEMI · B2 Cyber</span><b>Python : premiers exercices</b></div>
+  <div class="progress"><div class="bar"><i id="pbar"></i></div><small id="ptext">0 / 34 exercices</small></div>
+  <div class="links">
+    <a href="#comment">Comment travailler</a>
+    <a href="#bloc-A">A · Premiers pas <span class="muted">5</span></a><a href="#bloc-B">B · Les chaînes de caractères <span class="muted">5</span></a><a href="#bloc-C">C · Les listes <span class="muted">5</span></a><a href="#bloc-D">D · Les dictionnaires <span class="muted">4</span></a><a href="#bloc-E">E · Conditions et boucles <span class="muted">6</span></a><a href="#bloc-F">F · Les fonctions <span class="muted">4</span></a><a href="#bloc-G">G · Petits défis <span class="muted">5</span></a>
+  </div>
+</nav>
+<main>
+<header class="hero">
+  <div class="kicker">Très débutant · à votre rythme</div>
+  <h1>Python : 34 petits exercices pour se lancer</h1>
+  <p>Des exercices de quelques lignes, du plus simple au plus riche. Chacun a un indice et une solution à déplier, avec le résultat attendu. Cochez au fur et à mesure : la progression reste dans votre navigateur.</p>
+  <div class="chips"><span class="chip">5 à 10 min par bloc</span><span class="chip">Aucune installation</span><span class="chip">Solutions cachées</span></div>
+</header>
+
+<h2 id="comment">Comment travailler</h2>
+<ol>
+  <li><strong>Blocs A à D</strong> : dans l'interpréteur. Tapez <code>python3</code> dans le terminal, puis vos lignes ; <code>exit()</code> pour sortir.</li>
+  <li><strong>Blocs E à G</strong> : dans un fichier <code>essais.py</code>, lancé avec <code>python3 essais.py</code>. Les blocs sur plusieurs lignes y sont plus faciles à écrire.</li>
+  <li><strong>Essayez avant de déplier.</strong> Puis l'indice. La solution en dernier, et comparez-la à la vôtre : il y a souvent plusieurs bonnes réponses.</li>
+  <li>Bloqué par une erreur ? Lisez la <strong>dernière ligne</strong> du message, puis demandez à l'IA de l'<strong>expliquer</strong> (pas de corriger à votre place).</li>
+</ol>
+<div class="box warn"><strong>L'indentation compte</strong><p>Après un <code>:</code> (<code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>), les lignes du bloc sont décalées de 4 espaces. Dans l'interpréteur, validez un bloc par une ligne vide.</p></div>
+
+<h2 id="bloc-A">A · Premiers pas</h2>
+<p>Tapez <code>python3</code> dans le terminal, puis essayez directement. <code>exit()</code> pour sortir.</p>
+<div class="step" id="A1" data-step="A1">
+  <div class="step-head"><span class="id">A1</span><h3>Calculatrice</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Combien y a-t-il de minutes dans une journée ? Et de secondes ?</p>
+    <details><summary>Indice</summary><div><p>24 heures, 60 minutes par heure : une multiplication suffit.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>print(24 * 60)
+print(24 * 60 * 60)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>1440
+86400</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="A2" data-step="A2">
+  <div class="step-head"><span class="id">A2</span><h3>Ma première variable</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Créez une variable <code>prenom</code> qui contient votre prénom et une variable <code>age</code>. Affichez la phrase « Je m'appelle … et j'ai … ans. »</p>
+    <details><summary>Indice</summary><div><p>Une f-string : <code>f"… {prenom} …"</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>prenom = &quot;Alice&quot;
+age = 20
+print(f&quot;Je m&#x27;appelle {prenom} et j&#x27;ai {age} ans.&quot;)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>Je m&#x27;appelle Alice et j&#x27;ai 20 ans.</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="A3" data-step="A3">
+  <div class="step-head"><span class="id">A3</span><h3>Quel type ?</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Affichez le type de <code>42</code>, <code>"42"</code>, <code>4.2</code> et <code>True</code>.</p>
+    <details><summary>Indice</summary><div><p>La fonction <code>type(…)</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>print(type(42))
+print(type(&quot;42&quot;))
+print(type(4.2))
+print(type(True))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>&lt;class &#x27;int&#x27;&gt;
+&lt;class &#x27;str&#x27;&gt;
+&lt;class &#x27;float&#x27;&gt;
+&lt;class &#x27;bool&#x27;&gt;</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="A4" data-step="A4">
+  <div class="step-head"><span class="id">A4</span><h3>Texte ou nombre ?</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>a = "10"</code> et <code>b = "5"</code>, affichez <code>a + b</code>. Puis faites en sorte d'obtenir 15.</p>
+    <details><summary>Indice</summary><div><p>Le <code>+</code> colle deux textes. Pour additionner, convertissez avec <code>int(…)</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>a = &quot;10&quot;
+b = &quot;5&quot;
+print(a + b)
+print(int(a) + int(b))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>105
+15</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="A5" data-step="A5">
+  <div class="step-head"><span class="id">A5</span><h3>Trois divisions</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Comparez <code>17 / 5</code>, <code>17 // 5</code> et <code>17 % 5</code>. Que fait chacune ?</p>
+    <details><summary>Indice</summary><div><p>Une division « normale », une division entière, et le reste.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>print(17 / 5)
+print(17 // 5)
+print(17 % 5)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>3.4
+3
+2</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-B">B · Les chaînes de caractères</h2>
+<p>Une chaîne, c'est du texte entre guillemets. On peut la mesurer, la découper, la transformer.</p>
+<div class="step" id="B1" data-step="B1">
+  <div class="step-head"><span class="id">B1</span><h3>Mesurer et crier</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>nom = "srv-web-01"</code>, affichez sa longueur, puis le nom en majuscules.</p>
+    <details><summary>Indice</summary><div><p><code>len(…)</code> et la méthode <code>.upper()</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>nom = &quot;srv-web-01&quot;
+print(len(nom))
+print(nom.upper())</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>10
+SRV-WEB-01</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="B2" data-step="B2">
+  <div class="step-head"><span class="id">B2</span><h3>Premier, dernier, morceau</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Toujours avec <code>nom = "srv-web-01"</code> : affichez le premier caractère, le dernier, puis seulement <code>web</code>.</p>
+    <details><summary>Indice</summary><div><p>On compte à partir de 0. <code>nom[-1]</code> est le dernier. <code>nom[début:fin]</code> découpe un morceau (fin exclue).</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>nom = &quot;srv-web-01&quot;
+print(nom[0])
+print(nom[-1])
+print(nom[4:7])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>s
+1
+web</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="B3" data-step="B3">
+  <div class="step-head"><span class="id">B3</span><h3>Découper une ligne</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>ligne = "alice:x:1000:1000"</code>, découpez sur les <code>:</code>. Affichez la liste obtenue, puis seulement l'UID (le 3<sup>e</sup> champ).</p>
+    <details><summary>Indice</summary><div><p><code>ligne.split(":")</code> renvoie une liste. Le 3<sup>e</sup> élément est à la position 2.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ligne = &quot;alice:x:1000:1000&quot;
+champs = ligne.split(&quot;:&quot;)
+print(champs)
+print(champs[2])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>[&#x27;alice&#x27;, &#x27;x&#x27;, &#x27;1000&#x27;, &#x27;1000&#x27;]
+1000</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="B4" data-step="B4">
+  <div class="step-head"><span class="id">B4</span><h3>Chercher un mot</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>ligne = "Failed password for root from 10.0.0.5"</code> : la ligne contient-elle <code>Failed</code> ? Et <code>Accepted</code> ?</p>
+    <details><summary>Indice</summary><div><p>Le mot-clé <code>in</code> renvoie <code>True</code> ou <code>False</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ligne = &quot;Failed password for root from 10.0.0.5&quot;
+print(&quot;Failed&quot; in ligne)
+print(&quot;Accepted&quot; in ligne)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>True
+False</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="B5" data-step="B5">
+  <div class="step-head"><span class="id">B5</span><h3>Nettoyer</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>saisie = "  Admin  "</code>, retirez les espaces autour, puis mettez le tout en minuscules.</p>
+    <details><summary>Indice</summary><div><p><code>.strip()</code> et <code>.lower()</code>, qu'on peut enchaîner.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>saisie = &quot;  Admin  &quot;
+print(saisie.strip())
+print(saisie.strip().lower())</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>Admin
+admin</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-C">C · Les listes</h2>
+<p>Une liste range plusieurs valeurs dans l'ordre, entre crochets.</p>
+<div class="step" id="C1" data-step="C1">
+  <div class="step-head"><span class="id">C1</span><h3>Ma première liste</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Créez une liste <code>ports</code> contenant 22, 80 et 443. Affichez-la, puis sa longueur, puis son premier élément.</p>
+    <details><summary>Indice</summary><div><p><code>[22, 80, 443]</code>, <code>len(…)</code>, et la position 0.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ports = [22, 80, 443]
+print(ports)
+print(len(ports))
+print(ports[0])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>[22, 80, 443]
+3
+22</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="C2" data-step="C2">
+  <div class="step-head"><span class="id">C2</span><h3>Ajouter, retirer</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Partez de <code>ports = [21, 22, 80]</code>. Ajoutez 443, retirez 21, affichez le résultat.</p>
+    <details><summary>Indice</summary><div><p><code>.append(…)</code> ajoute à la fin, <code>.remove(…)</code> retire une valeur.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ports = [21, 22, 80]
+ports.append(443)
+ports.remove(21)
+print(ports)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>[22, 80, 443]</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="C3" data-step="C3">
+  <div class="step-head"><span class="id">C3</span><h3>Trier</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Affichez <code>[8080, 22, 443, 80]</code> trié dans l'ordre croissant, puis décroissant.</p>
+    <details><summary>Indice</summary><div><p><code>sorted(…)</code>, et pour l'ordre inverse <code>sorted(…, reverse=True)</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ports = [8080, 22, 443, 80]
+print(sorted(ports))
+print(sorted(ports, reverse=True))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>[22, 80, 443, 8080]
+[8080, 443, 80, 22]</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="C4" data-step="C4">
+  <div class="step-head"><span class="id">C4</span><h3>Somme, plus grand, plus petit</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>echecs = [12, 7, 30, 3]</code>, affichez le total, le maximum et le minimum.</p>
+    <details><summary>Indice</summary><div><p>Python a des fonctions toutes faites : <code>sum</code>, <code>max</code>, <code>min</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>echecs = [12, 7, 30, 3]
+print(sum(echecs))
+print(max(echecs))
+print(min(echecs))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>52
+30
+3</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="C5" data-step="C5">
+  <div class="step-head"><span class="id">C5</span><h3>Est-ce dedans ?</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>ouverts = [22, 80, 443]</code>, le port 22 est-il ouvert ? Et le port 3389 ?</p>
+    <details><summary>Indice</summary><div><p>Encore le mot-clé <code>in</code>, qui marche aussi sur les listes.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ouverts = [22, 80, 443]
+print(22 in ouverts)
+print(3389 in ouverts)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>True
+False</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-D">D · Les dictionnaires</h2>
+<p>Un dictionnaire associe une clé à une valeur, entre accolades. C'est la forme du JSON.</p>
+<div class="step" id="D1" data-step="D1">
+  <div class="step-head"><span class="id">D1</span><h3>Décrire un serveur</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Créez <code>serveur</code> avec les clés <code>nom</code> ("srv01"), <code>ip</code> ("10.0.0.5") et <code>ram</code> (8). Affichez son IP.</p>
+    <details><summary>Indice</summary><div><p><code>{"nom": "srv01", …}</code>, puis <code>serveur["ip"]</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>serveur = {&quot;nom&quot;: &quot;srv01&quot;, &quot;ip&quot;: &quot;10.0.0.5&quot;, &quot;ram&quot;: 8}
+print(serveur[&quot;ip&quot;])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>10.0.0.5</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="D2" data-step="D2">
+  <div class="step-head"><span class="id">D2</span><h3>Modifier, ajouter</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Passez la RAM à 16, ajoutez une clé <code>os</code> valant "Ubuntu", et affichez le dictionnaire.</p>
+    <details><summary>Indice</summary><div><p>Même syntaxe pour modifier et pour ajouter : <code>serveur["cle"] = valeur</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>serveur = {&quot;nom&quot;: &quot;srv01&quot;, &quot;ip&quot;: &quot;10.0.0.5&quot;, &quot;ram&quot;: 8}
+serveur[&quot;ram&quot;] = 16
+serveur[&quot;os&quot;] = &quot;Ubuntu&quot;
+print(serveur)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>{&#x27;nom&#x27;: &#x27;srv01&#x27;, &#x27;ip&#x27;: &#x27;10.0.0.5&#x27;, &#x27;ram&#x27;: 16, &#x27;os&#x27;: &#x27;Ubuntu&#x27;}</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="D3" data-step="D3">
+  <div class="step-head"><span class="id">D3</span><h3>Parcourir</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Affichez chaque clé et sa valeur, une par ligne, sous la forme <code>nom : srv01</code>.</p>
+    <details><summary>Indice</summary><div><p><code>for cle, valeur in serveur.items():</code></p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>serveur = {&quot;nom&quot;: &quot;srv01&quot;, &quot;ip&quot;: &quot;10.0.0.5&quot;}
+for cle, valeur in serveur.items():
+    print(f&quot;{cle} : {valeur}&quot;)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>nom : srv01
+ip : 10.0.0.5</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="D4" data-step="D4">
+  <div class="step-head"><span class="id">D4</span><h3>Une clé absente</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec ce même <code>serveur</code>, essayez <code>serveur["disque"]</code> : que se passe-t-il ? Puis obtenez 0 à la place, sans erreur.</p>
+    <details><summary>Indice</summary><div><p><code>serveur.get("disque", 0)</code> renvoie 0 si la clé n'existe pas.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>serveur = {&quot;nom&quot;: &quot;srv01&quot;, &quot;ip&quot;: &quot;10.0.0.5&quot;}
+# serveur[&quot;disque&quot;]  → KeyError
+print(serveur.get(&quot;disque&quot;, 0))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>0</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-E">E · Conditions et boucles</h2>
+<p>Les blocs commencent après <code>:</code> et sont décalés de 4 espaces. Écrivez-les dans un fichier <code>essais.py</code> plutôt que dans l'interpréteur.</p>
+<div class="step" id="E1" data-step="E1">
+  <div class="step-head"><span class="id">E1</span><h3>Alerte disque</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>pct = 85</code>, affichez « ALERTE » si <code>pct</code> vaut 80 ou plus, « OK » sinon. Testez aussi avec 50.</p>
+    <details><summary>Indice</summary><div><p><code>if pct >= 80:</code> … <code>else:</code> …</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>pct = 85
+if pct &gt;= 80:
+    print(&quot;ALERTE&quot;)
+else:
+    print(&quot;OK&quot;)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>ALERTE</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="E2" data-step="E2">
+  <div class="step-head"><span class="id">E2</span><h3>Compter jusqu&#x27;à 5</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Affichez les nombres de 1 à 5, un par ligne.</p>
+    <details><summary>Indice</summary><div><p><code>for i in range(1, 6):</code> (la fin est exclue).</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>for i in range(1, 6):
+    print(i)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>1
+2
+3
+4
+5</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="E3" data-step="E3">
+  <div class="step-head"><span class="id">E3</span><h3>Une phrase par port</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>ports = [22, 80, 443]</code>, affichez « Port 22 ouvert », etc.</p>
+    <details><summary>Indice</summary><div><p><code>for port in ports:</code> puis une f-string.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>ports = [22, 80, 443]
+for port in ports:
+    print(f&quot;Port {port} ouvert&quot;)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>Port 22 ouvert
+Port 80 ouvert
+Port 443 ouvert</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="E4" data-step="E4">
+  <div class="step-head"><span class="id">E4</span><h3>Additionner de 1 à 100</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Calculez la somme 1 + 2 + … + 100 avec une boucle (pas avec <code>sum</code>).</p>
+    <details><summary>Indice</summary><div><p>Une variable <code>total = 0</code> avant la boucle, et <code>total += i</code> dedans.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>total = 0
+for i in range(1, 101):
+    total += i
+print(total)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>5050</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="E5" data-step="E5">
+  <div class="step-head"><span class="id">E5</span><h3>Filtrer</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>disques = [12, 85, 40, 91]</code>, affichez seulement les valeurs de 80 ou plus.</p>
+    <details><summary>Indice</summary><div><p>Une boucle <code>for</code>, et un <code>if</code> dedans.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>disques = [12, 85, 40, 91]
+for pct in disques:
+    if pct &gt;= 80:
+        print(pct)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>85
+91</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="E6" data-step="E6">
+  <div class="step-head"><span class="id">E6</span><h3>Compte à rebours</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec une boucle <code>while</code>, affichez 3, 2, 1, puis « Partez ! ».</p>
+    <details><summary>Indice</summary><div><p><code>n = 3</code>, <code>while n > 0:</code>, et n'oubliez pas <code>n -= 1</code> sinon la boucle ne s'arrête jamais.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>n = 3
+while n &gt; 0:
+    print(n)
+    n -= 1
+print(&quot;Partez !&quot;)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>3
+2
+1
+Partez !</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-F">F · Les fonctions</h2>
+<p>Une fonction a un nom, reçoit des valeurs et en renvoie une avec <code>return</code>.</p>
+<div class="step" id="F1" data-step="F1">
+  <div class="step-head"><span class="id">F1</span><h3>Le carré</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Écrivez <code>carre(n)</code> qui renvoie n × n. Affichez <code>carre(7)</code>.</p>
+    <details><summary>Indice</summary><div><p><code>def carre(n):</code> puis <code>return …</code></p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>def carre(n):
+    return n * n
+
+print(carre(7))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>49</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="F2" data-step="F2">
+  <div class="step-head"><span class="id">F2</span><h3>Pair ou impair</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Écrivez <code>est_pair(n)</code> qui renvoie <code>True</code> si n est pair. Testez avec 4 et 7.</p>
+    <details><summary>Indice</summary><div><p>Un nombre est pair si le reste de sa division par 2 vaut 0 : <code>n % 2 == 0</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>def est_pair(n):
+    return n % 2 == 0
+
+print(est_pair(4))
+print(est_pair(7))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>True
+False</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="F3" data-step="F3">
+  <div class="step-head"><span class="id">F3</span><h3>Avec une valeur par défaut</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Écrivez <code>en_alerte(pct, seuil=80)</code> qui renvoie <code>True</code> si <code>pct</code> atteint le seuil. Testez <code>en_alerte(85)</code> et <code>en_alerte(85, 90)</code>.</p>
+    <details><summary>Indice</summary><div><p><code>seuil=80</code> dans les parenthèses donne une valeur par défaut.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>def en_alerte(pct, seuil=80):
+    return pct &gt;= seuil
+
+print(en_alerte(85))
+print(en_alerte(85, 90))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>True
+False</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="F4" data-step="F4">
+  <div class="step-head"><span class="id">F4</span><h3>La moyenne</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Écrivez <code>moyenne(valeurs)</code> qui renvoie la moyenne d'une liste, et 0 si la liste est vide. Testez avec <code>[10, 20, 30]</code> et <code>[]</code>.</p>
+    <details><summary>Indice</summary><div><p><code>sum(…) / len(…)</code>, mais diviser par 0 plante : testez d'abord <code>if not valeurs:</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>def moyenne(valeurs):
+    if not valeurs:
+        return 0
+    return sum(valeurs) / len(valeurs)
+
+print(moyenne([10, 20, 30]))
+print(moyenne([]))</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>20.0
+0</code></pre>
+    </div></details>
+  </div>
+</div>
+<h2 id="bloc-G">G · Petits défis</h2>
+<p>On combine tout. Essayez sans l'IA, puis demandez-lui d'<strong>expliquer</strong> votre erreur si vous bloquez.</p>
+<div class="step" id="G1" data-step="G1">
+  <div class="step-head"><span class="id">G1</span><h3>Compter les voyelles</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Comptez les voyelles du mot <code>"administrateur"</code>.</p>
+    <details><summary>Indice</summary><div><p>Une boucle sur chaque lettre, et <code>if lettre in "aeiouy":</code>.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>mot = &quot;administrateur&quot;
+nb = 0
+for lettre in mot:
+    if lettre in &quot;aeiouy&quot;:
+        nb += 1
+print(nb)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>6</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="G2" data-step="G2">
+  <div class="step-head"><span class="id">G2</span><h3>Palindrome</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Un mot est un palindrome s'il se lit pareil dans les deux sens. Testez <code>"kayak"</code> et <code>"python"</code>.</p>
+    <details><summary>Indice</summary><div><p><code>mot[::-1]</code> renvoie le mot à l'envers.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>for mot in [&quot;kayak&quot;, &quot;python&quot;]:
+    print(mot, mot == mot[::-1])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>kayak True
+python False</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="G3" data-step="G3">
+  <div class="step-head"><span class="id">G3</span><h3>Les noms d&#x27;utilisateurs</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>À partir de cette liste de lignes de <code>/etc/passwd</code>, affichez seulement les noms :<br><code>["root:x:0:0", "alice:x:1000:1000", "bob:x:1001:1001"]</code></p>
+    <details><summary>Indice</summary><div><p>Pour chaque ligne : <code>split(":")</code>, puis le premier élément.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>lignes = [&quot;root:x:0:0&quot;, &quot;alice:x:1000:1000&quot;, &quot;bob:x:1001:1001&quot;]
+for ligne in lignes:
+    print(ligne.split(&quot;:&quot;)[0])</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>root
+alice
+bob</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="G4" data-step="G4">
+  <div class="step-head"><span class="id">G4</span><h3>Compter les services</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Avec <code>connexions = ["ssh", "http", "ssh", "dns", "ssh"]</code>, construisez un dictionnaire qui compte chaque service.</p>
+    <details><summary>Indice</summary><div><p>Un dictionnaire vide, puis <code>comptes[s] = comptes.get(s, 0) + 1</code> dans une boucle.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>connexions = [&quot;ssh&quot;, &quot;http&quot;, &quot;ssh&quot;, &quot;dns&quot;, &quot;ssh&quot;]
+comptes = {}
+for s in connexions:
+    comptes[s] = comptes.get(s, 0) + 1
+print(comptes)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>{&#x27;ssh&#x27;: 3, &#x27;http&#x27;: 1, &#x27;dns&#x27;: 1}</code></pre>
+    </div></details>
+  </div>
+</div>
+<div class="step" id="G5" data-step="G5">
+  <div class="step-head"><span class="id">G5</span><h3>FizzBuzz</h3><label><input type="checkbox"> fait</label></div>
+  <div class="step-body">
+    <p>Pour les nombres de 1 à 15 : affichez « Fizz » si le nombre est divisible par 3, « Buzz » s'il l'est par 5, « FizzBuzz » s'il l'est par les deux, et le nombre sinon.</p>
+    <details><summary>Indice</summary><div><p>Testez d'abord la divisibilité par 15 (les deux), sinon le cas « FizzBuzz » n'arrive jamais.</p></div></details>
+    <details><summary>Solution et résultat attendu</summary><div>
+<pre><code>for i in range(1, 16):
+    if i % 15 == 0:
+        print(&quot;FizzBuzz&quot;)
+    elif i % 3 == 0:
+        print(&quot;Fizz&quot;)
+    elif i % 5 == 0:
+        print(&quot;Buzz&quot;)
+    else:
+        print(i)</code></pre>
+<p class="muted" style="margin-bottom:4px">Résultat :</p>
+<pre class="out"><code>1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz</code></pre>
+    </div></details>
+  </div>
+</div>
+
+<footer>EEMI · B2 Cybersécurité · Scripts de parsing et d'automatisation · Pour aller plus loin : le mémo <a href="../s1-scripter-admin/python-express.html">Python express</a> et les <a href="../s2-parsing-journaux/exercices-python/guide-exercices.html">8 exercices de la séance 2</a>.</footer>
+</main>
+</div>
+<script>
+(function () {
+  var KEY = 'eemi-python-debutant';
+  var etat = {};
+  try { etat = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { etat = {}; }
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step[data-step]'));
+  var total = steps.length;
+
+  function rafraichir() {
+    var n = 0;
+    steps.forEach(function (s) {
+      var id = s.getAttribute('data-step');
+      var fait = !!etat[id];
+      if (fait) n++;
+      s.classList.toggle('done', fait);
+      s.querySelector('input[type=checkbox]').checked = fait;
+      var lien = document.querySelector('nav a[data-step="' + id + '"]');
+      if (lien) lien.classList.toggle('done', fait);
+    });
+    document.getElementById('pbar').style.width = (100 * n / total) + '%';
+    document.getElementById('ptext').textContent = n + ' / ' + total + ' exercices';
+  }
+  steps.forEach(function (s) {
+    s.querySelector('input[type=checkbox]').addEventListener('change', function (e) {
+      etat[s.getAttribute('data-step')] = e.target.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(etat)); } catch (err) {}
+      rafraichir();
+    });
+  });
+  rafraichir();
+
+  // Boutons « copier » sur les blocs de code
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var b = document.createElement('button');
+    b.className = 'copy'; b.type = 'button'; b.textContent = 'Copier';
+    b.addEventListener('click', function () {
+      var clone = pre.cloneNode(true);
+      clone.querySelectorAll('.copy').forEach(function (x) { x.remove(); });
+      var texte = clone.textContent;
+      function ok() { b.textContent = 'Copié'; setTimeout(function () { b.textContent = 'Copier'; }, 1200); }
+      if (navigator.clipboard) { navigator.clipboard.writeText(texte).then(ok, function () {}); }
+    });
+    pre.appendChild(b);
+  });
+
+  // Thème clair / sombre
+  var root = document.documentElement;
+  try { var t = localStorage.getItem('eemi-theme'); if (t) root.setAttribute('data-theme', t); } catch (e) {}
+  document.getElementById('theme').addEventListener('click', function () {
+    var sombre = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var nouveau = sombre ? 'light' : 'dark';
+    root.setAttribute('data-theme', nouveau);
+    try { localStorage.setItem('eemi-theme', nouveau); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
