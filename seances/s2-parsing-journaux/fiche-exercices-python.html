@@ -242,7 +242,7 @@
     <div class="header">
       <div class="tag">EEMI — Formation Python</div>
       <h1>Scripting Python assisté par IA</h1>
-      <p>4 exercices pour découvrir Python en utilisant l'IA comme outil de développement</p>
+      <p>5 exercices pour découvrir Python en utilisant l'IA comme outil de développement</p>
     </div>
 
     <div class="intro">
@@ -390,6 +390,46 @@
               <li>Entrer un numéro de tâche inexistant</li>
               <li>Afficher quand la liste est vide</li>
               <li>Entrer une option de menu invalide</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 5 -->
+      <div class="exercise">
+        <div class="exercise-header">
+          <div class="ex-num">5</div>
+          <div class="ex-title">Analyse d'un journal SSH : qui attaque le serveur ?</div>
+          <div class="ex-concept">fichiers · split() · dictionnaires · détection</div>
+        </div>
+        <div class="exercise-body">
+          <div>
+            <div class="block-label">Objectif</div>
+            <div class="objective-text">
+              Vous êtes au SOC. Le serveur <code>srv-web-01</code> a été attaqué cette nuit et on vous confie son journal
+              d'authentification : <code>seances/s2-parsing-journaux/donnees/auth-ex5.log.extrait</code> (données fictives).
+              Le script lit ce fichier (son chemin est donné en argument) et affiche un rapport :
+              <ul class="tests-list" style="margin-top:8px">
+                <li>le nombre de lignes analysées et le nombre d'échecs de connexion (<code>Failed password</code>) ;</li>
+                <li>le top 5 des adresses IP en échec, avec leur nombre d'échecs ;</li>
+                <li>les IP qui dépassent un seuil d'échecs (10 par défaut, modifiable) : <strong>brute force</strong> ;</li>
+                <li>les IP qui ont essayé au moins 5 noms d'utilisateur différents : <strong>password spraying</strong> ;</li>
+                <li>surtout : les <strong>connexions réussies</strong> (<code>Accepted</code>) depuis une IP qui avait échoué avant. C'est le signe d'une compromission possible.</li>
+              </ul>
+              Le script ne doit jamais planter, même sur une ligne abîmée.
+              <br><br><em>Conseil : commencez par ouvrir le fichier et lire 30 lignes à la main. Un bon prompt décrit le format des lignes à l'IA.</em>
+            </div>
+          </div>
+          <div>
+            <div class="block-label">Cas à tester</div>
+            <ul class="tests-list">
+              <li>Le fichier fourni : quelle IP attaque le plus ?</li>
+              <li>Trouver l'IP qui a fini par <strong>réussir</strong> à se connecter : avec quel compte, et qu'a-t-elle fait juste après ?</li>
+              <li>Repérer l'IP qui essaie beaucoup de comptes, lentement</li>
+              <li>Une adresse IPv6 est dans le fichier : est-elle comptée ?</li>
+              <li>Le fichier contient une ligne tronquée et une ligne vide</li>
+              <li>Fichier inexistant, fichier vide</li>
+              <li>Seuil à 5, puis à 50</li>
             </ul>
           </div>
         </div>

