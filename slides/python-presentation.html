@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python en 10 minutes</title>
+<style>
+:root{
+  --bg:#0f1b2d; --bg2:#15253d; --ink:#1b2430; --paper:#fbfaf7; --muted:#5d6878;
+  --accent:#0f8b8d; --accent2:#e07a2f; --ok:#2f8f4e; --ko:#c0392b; --line:#d9dde3;
+  --code-bg:#0f1b2d; --code-ink:#e6edf3; --code-com:#8b98a9; --code-str:#9fd6a5; --code-kw:#ffb86b; --code-var:#7fc8ff;
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1320;font-family:var(--sans);color:var(--ink)}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--paper);padding:56px 72px 48px;
+  display:none;flex-direction:column;transform-origin:center center;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.slide.active{display:flex}
+.slide h1{font-size:44px;line-height:1.1;margin:0 0 20px;letter-spacing:-.5px}
+.slide h2{font-size:34px;line-height:1.15;margin:0 0 22px;letter-spacing:-.3px}
+.slide h2 small{display:block;font-size:17px;font-weight:600;color:var(--accent);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.slide p,.slide li{font-size:22px;line-height:1.45}
+.slide ul,.slide ol{margin:0 0 0 4px;padding-left:26px}
+.slide li{margin:6px 0}
+.slide li::marker{color:var(--accent)}
+.muted{color:var(--muted)}
+.foot{position:absolute;left:72px;right:72px;bottom:18px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+/* variantes */
+.title,.section{background:var(--bg);color:#fff;justify-content:center}
+.title h1{font-size:58px;max-width:980px}
+.title .kicker,.section .kicker{color:#7fd3d4;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:18px;margin-bottom:18px}
+.title p{color:#c6d0dc;font-size:24px}
+.section h1{font-size:64px}
+.section .num{font-size:120px;font-weight:800;color:#23405f;position:absolute;right:72px;bottom:28px;line-height:1}
+.title .foot,.section .foot{color:#8a97a8}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;min-height:0}
+.cols.c3{grid-template-columns:1fr 1fr 1fr}
+.cols.code{grid-template-columns:1.45fr 1fr}
+.cols > pre{align-self:start}
+pre.xs{font-size:13.5px;line-height:1.42}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.card h3{margin:0 0 10px;font-size:22px}
+.card.ok{border-top:5px solid var(--ok)} .card.ko{border-top:5px solid var(--ko)} .card.acc{border-top:5px solid var(--accent)}
+.card li,.card p{font-size:19px}
+.callout{margin-top:auto;background:#eaf6f6;border-left:6px solid var(--accent);padding:14px 20px;border-radius:6px;font-size:20px}
+.callout.warn{background:#fdf1e7;border-color:var(--accent2)}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef1f4;font-weight:700}
+td code,li code,p code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 6px;border-radius:4px}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:16px 20px;font-family:var(--mono);
+  font-size:16.5px;line-height:1.5;overflow:hidden;white-space:pre}
+pre.small{font-size:14.5px}
+.tok-com{color:var(--code-com);font-style:italic} .tok-str{color:var(--code-str)} .tok-kw{color:var(--code-kw)} .tok-var{color:var(--code-var)}
+.pill{display:inline-block;padding:2px 12px;border-radius:999px;font-size:16px;font-weight:700;background:#eef1f4}
+.pill.ok{background:#e3f3e8;color:var(--ok)} .pill.ko{background:#f8e4e1;color:var(--ko)} .pill.acc{background:#e0f2f2;color:var(--accent)}
+.big{font-size:30px!important;line-height:1.35}
+.center{align-items:center;justify-content:center;text-align:center}
+.steps{counter-reset:s;list-style:none;padding:0!important}
+.steps li{counter-increment:s;position:relative;padding-left:52px;margin:12px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-size:18px}
+aside.notes{display:none}
+body.show-notes .slide.active aside.notes{display:block;position:absolute;left:0;right:0;top:100%;margin-top:8px;background:#fffbe6;
+  border:1px solid #e8d98a;padding:10px 16px;font-size:15px;color:#4a4020;border-radius:6px}
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .2s}
+#help{position:fixed;right:12px;bottom:10px;color:#6f7d8f;font-size:12px}
+/* impression : une slide par page */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#fff}
+  #deck{position:static;display:block}
+  .slide{display:flex!important;position:relative;transform:none!important;box-shadow:none;page-break-after:always;break-after:page}
+  #bar,#help,aside.notes{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 -->
+<section class="slide title">
+  <div class="kicker">EEMI · B2 Cybersécurité · Scripts de parsing et d'automatisation</div>
+  <h1>Python en 10 minutes</h1>
+  <p>Ce qu'est Python, pourquoi il est partout, et à quoi il ressemble</p>
+  <div class="foot"><span>Emmanuel Pinglier</span><span>Présentation générale</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <h2><small>Carte d'identité</small>Python, c'est quoi ?</h2>
+  <div class="cols">
+    <ul>
+      <li>Un <strong>langage de programmation</strong> généraliste, créé par <strong>Guido van Rossum</strong></li>
+      <li>Première version en <strong>1991</strong> ; le nom vient des <em>Monty Python</em>, pas du serpent</li>
+      <li><strong>Python 3</strong> depuis 2008 ; Python 2 est abandonné depuis 2020</li>
+      <li>Une nouvelle version chaque automne : <strong>3.15</strong> en octobre 2026</li>
+      <li><strong>Libre et gratuit</strong>, géré par la Python Software Foundation</li>
+    </ul>
+    <div class="card acc">
+      <h3>Sa philosophie</h3>
+      <p style="font-family:var(--mono);font-size:18px;line-height:1.6">Beautiful is better than ugly.<br>Simple is better than complex.<br>Readability counts.</p>
+      <p class="muted" style="font-size:16px">Extraits du « Zen of Python » : tapez <code>import this</code> dans <code>python3</code>.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Python en 10 minutes</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <h2><small>Pourquoi lui</small>Pourquoi Python est partout</h2>
+  <div class="cols">
+    <div class="card ok"><h3>Ses atouts</h3><ul>
+      <li><strong>Lisible</strong> : proche de l'anglais, peu de symboles</li>
+      <li><strong>« Piles incluses »</strong> : plus de 200 modules livrés avec</li>
+      <li><strong>PyPI</strong> : plus de 900 000 bibliothèques à installer</li>
+      <li>Tourne sur Linux, Windows, macOS, sans modification</li></ul></div>
+    <div class="card acc"><h3>Où on le trouve</h3><ul>
+      <li><strong>Administration</strong> et automatisation</li>
+      <li><strong>Données</strong> et intelligence artificielle</li>
+      <li><strong>Web</strong> : API, sites, outils internes</li>
+      <li><strong>Sécurité</strong> : analyse, détection, outillage</li></ul></div>
+  </div>
+  <div class="callout">Contrepartie : il est <strong>plus lent</strong> que C ou Go. Pour un script d'administration, ça ne compte presque jamais.</div>
+  <div class="foot"><span>Python en 10 minutes</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h2><small>Dans votre métier</small>Python et la cybersécurité</h2>
+  <table>
+    <tr><th>Outil</th><th>À quoi il sert</th></tr>
+    <tr><td><strong>Ansible</strong></td><td>Automatiser la configuration et le durcissement de centaines de serveurs</td></tr>
+    <tr><td><strong>Volatility</strong></td><td>Analyser la mémoire vive d'une machine compromise (forensic)</td></tr>
+    <tr><td><strong>Scapy</strong></td><td>Construire, capturer et décoder des paquets réseau</td></tr>
+    <tr><td><strong>pySigma</strong>, <strong>yara-python</strong></td><td>Manipuler des règles de détection (Sigma, YARA)</td></tr>
+    <tr><td><strong>PyMISP</strong></td><td>Échanger des indicateurs de compromission avec une plateforme MISP</td></tr>
+  </table>
+  <div class="callout">Tous écrits en Python, ou pilotables en Python. Savoir lire et écrire un script Python, c'est pouvoir <strong>comprendre, adapter et automatiser</strong> ces outils.</div>
+  <div class="foot"><span>Python en 10 minutes</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h2><small>Sous le capot</small>Comment un script s'exécute</h2>
+  <div style="display:flex;align-items:center;gap:18px;margin:10px 0 28px">
+    <div class="card" style="flex:1;text-align:center"><h3>script.py</h3><p>du texte que vous écrivez</p></div>
+    <div style="font-size:34px;color:var(--accent)">→</div>
+    <div class="card acc" style="flex:1;text-align:center"><h3>python3</h3><p>l'interpréteur le lit et le traduit en <em>bytecode</em></p></div>
+    <div style="font-size:34px;color:var(--accent)">→</div>
+    <div class="card" style="flex:1;text-align:center"><h3>exécution</h3><p>ligne après ligne</p></div>
+  </div>
+  <ul>
+    <li><strong>Pas de compilation</strong> à lancer : <code>python3 script.py</code> suffit</li>
+    <li>Une erreur n'apparaît <strong>qu'au moment où la ligne s'exécute</strong> : d'où l'importance de tester</li>
+    <li>Le mode interactif (<code>python3</code> seul) permet d'essayer une ligne à la fois</li>
+  </ul>
+  <div class="foot"><span>Python en 10 minutes</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h2><small>La syntaxe</small>Tout Python de base, sur une slide</h2>
+  <div class="cols code">
+<pre data-lang="python" class="small">import json                          # utiliser un module
+
+seuil = 80                           # une variable
+disques = {"/": 47, "/var": 86}      # un dictionnaire
+
+def en_alerte(pct: int) -> bool:     # une fonction
+    return pct >= seuil
+
+alertes = []                         # une liste
+for point, pct in disques.items():   # une boucle
+    if en_alerte(pct):               # une condition
+        alertes.append(point)
+        print(f"ALERTE {point} : {pct} %")
+
+print(json.dumps(alertes))           # ["/var"]</pre>
+    <ul>
+      <li>Pas de <code>;</code>, pas d'accolades</li>
+      <li>Les blocs se font par <strong>l'indentation</strong> (4 espaces), après un <code>:</code></li>
+      <li>Pas de type à déclarer : Python le déduit</li>
+      <li><code>#</code> commence un commentaire</li>
+    </ul>
+  </div>
+  <div class="foot"><span>Python en 10 minutes</span><span>6</span></div>
+  <aside class="notes">Le lancer en direct. Faire changer seuil = 90 et relancer : plus d'alerte.</aside>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <h2><small>Choisir</small>Bash ou Python ?</h2>
+  <div class="cols">
+    <div class="card"><h3>Bash si…</h3><ul><li>on enchaîne des commandes existantes</li><li>le script tient en quelques lignes</li><li>pas de données structurées</li></ul></div>
+    <div class="card acc"><h3>Python si…</h3><ul><li>il faut <strong>découper, compter, trier</strong> des données</li><li>on lit ou produit du <strong>JSON</strong>, du CSV, une API</li><li>il faut gérer proprement les <strong>erreurs</strong> et <strong>tester</strong></li><li>le script va grossir</li></ul></div>
+  </div>
+  <div class="callout">Dans la vraie vie, on fait les deux : un script Bash qui appelle un script Python est très courant.</div>
+  <div class="foot"><span>Python en 10 minutes</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <h2><small>La boîte à outils</small>Ce qu'on utilise au quotidien</h2>
+  <table>
+    <tr><th>Outil</th><th>Rôle</th><th>Commande</th></tr>
+    <tr><td>Interpréteur</td><td>exécuter, essayer</td><td><code>python3 script.py</code> · <code>python3</code></td></tr>
+    <tr><td>Environnement virtuel</td><td>isoler les dépendances d'un projet</td><td><code>python3 -m venv .venv</code></td></tr>
+    <tr><td>pip</td><td>installer une bibliothèque de PyPI</td><td><code>pip install psutil</code></td></tr>
+    <tr><td>Éditeur</td><td>écrire, avec couleurs et vérifications</td><td>VS Code, PyCharm, vim…</td></tr>
+    <tr><td>pytest, ruff, bandit</td><td>tester, vérifier le style, chercher des failles</td><td>vus en séance 5</td></tr>
+  </table>
+  <div class="callout warn">Jamais de <code>sudo pip install</code> : on installe dans un <strong>venv</strong>, pas dans le Python du système.</div>
+  <div class="foot"><span>Python en 10 minutes</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h2><small>Pour continuer</small>Où apprendre</h2>
+  <ul class="big" style="font-size:25px!important">
+    <li>Le mémo du cours : <code>seances/s1-scripter-admin/python-express.html</code></li>
+    <li>Les 8 exercices auto-vérifiés : <code>seances/s2-parsing-journaux/exercices-python/</code></li>
+    <li>La documentation officielle, en français : <strong>docs.python.org/fr</strong> (tutoriel et bibliothèque standard)</li>
+    <li>Dans l'interpréteur : <code>help(str.split)</code>, <code>dir("texte")</code></li>
+    <li>L'IA, en mode <strong>tuteur</strong> : faire expliquer, pas faire à votre place</li>
+  </ul>
+  <div class="foot"><span>Python en 10 minutes</span><span>9</span></div>
+</section>
+</div>
+<div id="bar"></div>
+<div id="help">← → naviguer · F plein écran · N notes · P imprimer</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const bar = document.getElementById('bar');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96;
+    slides.forEach(el => el.style.transform = `scale(${s})`);
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    bar.style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('show-notes');
+    else if (e.key.toLowerCase() === 'p') window.print();
+  });
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('pre, a, code')) return;
+    show(e.clientX > window.innerWidth / 2 ? i + 1 : i - 1);
+  });
+  let x0 = null;
+  document.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // Coloration syntaxique minimale (commentaires, chaînes, mots-clés, variables)
+  const KW = {
+    python: /\b(import|from|def|return|if|else|elif|for|in|with|as|try|except|raise|not|and|or|None|True|False|class|while|lambda|is)\b/g,
+    bash: /\b(if|then|else|fi|for|in|do|done|while|case|esac|function|return|exit|set|local|readonly|trap|echo|export)\b/g,
+  };
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function highlightCode(code, lang) {
+    let out = '', k = 0;
+    const plain = s => {
+      let h = esc(s);
+      if (KW[lang]) h = h.replace(KW[lang], '<span class="tok-kw">$1</span>');
+      if (lang === 'bash') h = h.replace(/(\$\{?[A-Za-z_?#@][A-Za-z0-9_]*\}?|\$\(|\$\?)/g, '<span class="tok-var">$1</span>');
+      return h;
+    };
+    let buf = '';
+    while (k < code.length) {
+      const c = code[k];
+      const prev = k === 0 ? '\n' : code[k - 1];
+      if (c === '#' && lang !== 'text' && /\s/.test(prev) || (c === '#' && k === 0)) {
+        if (!(lang === 'bash' && code[k + 1] === '!' && k === 0)) {
+          const end = code.indexOf('\n', k); const stop = end === -1 ? code.length : end;
+          out += plain(buf) + `<span class="tok-com">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+        }
+      }
+      if (lang === 'python' && code.startsWith('"""', k)) {
+        const end = code.indexOf('"""', k + 3); const stop = end === -1 ? code.length : end + 3;
+        out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, stop))}</span>`; buf = ''; k = stop; continue;
+      }
+      if ((c === '"' || c === "'") && lang !== 'text') {
+        let j = k + 1;
+        while (j < code.length && code[j] !== c && code[j] !== '\n') { if (code[j] === '\\') j++; j++; }
+        if (code[j] === c) {
+          out += plain(buf) + `<span class="tok-str">${esc(code.slice(k, j + 1))}</span>`; buf = ''; k = j + 1; continue;
+        }
+      }
+      buf += c; k++;
+    }
+    return out + plain(buf);
+  }
+  document.querySelectorAll('pre[data-lang]').forEach(pre => {
+    pre.innerHTML = highlightCode(pre.textContent, pre.dataset.lang);
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>
