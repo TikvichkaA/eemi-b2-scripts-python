@@ -1,0 +1,29 @@
+Prompt E1
+Écris-moi un script Python qui demande le poids en kg et la taille en mètre, calcule l'IMC et affiche la catégorie : sous-poids, poids normal, surpoids ou obèse. Il doit gérer les erreur si l'utilisateur saisit une valeur non numérique ou 0. Teste-le avec : 80 kg / 1.80 m, 50 kg / 1.75 m, 100 kg / 1.65 m, "abc" à la place d'un chiffre, et 0 pour la taille. 
+
+ommentaire Exo1 – Calcul de l'IMC
+J'ai utilisé float() pour récupérer le poids et la taille sous forme de nombres. Le try/except permet de gérer les erreurs si l'utilisateur entre du texte ou une valeur incorrecte. Ensuite, le programme calcule l'IMC et affiche la catégorie correspondante selon le résultat.
+
+Prompt Exo2
+Écris-moi un script Python qui demande un texte et affiche : le nombre de mots, le nombre de caractères sans les espaces, et le mot qui apparaît le plus souvent. La casse n'a pas d'importance Le" et "le" sont le même mot). Utilise split() et des boucles. 
+
+J'ai utilisé lower() pour mettre tous les mots en minuscules afin de ne pas faire de différence entre les majuscules et les minuscules. split() permet de séparer les mots et le dictionnaire sert à compter combien de fois chaque mot apparaît. J'ai aussi retiré la ponctuation pour éviter de compter deux fois le même mot.
+
+Prompt Exo3
+
+Écris-moi un script Python qui génère un mot de passe aléatoire selon les préférences de l'utilisateur : longueur souhaitée, inclusion ou non de chiffres, inclusion ou non de caractères spéciaux. Le code doit être organisé sous forme de fonction. fonctions · import random · paramètres
+
+Commentaire Exo3 – Générateur de mot de passe
+J'ai créé une fonction qui permet de générer un mot de passe selon les choix de l'utilisateur. On peut choisir sa longueur et décider d'inclure des chiffres et des caractères spéciaux. J'ai utilisé secrets plutôt que random, car il est plus adapté pour créer des mots de passe sécurisés. Le programme vérifie également que la longueur demandée est valide.
+
+
+Prompt Exo4
+
+Écris-moi un script Python gestionnaire de tâches en ligne de commande avec un menu interactif. Il doit permettre d'ajouter une tâche, lister les tâches (avec leur statut fait/à faire), marquer une tâche comme faite, et quitter. La liste doit être sauvegardée dans un fichier pour persister entre deux exécutions.Ajouter 3 tâches, quitter, relancer → tâches toujours là
+Marquer une tâche déjà faite
+Entrer un numéro de tâche inexistant
+Afficher quand la liste est vide
+Entrer une option de menu invalide
+
+Commentaire Exo4:
+   J'ai créé un programme qui fonctionne comme un petit agenda. On peut ajouter des tâches, afficher la liste, choisir une tâche et la marquer comme terminée. Chaque action possède sa propre fonction pour que le code soit plus facile à comprendre. Les tâches sont enregistrées dans un fichier pour les retrouver même après avoir fermé et relancé le programme.
