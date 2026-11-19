@@ -2,6 +2,10 @@
 
 `watchdog` est un script Python qui tourne en boucle, collecte des métriques système (CPU, RAM, disque) et écrit une alerte dans un fichier de log dès qu'un seuil est dépassé.
 
+## Téléchargement
+
+[Télécharger le ZIP](https://github.com/TikvichkaA/eemi-b2-scripts-python/archive/refs/heads/main.zip) puis extraire le dossier `watchdog/`.
+
 ## Installation
 
 ```bash
