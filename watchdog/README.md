@@ -4,7 +4,7 @@
 
 ## Téléchargement
 
-[Télécharger le ZIP](https://github.com/TikvichkaA/eemi-b2-scripts-python/archive/refs/heads/main.zip) puis extraire le dossier `watchdog/`.
+[Télécharger le ZIP](https://github.com/TikvichkaA/eemi-b2-scripts-python/releases/download/v1.0-watchdog/watchdog.zip)
 
 ## Installation
 
