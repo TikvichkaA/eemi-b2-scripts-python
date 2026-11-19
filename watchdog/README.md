@@ -15,8 +15,8 @@ py -m pip install -r requirements.txt
 ## Utilisation
 
 ```bash
-python main.py
-python main.py --log /var/log/watchdog.log --interval 60
+py main.py
+py main.py --log alertes.log --interval 60
 ```
 
 ## Structure
